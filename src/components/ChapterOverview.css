@@ -1,0 +1,73 @@
+.chapter-overview {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    margin-bottom: 2rem;
+  }
+  
+  .overview-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1rem;
+  }
+  
+  .chapter-overview h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+  }
+  
+  .chapter-overview p {
+    font-size: 1.05rem;
+    color: #475569;
+    margin-bottom: 1.5rem;
+  }
+  
+  .start-btn {
+    padding: 0.6rem 1.4rem;
+    background-color: #1e40af;
+    color: #ffffff;
+    font-size: 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+  }
+  
+  .start-btn:hover {
+    background-color: #1c3aa9;
+  }
+  @media (min-width: 768px) {
+    .chapter-overview {
+/* display: none !important; */
+    }
+  }
+  
+  /* Responsive tweaks */
+  @media (max-width: 768px) {
+    .chapter-overview {
+      padding: 1.5rem 1rem;
+    }
+  
+    .overview-icon {
+      width: 50px;
+      height: 50px;
+    }
+  
+    .chapter-overview h2 {
+      font-size: 1.5rem;
+    }
+  
+    .chapter-overview p {
+      font-size: 0.95rem;
+    }
+  
+    .start-btn {
+      font-size: 0.95rem;
+      padding: 0.5rem 1.2rem;
+    }
+  }
+  
