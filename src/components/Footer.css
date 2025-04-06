@@ -22,6 +22,7 @@
   /* Mobile view: floating bottom nav style */
   @media (max-width: 768px) {
     .footer {
+        display: none;
       position: fixed;
       bottom: 0;
       left: 0;
