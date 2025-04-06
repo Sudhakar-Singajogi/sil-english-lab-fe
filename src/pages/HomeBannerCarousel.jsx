@@ -4,7 +4,8 @@ function HomeBannerCarousel() {
     //give the path of the image whihc is in public/assets/images/
     const slides = [
         {
-          image: '/assets/images/home-banner1.jpg',
+            image: `${import.meta.env.BASE_URL}assets/images/home-banner1.jpg`,
+
           title: 'Start Your English Journey',
           subtitle: 'Basics to Advanced — Explore All in One Place',
           buttonText: 'Explore Modules',
