@@ -1,0 +1,18 @@
+/* File: /src/components/SearchBar.css */
+.search-bar {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    font-size: 0.9rem;
+    min-width: 200px;
+    background-color: #f1f5f9;
+    color: #0f172a;
+    transition: border-color 0.2s;
+  }
+  
+  .search-bar:focus {
+    border-color: #1e40af;
+    background-color: #fff;
+  }
+  
