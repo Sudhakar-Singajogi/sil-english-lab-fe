@@ -1,12 +1,16 @@
 .chapter-list-container {
   padding: 1.5rem;
   background: #f8fafc;
+  box-shadow: 0px 4px 12px rgba(0.1, 0.1, 0.1, 0.1);
 }
 
 .chapter-heading {
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
+}
+.chapter-info {
+  width: 100%;
 }
 
 .chapter-list {
@@ -25,8 +29,8 @@
   background: #fff;
   border-radius: 12px;
   padding: 1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.3s ease;   
+  box-shadow: 0px 4px 12px rgba(0.1, 0.1, 0.1, 0.1);
+  transition: box-shadow 0.3s ease;
 }
 
 .chapter-card:hover {
@@ -34,9 +38,9 @@
 }
 
 .chapter-title {
-  display: flex;
+  /* display: flex;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 1rem; */
 }
 
 .chapter-icon {
@@ -46,14 +50,24 @@
 }
 
 .chapter-number {
-  font-size: 0.9rem;
-  color: #64748b;
+  font-size: 1rem;
+  color: #000;
+  font-weight: bold;
 }
 
 .chapter-name {
+  position: relative;
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0.25rem 0;
+  img {
+    margin-right: 10px;
+  }
+  span.chapter-title-inner {
+    position: absolute;
+    top: 10px;
+    color: #64748b;
+  }
 }
 
 .chapter-description {
@@ -77,7 +91,6 @@
   background: #1c3aa9;
 }
 
-
 /* Responsive */
 @media (min-width: 768px) {
   .chapter-description {
@@ -90,5 +103,21 @@
 
   .chapter-button {
     margin-top: 0.5rem;
+  }
+  .chapter-list-container {
+    padding: 0rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .chapter-list-container {
+    padding: 0rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  span.chapter-title-inner {
+    font-size: 14px !important;
   }
 }

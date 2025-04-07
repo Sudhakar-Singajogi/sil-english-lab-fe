@@ -5,6 +5,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    margin-left:2.5rem
   }
   
   .breadcrumb-item {
@@ -26,3 +27,9 @@
     color: #94a3b8;
   }
   
+
+  @media (max-width: 768px) {
+    .breadcrumb {
+margin-left:1.5rem
+    }
+  }
