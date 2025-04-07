@@ -1,4 +1,5 @@
 import React from "react";
+import ProgressBar from "./ProgressBar"; // import it here
 import "./ChapterList.css";
 
 const chapters = [
@@ -7,6 +8,7 @@ const chapters = [
     title: "Greetings and Introductions",
     icon: `${import.meta.env.BASE_URL}assets/icons/greeting.svg`,
     description: "Learn how to greet and introduce yourself in English.",
+    progress: 30,
   },
   {
     id: 2,
@@ -14,6 +16,7 @@ const chapters = [
     icon: `${import.meta.env.BASE_URL}assets/icons/greeting.svg`,
     description:
       "Master the letters of the English alphabet and pronunciation.",
+      progress: 45,
   },
   {
     id: 3,
@@ -21,12 +24,14 @@ const chapters = [
     icon: `${import.meta.env.BASE_URL}assets/icons/greeting.svg`,
     description:
       "Understand numbers and basic counting in everyday situations.",
+      progress: 40,
   },
   {
     id: 4,
     title: "Days of the Week",
     icon: `${import.meta.env.BASE_URL}assets/icons/greeting.svg`,
     description: "Familiarize yourself with weekdays and how to use them.",
+    progress: 65,
   },
 ];
 
@@ -40,7 +45,11 @@ const ChapterList = () => {
             <div className="chapter-info">
               <div className="chapter-title">
                 <div>
-                  <span className="chapter-number">Chapter {chapter.id}</span>
+                    <div className='progress-bar'>
+                    <span className="chapter-number">Chapter {chapter.id}</span>
+                    <ProgressBar percentage={chapter.progress} showProgressLabel={true} />
+                    </div>
+                  
 
                   <h3 className="chapter-name">
                     <img

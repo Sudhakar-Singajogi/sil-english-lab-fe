@@ -1,7 +1,8 @@
 .breadcrumb {
     font-size: 0.95rem;
     color: #64748b;
-    margin-bottom: 1rem;
+    height:40px;
+    line-height: 40px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -30,6 +31,6 @@
 
   @media (max-width: 768px) {
     .breadcrumb {
-margin-left:1.5rem
+margin-left:0.5rem
     }
   }
