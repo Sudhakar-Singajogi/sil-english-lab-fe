@@ -1,0 +1,32 @@
+.navigation-footer {
+    display: flex;
+    justify-content: space-between; 
+    padding: 0.5rem;
+    padding-bottom: 1rem;
+    gap: 1rem;
+  }
+  
+  .nav-btn {
+    padding: 0.6rem 1.4rem;
+    background-color: #e5e7eb;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #1f2937;
+    transition: background 0.2s ease;
+  }
+  
+  .nav-btn:hover {
+    background-color: #d1d5db;
+  }
+  
+  .nav-btn.primary {
+    background-color: #1e40af;
+    color: white;
+  }
+  
+  .nav-btn.primary:hover {
+    background-color: #1c3aa9;
+  }
+  

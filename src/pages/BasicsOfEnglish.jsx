@@ -6,7 +6,6 @@ import Breadcrumb from '../components/Breadcrumb';
 const BasicsOfEnglish = () => {
   const breadcrumbPath = [
     { label: 'Home', to: '/' },
-    { label: 'Modules', to: '/home' },
     { label: 'Basics of English' } // no `to` means it's the current page
   ];
   return (

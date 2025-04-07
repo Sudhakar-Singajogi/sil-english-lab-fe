@@ -1,0 +1,48 @@
+.chapter-header {
+    display: flex;
+    /* align-items: center; */
+    gap: 1rem;
+    background-color: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    /* position: relative; */
+    margin-bottom: 1.6rem;
+  }
+  
+  .chapter-header-icon {
+    width: 75px;
+    height: 75px;
+    border: 1px solid bisque;
+    border-radius: 50%;
+    background-color: bisque;
+  }
+  
+  .chapter-header-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0;
+    color: #1e293b;
+  }
+  
+  .chapter-header-description {
+    font-size: 1rem;
+    color: #475569;
+    margin-top: 1rem;
+    position: absolute;
+    top:10.5rem;
+    left:10px;
+  }
+  
+  .chapter-cnt {
+    font-size: 1.6rem;
+    font-weight: bold;
+  }
+
+  @media (max-width: 768px) {
+      .chapter-header-title {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+      }
+
+  }

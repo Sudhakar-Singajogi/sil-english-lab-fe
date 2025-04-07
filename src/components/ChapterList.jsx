@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import ProgressBar from "./ProgressBar"; // import it here
 import "./ChapterList.css";
 
@@ -63,7 +64,9 @@ const ChapterList = () => {
                 </div>
               </div>
             </div>
-            <button className="chapter-view-button">View</button>
+            <Link to={`/basics/chapter/${chapter.id}`}>
+              <button className="chapter-view-button">View</button>
+            </Link>
           </li>
         ))}
       </ul>

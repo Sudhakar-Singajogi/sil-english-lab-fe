@@ -1,0 +1,19 @@
+.progress-tracker {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  
+  .tracker-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #d1d5db; /* gray-300 */
+    transition: background 0.3s ease;
+  }
+  
+  .tracker-dot.active {
+    background-color: #10b981; /* green-500 */
+  }
+  
