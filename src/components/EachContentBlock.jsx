@@ -1,7 +1,9 @@
 import React from 'react';
 import './EachContentBlock.css';
+import AudioPlayer from './AudioPlayer';
 
 const EachContentBlock = ({ type, data }) => {
+  console.log('data is', data)
   switch (type) {
     case 'text':
       return <div className="bubble text-bubble">{data}</div>;
@@ -9,10 +11,11 @@ const EachContentBlock = ({ type, data }) => {
     case 'audio':
       return (
         <div className="bubble audio-bubble">
-          <audio controls>
+          <AudioPlayer audioFile={data} />
+          {/* <audio controls>
             <source src={data} type="audio/mpeg" />
             Your browser does not support the audio element.
-          </audio>
+          </audio> */}
         </div>
       );
 

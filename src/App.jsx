@@ -4,11 +4,8 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
-import BasicsOfEnglish from './pages/BasicsOfEnglish';
-import ChapterContentPage from './pages/ChapterContentPage';
-
-
-
+import BasicsOfEnglish from './pages/EnglishBasics/BasicsOfEnglish';
+import ChapterContentPage from './pages/EnglishBasics/ChapterContentPage';
 
 const App = () => {
   return (

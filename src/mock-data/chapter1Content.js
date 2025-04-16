@@ -12,7 +12,7 @@ const chapter1 = [
           { type: "text", data: "Hi" },
           { type: "text", data: "Good morning" },
           { type: "text", data: "Good evening" },
-          { type: "audio", data: "/assets/audio/hello.mp3" }
+          { type: "audio", data: "abcd-song.mp3" }
         ]
       },
       {

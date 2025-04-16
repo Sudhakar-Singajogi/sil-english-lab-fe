@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
-import ChapterHeader from "../components/ChapterHeader";
-import ContentBlock from "../components/ContentBlock";
-import ProgressTracker from "../components/ProgressTracker";
-import NavigationFooter from "../components/NavigationFooter";
-import chapter1Content from "../mock-data/chapter1Content";
-import ProgressBar from "../components/ProgressBar";
+import ChapterHeader from "../../components/BasicsOfEnglish/ChapterHeader";
+import ContentBlock from "../../components/ContentBlock";
+import ProgressTracker from "../../components/ProgressTracker";
+import NavigationFooter from "../../components/NavigationFooter";
+import chapter1Content from "../../mock-data/chapter1Content";
+import ProgressBar from "../../components/ProgressBar";
 import './ChapterContentPage.css'
-import Breadcrumb from "../components/Breadcrumb";
+import Breadcrumb from "../../components/Breadcrumb";
 
 const contentSteps = chapter1Content;
 

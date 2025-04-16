@@ -1,42 +1,26 @@
-import React from "react";
+import React, { useEffect, useState }  from "react";
 import { Link } from "react-router-dom";
-import ProgressBar from "./ProgressBar"; // import it here
+import ProgressBar from "../ProgressBar"; // import it here
 import "./ChapterList.css";
+import { fetchBasicsChapter } from "../../store/basicSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-const chapters = [
-  {
-    id: 1,
-    title: "Greetings and Introductions",
-    icon: `${import.meta.env.BASE_URL}assets/icons/greeting.svg`,
-    description: "Learn how to greet and introduce yourself in English.",
-    progress: 30,
-  },
-  {
-    id: 2,
-    title: "The English Alphabet",
-    icon: `${import.meta.env.BASE_URL}assets/icons/greeting.svg`,
-    description:
-      "Master the letters of the English alphabet and pronunciation.",
-      progress: 45,
-  },
-  {
-    id: 3,
-    title: "Numbers and Counting",
-    icon: `${import.meta.env.BASE_URL}assets/icons/greeting.svg`,
-    description:
-      "Understand numbers and basic counting in everyday situations.",
-      progress: 40,
-  },
-  {
-    id: 4,
-    title: "Days of the Week",
-    icon: `${import.meta.env.BASE_URL}assets/icons/greeting.svg`,
-    description: "Familiarize yourself with weekdays and how to use them.",
-    progress: 65,
-  },
-];
+
 
 const ChapterList = () => {
+  const dispatch = useDispatch();
+  const { chapters, loading:status, error } = useSelector((state) => state.basics);
+
+  useEffect(() => {
+    if (status && chapters.length === 0) {
+      dispatch(fetchBasicsChapter());
+    }
+  }, [dispatch]);
+
+  if (status === "loading") return <p>Loading...</p>;
+  if (status === "failed") return <p>Error: {error}</p>;
+
+  
   return (
     <div className="chapter-list-container">
       <h2 className="chapter-heading">Upcoming Chapters</h2>

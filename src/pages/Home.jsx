@@ -3,6 +3,7 @@ import HomeBannerCarousel from './HomeBannerCarousel';
 
 import { Link } from 'react-router-dom';
 import './Home.css';
+import AudioPlayer from '../components/AudioPlayer';
 
 const modules = [
   {
@@ -74,6 +75,9 @@ const Home = () => {
       <div className="home-wrapper">
         <div className="home-header">
           <h1 className="home-title">Welcome to English Lab</h1>
+          {
+            <AudioPlayer />
+          }
           <p className="home-subtitle">Explore modules to improve your English and cognitive skills.</p>
           <Link to="/basics">
             <button className="cta-button">Start Learning</button>
