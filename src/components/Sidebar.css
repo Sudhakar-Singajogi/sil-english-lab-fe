@@ -1,0 +1,129 @@
+.sidebar {
+  width: 220px;
+  background-color: #1e293b;
+  color: white;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.sidebar-logo {
+  /* font-size: 22px; */
+  font-weight: bold;
+  margin-bottom: 10px;
+  /* text-align: center; */
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  /* gap: 10px; */
+  /* padding: 0px; */
+  border-bottom: 1px solid #2f3e56;
+  height: 70px;
+  position: absolute;
+  left: 0px;
+}
+
+.sidebar-logo img {
+  width: 220px;
+  height: 180px;
+}
+
+.logo-text .brand {
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.logo-text .subtitle {
+  color: #ddd;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 5.4rem;
+}
+
+.sidebar-link {
+  text-decoration: none;
+  color: #cbd5e1;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.sidebar-link:hover {
+  color: #ffffff;
+}
+
+.sidebar-link.active {
+  color: #ffffff;
+  font-weight: bold;
+  border-left: 4px solid #0ea5e9;
+  padding-left: 8px;
+}
+
+.sidebar a {
+  display: block;
+  padding: 5px 5px;
+  color: #ccc;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar a:hover {
+  background-color: #163a5f;
+  color: #fff;
+}
+
+.sidebar a.active {
+  background-color: #ffffff10;
+  border-left: 4px solid #00bfff;
+  color: #fff;
+  font-weight: bold;
+}
+
+.sidebar-wrapper {
+  width: 220px;
+  background-color: #1e293b;
+  color: white;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  position: fixed;
+  left: 0;
+  top: 0;
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+.hamburger {
+  display: none;
+}
+
+@media (min-width: 700px) {
+.sidebar-wrapper {
+    position: absolute;
+    top: 0rem;
+  }
+}
+
+/* Mobile: initially hide */
+@media (max-width: 700px) {
+  .sidebar-wrapper {
+    transform: translateX(-100%);
+  }
+
+  .sidebar-wrapper {
+    position: absolute;
+    top: 5.6rem;
+  }
+  
+  .sidebar-wrapper.open {
+    transform: translateX(0);
+  }
+}
