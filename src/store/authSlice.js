@@ -9,20 +9,24 @@ export const loginUser = createAsyncThunk(
         email: loginId,
         password,
       });
-      console.log('response is', response);
-      const { token, user } = response.data;
+      console.log("response is", response);
+      const { token, user, schoolInfo, licenseTierInfo, lacInfo, allMenuItems } =
+        response.data;
 
       return {
         token,
         user,
         role: user.role,
+        schoolInfo,
+        licenseTierInfo,
+        lacInfo,
+        allMenuItems
       };
     } catch (error) {
       const message =
         error.response?.data?.message || "Login failed. Please try again.";
       return thunkAPI.rejectWithValue(message);
     }
-    
   }
 );
 
@@ -30,6 +34,10 @@ const initialState = {
   user: null,
   token: null,
   role: null,
+  schoolInfo: null,
+  licenseTierInfo: null,
+  lacInfo: null,
+  allMenuItems:null,
   isAuthenticated: false,
   loading: false,
   error: null,
@@ -43,6 +51,10 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       state.role = null;
+      state.schoolInfo = null;
+      state.licenseTierInfo = null;
+      state.lacInfo = null;
+      state.allMenuItems=null;
       state.isAuthenticated = false;
       localStorage.clear();
     },
@@ -54,11 +66,16 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        const { token, user, role } = action.payload;
+        const { token, user, role, schoolInfo, licenseTierInfo, lacInfo, allMenuItems } =
+          action.payload;
         state.loading = false;
         state.token = token;
         state.user = user;
         state.role = role;
+        state.schoolInfo = schoolInfo;
+        state.licenseTierInfo = licenseTierInfo;
+        state.lacInfo = lacInfo;
+        state.allMenuItems =allMenuItems
         state.isAuthenticated = true;
 
         localStorage.setItem("token", token);

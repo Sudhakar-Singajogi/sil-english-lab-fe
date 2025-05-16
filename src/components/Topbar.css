@@ -1,11 +1,22 @@
 .topbar {
-  height: 82px;
+  height: 68px;
   background-color: #ffffff;
   border-bottom: 1px solid #e2e8f0;
   padding: 0 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
+  .sidebar-logo {
+      display: none;
+  }
+  .sidebar-logo img {
+    position: absolute;
+    width: 150px;
+    height: 120px;
+    left: 2rem;
+    top: -20px;
+  }
 }
 
 .topbar-title {
@@ -17,7 +28,7 @@
 .topbar-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 1.2rem;
 }
 
 .topbar-icon {
@@ -46,6 +57,26 @@
   border: none;
   color: #333;
   cursor: pointer;
+  z-index: 999999;
+}
+
+.license-badge, .notification, .user-logout {
+    width: 30px;
+    img {
+        width: 100%;
+    }
+}
+.user-logout input{
+    width: 100%;
+    cursor: pointer;
+}
+
+@media (max-width: 699px) {
+  .topbar {
+    .sidebar-logo {
+      display: block;
+    }
+  }
 }
 
 @media (min-width: 699px) {
@@ -62,22 +93,19 @@
   .sidebar-wrapper {
     top: 0rem;
   }
-  
+
   .sidebar-wrapper.open {
     transform: translateX(0);
   }
 }
 
-
 /**need to add media queries for min with 350 and max 600 */
 
-
-
-@media (max-width:700px) {
-.hamburger {
+@media (max-width: 700px) {
+  .hamburger {
     display: block;
   }
-.topbar {
+  .topbar {
     padding: 0px !important;
   }
 

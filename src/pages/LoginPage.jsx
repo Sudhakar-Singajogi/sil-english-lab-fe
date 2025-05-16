@@ -5,6 +5,7 @@ import { loginUser } from "../store/authSlice";
 import { useNavigate } from "react-router-dom";
 
 import "./LoginPage.css";
+import Loader from "../components/Loader";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -59,6 +60,9 @@ const LoginPage = () => {
           <h1 className="logo-text">Sonet</h1>
           <p className="sub-logo">ENGLISH LAB</p>
         </div>
+        {
+            loading ? <Loader /> : null
+        }
 
         <form onSubmit={handleLogin}>
           <input
@@ -67,7 +71,7 @@ const LoginPage = () => {
             placeholder="Login Id"
             value={loginId}
             onChange={(e) => setLoginId(e.target.value)}
-            required
+            
           />
           <input
             type="password"
@@ -75,7 +79,7 @@ const LoginPage = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
+            
           />
           <button type="submit" disabled={loading}>
             {loading ? "Logging in..." : "Login"}
