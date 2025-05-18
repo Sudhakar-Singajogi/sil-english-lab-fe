@@ -1,16 +1,32 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './Breadcrumb.css';
+// File: src/components/Breadcrumb.jsx
+import React from "react";
+import { Link } from "react-router-dom";
+import "./Breadcrumb.css"; // optional for custom styles
 
-const Breadcrumb = ({ path }) => {
+const Breadcrumb = ({ items }) => {
   return (
-    <nav className="breadcrumb">
-      {path.map((item, idx) => (
-        <span key={idx} className="breadcrumb-item">
-          {item.to ? <Link to={item.to}>{item.label}</Link> : <span>{item.label}</span>}
-          {idx < path.length - 1 && <span className="breadcrumb-separator">/</span>}
-        </span>
-      ))}
+    <nav aria-label="breadcrumb" className="mb-1">
+      <ol className="breadcrumb">
+        {items.map((item, index) => {
+          const isLast = index === items.length - 1;
+          return (
+            <li
+              key={index}
+              className={`breadcrumb-item d-flex align-items-center ${
+                isLast ? "active" : ""
+              }`}
+              aria-current={isLast ? "page" : undefined}
+            >
+              {item.icon && <i className={`me-1 ${item.icon}`}></i>}
+              {isLast ? (
+                <span>{item.label}</span>
+              ) : (
+                <Link to={item.path}>{item.label}</Link>
+              )}
+            </li>
+          );
+        })}
+      </ol>
     </nav>
   );
 };

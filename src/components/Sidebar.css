@@ -106,7 +106,7 @@ a.sidebar-link:hover {
   color: #ffffff !important;
 }
 
-.active {
+.sidebar-menu .active {
   color: #ffffff;
   font-weight: bold;
   border-left: 4px solid #0ea5e9 !important;
