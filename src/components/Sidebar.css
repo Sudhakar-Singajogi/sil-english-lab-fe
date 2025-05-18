@@ -1,3 +1,7 @@
+.nav {
+  /* --bs-nav-link-padding-x: 1rem; */
+  --bs-nav-link-padding-y: 0.3rem !important;
+}
 .sidebar {
   width: 220px;
   background-color: #1e293b;
@@ -21,7 +25,7 @@
   border-bottom: 1px solid #2f3e56;
   height: 70px;
   position: absolute;
-  left: 0px;
+  left: 0.8rem;
 }
 
 .sidebar-logo img {
@@ -33,41 +37,42 @@
   font-weight: bold;
   margin-bottom: 10px;
   color: #ffffff;
+  width: 90%;
+  /* margin-left: 5px; */
+  /* margin-right: 5px; */
   /* display: flex; */
   align-items: center;
   border-bottom: 1px solid #2f3e56;
-  height: 100px;
+  height: 8rem;
   position: absolute;
   left: 5px;
   .school-title {
     font-size: 18px;
     margin: 0px;
-    margin-top:10px;
+    margin-top: 10px;
   }
   p.school-address {
-        font-size:12px ;
-        text-align: left;
-        word-wrap: break-word;
-        font-weight: 400;
-        margin-top:10px
-      }
+    font-size: 12px;
+    /* text-align: left; */
+    word-wrap: break-word;
+    font-weight: 400;
+    margin-top: 10px;
+  }
   .user-profile {
-    
     display: flex;
-      p.user-name {
-        font-size:12px ;
-        text-align: left;
-        word-wrap: break-word;
-        font-weight: 400;
-        margin-top:0px;
-      }
-      .user-icon {
-        margin:0px;
-        margin-top: -5px;
-        margin-left:5px;
-
-      }
-
+    justify-content: center;
+    p.user-name {
+      font-size: 12px;
+      text-align: left;
+      word-wrap: break-word;
+      font-weight: 400;
+      margin-top: 0px;
+    }
+    .user-icon {
+      margin: 0px;
+      margin-top: -5px;
+      margin-left: 5px;
+    }
   }
 }
 
@@ -86,8 +91,8 @@
 .sidebar-menu {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-top: 5.4rem;
+  gap: 1px;
+  margin-top: 9rem;
 }
 
 .sidebar-link {
@@ -97,14 +102,14 @@
   transition: 0.3s;
 }
 
-.sidebar-link:hover {
-  color: #ffffff;
+a.sidebar-link:hover {
+  color: #ffffff !important;
 }
 
-.sidebar-link.active {
+.active {
   color: #ffffff;
   font-weight: bold;
-  border-left: 4px solid #0ea5e9;
+  border-left: 4px solid #0ea5e9 !important;
   padding-left: 8px;
 }
 
@@ -145,13 +150,18 @@
 }
 
 .hamburger {
-  display: none;
+  /* display: none; */
 }
 
 @media (min-width: 700px) {
   .sidebar-wrapper {
     position: absolute;
-    top: 0rem;
+    top: 4.8rem;
+    transform: translateX(-100%);
+  }
+
+  .sidebar-wrapper.open {
+    transform: translateX(0%);
   }
 }
 
@@ -161,10 +171,10 @@
     transform: translateX(-100%);
   }
 
-  .sidebar-wrapper {
+  /* .sidebar-wrapper {
     position: absolute;
     top: 4.8rem;
-  }
+  } */
 
   .sidebar-wrapper.open {
     transform: translateX(0);
@@ -174,21 +184,18 @@
     .sidebar-logo {
       display: none;
     }
-    .sidebar-menu {
-      margin-top: 7rem;
-    }
+    /* .sidebar-menu {
+      margin-top: 9rem;
+    } */
   }
 }
 
 @media (min-width: 700px) {
-  .sidebar-user-info {
-    margin-top: 4.3rem;
-    height: 100px;
-    
+  .sidebar-user-info {    
+    height: 8rem;
   }
-  .sidebar-menu {
-      margin-top: 12rem;
-    }
+  
+  
 }
 
 @media (max-width: 400px) {
@@ -198,9 +205,38 @@
       display: none;
     }
     .sidebar-menu {
-      margin-top: 7rem;
+      margin-top: 9rem;
     }
+  }
+  .navbar-toggler-icon {
+    width: 1em !important;
+    height: 1em !important;
+  }
+
+  .sidebar-wrapper {
+    position: absolute;
+    top: 3.6rem;
   }
 }
 
+
+
+@media screen and (min-width: 401px) and (max-width: 699px) {
+  .sidebar-wrapper {
+    top: 4.7rem !important;
+    /* width:160px !important; */
+  }
+}
+
+@media  (max-width: 450px) {
+.sidebar-wrapper {
+    width:180px !important;
+  }
+}
+
+@media (min-width: 451px) {
+.sidebar-wrapper {
+    width:200px !important;
+  }
+}
 

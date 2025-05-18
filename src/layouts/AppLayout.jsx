@@ -2,13 +2,14 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import "../layouts/AppLayout.css";
+import { useUI } from "../context/UIContext";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 
 const AppLayout = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { isSidebarOpen, dispatch } = useUI();
 
-  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
+  const toggleSidebar = () => dispatch({ type: "TOGGLE_SIDEBAR" });
 
   return (
     <main className="layout">
@@ -19,7 +20,7 @@ const AppLayout = () => {
         <Topbar onToggleSidebar={toggleSidebar} />
 
         <div className="content">
-          <Outlet />
+          <Outlet isSidebarOpen={isSidebarOpen} />
         </div>
       </div>
     </main>
