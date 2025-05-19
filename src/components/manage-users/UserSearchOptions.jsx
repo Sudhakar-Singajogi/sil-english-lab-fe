@@ -1,9 +1,10 @@
 // File: src/pages/system-admin/UserList.jsx
 import React, { useRef, useEffect, useState } from "react";
 import { Button, Form, Offcanvas } from "react-bootstrap";
-import AsyncSelect from "react-select/async";
+
 import { fetchSchools } from "./Service";
 import "./UserSearchOptions.css";
+import { useSelector, useDispatch } from "react-redux";
 
 const customSelectStyles = {
   control: (provided) => ({
@@ -27,13 +28,16 @@ function UserSearchOptions({
   onStatusChange,
   onSchoolChange,
   schoolSelected,
-  selectedRole
+  selectedRole,
+  selectedStatus,
+  setShowDrawer,
 }) {
-    
   const [schoolList, setSchoolList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-    const prevSchoolSelected = useRef('');
-
+  const prevSchoolSelected = useRef("");
+  const allowedFeatures = useSelector(
+    (state) => state.auth.lacInfo.allowedFeatures
+  );
 
   console.log("schoolSelected:", schoolSelected);
 
@@ -49,8 +53,8 @@ function UserSearchOptions({
   };
 
   useEffect(() => {
-    if(prevSchoolSelected.current !== schoolSelected) {
-        loadOptions();
+    if (prevSchoolSelected.current !== schoolSelected) {
+      loadOptions();
     }
     prevSchoolSelected.current = schoolSelected;
   }, [schoolSelected]);
@@ -73,7 +77,6 @@ function UserSearchOptions({
             className="me-2"
             style={{ maxWidth: "250px" }}
             onChange={(e) => setSearchTerm(e.target.value)}
-            
           />
           <Button
             variant="outline-secondary"
@@ -116,31 +119,34 @@ function UserSearchOptions({
             <option value="student">Student</option>
           </Form.Select>
           <Form.Select
-            // onChange={(e) => handleStatusFilter(e.target.value)}
+            onChange={(e) => onStatusChange(e.target.value)}
             size="sm"
+            value={selectedStatus || ""}
           >
             <option value="">All Statuses</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
           </Form.Select>
         </div>
-        <div className="d-flex justify-content-between align-items-center">
-          <Button
-            variant="primary"
-            className="btn-sm show-500-after"
-            // onClick={() => setShowDrawer(true)}
-          >
-            <i className="bi bi-plus-circle"></i> Add User
-          </Button>
+        {allowedFeatures.includes("add-user") && (
+          <div className="d-flex justify-content-between align-items-center">
+            <Button
+              variant="primary"
+              className="btn-sm show-500-after"
+              onClick={() => setShowDrawer(true)}
+            >
+              <i className="bi bi-plus-circle"></i> Add User
+            </Button>
 
-          <Button
-            variant="primary"
-            className="btn-xs show-500-before"
-            // onClick={() => setShowDrawer(true)}
-          >
-            <i className="bi bi-plus-circle"></i> Add User
-          </Button>
-        </div>
+            <Button
+              variant="primary"
+              className="btn-xs show-500-before"
+              onClick={() => setShowDrawer(true)}
+            >
+              <i className="bi bi-plus-circle"></i> Add User
+            </Button>
+          </div>
+        )}
       </div>
     </>
   );

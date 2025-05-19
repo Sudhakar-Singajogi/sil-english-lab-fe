@@ -39,6 +39,9 @@ const UserList = () => {
   const [showDrawer, setShowDrawer] = useState(false);
   const [editData, setEditData] = useState({});
   const role = useSelector((state) => state.auth.role);
+  const allowedFeatures = useSelector(
+    (state) => state.auth.lacInfo.allowedFeatures
+  );
   let schoolId = null;
   if (role !== "system-admin") {
     schoolId = useSelector((state) => state.auth.schoolInfo.id);
@@ -47,8 +50,9 @@ const UserList = () => {
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const { users, loading, error, resultTotal, totalRows, hasMore } =
-    useSelector((state) => state.userManagement);
+  const { users, loading, totalRows } = useSelector(
+    (state) => state.userManagement
+  );
   const [schoolUsers, setSchoolUsers] = useState(users);
   const [totalPages, setTotalPages] = useState(
     getTotalPages(totalRows, perPage)
@@ -118,38 +122,44 @@ const UserList = () => {
     {
       key: "actions",
       title: "Actions",
+      edit: allowedFeatures.includes("edit-user"),
+      delete: allowedFeatures.includes("delete-user"),
       render: (_, row) => (
         <div className="d-flex gap-2">
-          <Pencil
-            role="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              alert(`Edit ${row.fullName}`);
-            }}
-            size={18} // or 20
-            className="text-primary me-2 cursor-pointer"
-          />
-          {row.status === "active" ? (
-            <ToggleOn
+          {allowedFeatures.includes("edit-user") && (
+            <Pencil
               role="button"
               onClick={(e) => {
                 e.stopPropagation();
-                alert(`Deactivate ${row.fullName}`);
+                alert(`Edit ${row.fullName}`);
               }}
-              size={22}
-              className="text-success cursor-pointer"
-            />
-          ) : (
-            <ToggleOff
-              role="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                alert(`Activate ${row.fullName}`);
-              }}
-              size={22}
-              className="text-muted cursor-pointer"
+              size={18} // or 20
+              className="text-primary me-2 cursor-pointer"
             />
           )}
+          {row.status === "active"
+            ? allowedFeatures.includes("delete-user") && (
+                <ToggleOn
+                  role="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    alert(`Deactivate ${row.fullName}`);
+                  }}
+                  size={22}
+                  className="text-success cursor-pointer"
+                />
+              )
+            : allowedFeatures.includes("delete-user") && (
+                <ToggleOff
+                  role="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    alert(`Activate ${row.fullName}`);
+                  }}
+                  size={22}
+                  className="text-muted cursor-pointer"
+                />
+              )}
         </div>
       ),
     },
@@ -198,13 +208,11 @@ const UserList = () => {
             onSchoolChange={(selectedValue) =>
               handleSelectedSchool(selectedValue || null)
             }
+            setShowDrawer={setShowDrawer}
             schoolSelected={getSchoolSelected()}
             selectedRole={roleFilter}
+            selectedStatus={statusFilter}
           />
-          {/** End of filter section */}
-
-          {/** user grid section */}
-          {/* <ListGrid columns={columns} data={users} /> */}
 
           <AdvancedGrid
             columns={columns}

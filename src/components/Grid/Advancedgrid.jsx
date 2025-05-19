@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./Advancedgrid.css";
-import { ArrowDown, ArrowUp, ThreeDotsVertical, ChevronDown, ChevronRight } from "react-bootstrap-icons";
+import {
+  ArrowDown,
+  ArrowUp,
+  ThreeDotsVertical,
+  ChevronDown,
+  ChevronRight,
+} from "react-bootstrap-icons";
 
 const AdvancedGrid = ({
   columns,
@@ -57,14 +63,14 @@ const AdvancedGrid = ({
     setSortConfig({ key, direction });
   };
 
-//   const toggleExpand = (id) => {
-//     setExpandedRows((prev) =>
-//       prev.includes(id) ? prev.filter((rowId) => rowId !== id) : [...prev, id]
-//     );
-//   };
+  //   const toggleExpand = (id) => {
+  //     setExpandedRows((prev) =>
+  //       prev.includes(id) ? prev.filter((rowId) => rowId !== id) : [...prev, id]
+  //     );
+  //   };
 
-  const showDropdown = (key) => (
-    <td key={key}>
+  const showDropdown = (col) => (
+    <td key={col.key}>
       <div className="dropdown">
         <button
           className="btn btn-sm btn-outline-secondary dropdown-toggle"
@@ -74,15 +80,24 @@ const AdvancedGrid = ({
         >
           <ThreeDotsVertical />
         </button>
-        <ul className="dropdown-menu">
-          <li>
-            {/* <button className="dropdown-item">Edit</button> */}
-            <i className="bi bi-pencil-fill"></i> Edit
-          </li>
-          <li>
-            <i className="bi bi-trash3"></i> Delete
-          </li>
-        </ul>
+        {(col.edit || col.delete) && (
+          <>
+            <ul className="dropdown-menu">
+              {col.edit && (
+                <li>
+                  {/* <button className="dropdown-item">Edit</button> */}
+                  <i className="bi bi-pencil-fill"></i> Edit
+                </li>
+              )}
+
+              {col.delete && (
+                <li>
+                  <i className="bi bi-trash3"></i> Delete
+                </li>
+              )}
+            </ul>
+          </>
+        )}
       </div>
     </td>
   );
@@ -221,7 +236,7 @@ const AdvancedGrid = ({
                     )} */}
                     {columns.map((col) =>
                       enableActionDropdown && col.key === "actions" ? (
-                        showDropdown(col.key)
+                        showDropdown(col)
                       ) : (
                         <td key={col.key}>
                           {col.render
