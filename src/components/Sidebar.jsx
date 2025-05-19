@@ -2,10 +2,12 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./Sidebar.css";
+import { useUI } from "../context/UIContext";
 
 const Sidebar = ({ isOpen }) => {
   const role = useSelector((state) => state.auth.role);
   const { fullName: userName } = useSelector((state) => state.auth.user);
+  const { isSidebarOpen, dispatch } = useUI();
 
   const { name: schoolName, address } =
     role === "system-admin"
@@ -26,6 +28,8 @@ const Sidebar = ({ isOpen }) => {
   if (role === "super-admin") {
     pathprefix = "/school";
   }
+
+  const toggleSidebar = () => dispatch({ type: "TOGGLE_SIDEBAR" });
 
   return (
     <>
@@ -70,7 +74,7 @@ const Sidebar = ({ isOpen }) => {
       <div
         className={`sidebar-wrapper ${
           isOpen ? "open" : ""
-        } d-flex flex-column bg-dark text-white p-1 vh-100`} 
+        } d-flex flex-column bg-dark text-white p-1 vh-100`}
       >
         {/* Logo Section */}
         {/* <div className="text-center mb-3 sidebar-logo">
@@ -99,7 +103,12 @@ const Sidebar = ({ isOpen }) => {
         </div>
         {/* Menu */}
         <nav className="nav flex-column sidebar-menu">
-          <NavLink to={pathprefix + "/dashboard"} key={pathprefix + "/dashboard"} className="sidebar-link nav-link active text-white fw-bold">
+          <NavLink
+            to={pathprefix + "/dashboard"}
+            key={pathprefix + "/dashboard"}
+            className="sidebar-link nav-link active text-white fw-bold"
+            onClick={toggleSidebar}
+          >
             Dashboard
           </NavLink>
           {visibleMenus.map((item) => (
@@ -111,6 +120,7 @@ const Sidebar = ({ isOpen }) => {
                   isActive ? "active text-white fw-bold" : "text-secondary"
                 }`
               }
+              onClick={toggleSidebar}
             >
               {item.label}
             </NavLink>

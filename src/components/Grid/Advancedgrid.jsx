@@ -134,7 +134,7 @@ const AdvancedGrid = ({
       )}
 
       <div className="table-responsive listgrid-container">
-        <table className="table table-bordered table-hover">
+        <table className="table table-bordered table-hover table-responsive ">
           <thead className="table-light">
             <tr>
               {enableSelection && (

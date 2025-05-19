@@ -1,5 +1,5 @@
 // File: src/pages/system-admin/UserList.jsx
-import React, { use, useEffect, useState } from "react";
+import React, { use, useCallback, useEffect, useState } from "react";
 // import ListGrid from "../Grid/ListGrid";
 import AdvancedGrid from "../Grid/Advancedgrid";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,13 +8,14 @@ import { fetchUsers } from "../../store/userManagementSlice";
 import { Pencil, ToggleOn, ToggleOff } from "react-bootstrap-icons";
 import "./UserList.css";
 import DrawerForm from "../../components/DrawerForm";
-import { Button, Form, Offcanvas } from "react-bootstrap";
+import { fetchUserByEmail } from "./Service";
 
 import userFormSchema from "../../schema/userFormSchema";
 import Breadcrumb from "../../components/Breadcrumb";
 import PaginationComponent from "../PaginationComponent";
 import { getTotalPages } from "../../utils/helper";
 import Loader from "../Loader";
+import UserSearchOptions from "./UserSearchOptions";
 
 const roleColors = {
   "system-admin": "danger",
@@ -38,21 +39,67 @@ const UserList = () => {
   const [showDrawer, setShowDrawer] = useState(false);
   const [editData, setEditData] = useState({});
   const role = useSelector((state) => state.auth.role);
-  const schoolId = useSelector((state) => state.auth.schoolInfo.id);
-  const [searchValue, setSearchValue] = useState("");
+  let schoolId = null;
+  if (role !== "system-admin") {
+    schoolId = useSelector((state) => state.auth.schoolInfo.id);
+  }
+  const [searchByEmail, setSearchByEmail] = useState(null);
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const { users, loading, error, resultTotal, totalRows, hasMore } =
     useSelector((state) => state.userManagement);
-  const totalPages = getTotalPages(totalRows, perPage);
-  console.log("users are:", users);
+  const [schoolUsers, setSchoolUsers] = useState(users);
+  const [totalPages, setTotalPages] = useState(
+    getTotalPages(totalRows, perPage)
+  );
+  const [SchId, setSchId] = useState(null);
+  const [selectedSchool, setSelectedSchool] = useState(
+    schoolId ? schoolId : SchId
+  );
+  const [roleFilter, setRoleFilter] = useState(null);
+  const [statusFilter, setStatusFilter] = useState(null);
 
   useEffect(() => {
     dispatch(
-      fetchUsers({ offset: (page - 1) * perPage, perPage: perPage, schoolId })
+      fetchUsers({
+        offset: (page - 1) * perPage,
+        perPage: perPage,
+        schoolId: selectedSchool,
+        role: roleFilter,
+        status: statusFilter,
+      })
     );
-  }, [dispatch, page, perPage, schoolId]);
+
+    // setTotalPages(totalRows, perPage)
+  }, [
+    dispatch,
+    page,
+    perPage,
+    schoolId,
+    selectedSchool,
+    roleFilter,
+    statusFilter,
+  ]);
+  useEffect(() => {
+    setTotalPages(getTotalPages(totalRows, perPage));
+  }, [totalRows, perPage]);
+
+  useEffect(() => {
+    const getAUser = async (searchByEmail) => {
+      const fetchedUser = await fetchUserByEmail(searchByEmail);
+
+      console.log("user is", fetchedUser.users);
+      setSchoolUsers(() => fetchedUser.users);
+      setPage(1);
+      setTotalPages(1);
+    };
+    if (searchByEmail !== null && searchByEmail !== "") {
+      {
+        getAUser(searchByEmail);
+      }
+    }
+  }, [dispatch, searchByEmail]);
 
   let pathprefix = "/admin";
   if (role === "super-admin") {
@@ -122,9 +169,14 @@ const UserList = () => {
     { label: "Manage Users", icon: "" }, // current page
   ];
 
-  const handleSearch = () => {};
-  const handleRoleFilter = () => {};
-  const handleStatusFilter = () => {};
+  const handleSelectedSchool = (schoolId) => {
+    setSchId(schoolId);
+    setSelectedSchool(schoolId);
+  };
+
+  const getSchoolSelected = () => {
+    return schoolId ? schoolId : SchId;
+  };
 
   // const visibleUsers = allUsers.slice((page-1)*perPage, page*perPage);
 
@@ -137,62 +189,18 @@ const UserList = () => {
       ) : (
         <div className="container-fluid py-1 manage-user-section">
           {/* Filter section*/}
-          <div className="d-flex flex-wrap justify-content-between align-items-center mb-3">
-            <Form className="d-flex align-items-center">
-              <Form.Control
-                type="text"
-                placeholder="Search by name/email"
-                className="me-2"
-                style={{ maxWidth: "250px" }}
-                onChange={(e) => setSearchValue(e.target.value)} // add this state handler
-              />
-              <Button
-                variant="outline-secondary"
-                className="user-search-btn"
-                onClick={handleSearch}
-              >
-                <i className="bi bi-search"></i>
-              </Button>
-            </Form>
-
-            <div className="d-flex gap-2">
-              <Form.Select
-                onChange={(e) => handleRoleFilter(e.target.value)}
-                size="sm"
-              >
-                <option value="">All Roles</option>
-                <option value="system-admin">System Admin</option>
-                <option value="super-admin">Super Admin</option>
-                <option value="teacher">Teacher</option>
-                <option value="student">Student</option>
-              </Form.Select>
-              <Form.Select
-                onChange={(e) => handleStatusFilter(e.target.value)}
-                size="sm"
-              >
-                <option value="">All Statuses</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </Form.Select>
-            </div>
-            <div className="d-flex justify-content-between align-items-center">
-              <Button
-                variant="primary"
-                className="btn-sm show-500-after"
-                onClick={() => setShowDrawer(true)}
-              >
-                <i className="bi bi-plus-circle"></i> Add User
-              </Button>
-
-              <Button
-                variant="primary"
-                className="btn-xs show-500-before"
-                onClick={() => setShowDrawer(true)}
-              >
-                <i className="bi bi-plus-circle"></i> Add User
-              </Button>
-            </div>
-          </div>
+          <UserSearchOptions
+            role={role}
+            onSearch={(query) => setSearchByEmail(query)}
+            onAdd={() => setShowDrawer(true)}
+            onRoleChange={(val) => setRoleFilter(val)}
+            onStatusChange={(val) => setStatusFilter(val)}
+            onSchoolChange={(selectedValue) =>
+              handleSelectedSchool(selectedValue || null)
+            }
+            schoolSelected={getSchoolSelected()}
+            selectedRole={roleFilter}
+          />
           {/** End of filter section */}
 
           {/** user grid section */}
@@ -200,7 +208,7 @@ const UserList = () => {
 
           <AdvancedGrid
             columns={columns}
-            data={users}
+            data={searchByEmail ? schoolUsers : users}
             enableSelection={true}
             enableBulkActions={true}
             selectedRows={selectedUsers}

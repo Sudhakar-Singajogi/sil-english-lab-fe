@@ -6,11 +6,14 @@ import LoginPage from "./pages/LoginPage";
 import AdminDashboard from "./pages/system-admin/Dashboard";
 import SuperAdminDashboard from "./pages/super-admin/Dashboard";
 import UserList from "./components/manage-users/UserList";
+import SessionExpired from "./components/SessionExpired";
 
 const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/session-expired" element={<SessionExpired />} />
+
 
       <Route path="/login" element={<LoginPage />} />
 
@@ -23,7 +26,7 @@ const AppRoutes = () => {
         }
       >
         <Route path="dashboard" element={<AdminDashboard />} />
-        {/* Add other nested admin routes */}
+        <Route path="manage-users" element={<UserList />} />
       </Route>
 
       <Route

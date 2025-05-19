@@ -1,5 +1,9 @@
 import axiosInstance from "../utils/axiosInstance";
 
+export const checkSessionExpired = (error) => {
+      window.location.href = "/session-expired";
+
+}
 export const fetchUsersAPI = async (params = {}) => {
   const { offset, perPage, schoolId, search, role, status, sort } = params;
   const query = new URLSearchParams();
@@ -15,7 +19,7 @@ export const fetchUsersAPI = async (params = {}) => {
   const response = await axiosInstance.get(`/users?${query.toString()}`, {
     cache: { ttl: 60000 }, // 1 min
   });
-
+  
   return {
     users: response.data.data,
     resultTotal: response.data.resultTotal,

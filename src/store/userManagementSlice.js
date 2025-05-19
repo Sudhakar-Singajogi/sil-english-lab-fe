@@ -1,13 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-import { fetchUsersAPI } from "../service/apiService";
+import { logout } from "./authSlice";
+import { checkSessionExpired, fetchUsersAPI } from "../service/apiService";
 
 export const fetchUsers = createAsyncThunk(
   "users/fetchUsers",
   async (params, thunkAPI) => {
+
     try {
       return await fetchUsersAPI(params);
     } catch (error) {
+        console.log('Session response is', error.response.data);
+        if(error.response.data.message === 'Unauthorized or invalid token'){
+            checkSessionExpired();            
+        }
+  
       const message =
         error.response?.data?.message ||
         "Failed to fetch users. Please try again.";
@@ -15,6 +21,7 @@ export const fetchUsers = createAsyncThunk(
     }
   }
 );
+
 const initialState = {
   users: [],
   loading: false,
@@ -61,7 +68,15 @@ const userManagementSlice = createSlice({
       .addCase(fetchUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      }).addCase(logout, (state) => {
+      // Triggered when auth/logout is dispatched
+      state.users = [];
+      state.resultTotal = 0;
+      state.totalRows = 0;
+      state.hasMore = false;
+      state.loading = false;
+      state.error = null;
+    });
   },
 });
 

@@ -1,0 +1,14 @@
+.school-dropdown {
+  position: relative;
+}
+
+.school-list {
+  position: absolute;
+  top: 2.5rem;
+  background: #f9f9f9;
+  width: 142px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 10px;
+  border-top: none;
+}
