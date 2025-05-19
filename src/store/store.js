@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import basicReducer from "./basicSlice"; // update path if needed
 import authReducer from "./authSlice";
+import userManagementReducer from "./userManagementSlice";
 import {
   persistReducer,
   persistStore,
@@ -20,12 +21,14 @@ if (import.meta.env.MODE === "development" ) {
   const persistConfig = {
     key: "root",
     storage,
-    whitelist: ["auth", "basics"], // only persist the auth slice
+    whitelist: ["auth", "basics", "userManagement"], // only persist the auth slice
   };
 
   const rootReducer = combineReducers({
     auth: authReducer, // 'auth' → appears in `state.auth` need use like this while calling
     basics: basicReducer, // 'basics' → appears in `state.basics` need use like this while calling
+    userManagement: userManagementReducer // 'userManagement' → appears in `state.userManagement` need use like this while calling
+
   });
 
   const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -44,6 +47,7 @@ if (import.meta.env.MODE === "development" ) {
     reducer: {
       basics: basicReducer,
       auth: authReducer,
+      userManagement: userManagementReducer
     },
   });
 }

@@ -99,7 +99,7 @@ const Sidebar = ({ isOpen }) => {
         </div>
         {/* Menu */}
         <nav className="nav flex-column sidebar-menu">
-          <NavLink to="/dashboard" className="sidebar-link nav-link active text-white fw-bold">
+          <NavLink to={pathprefix + "/dashboard"} key={pathprefix + "/dashboard"} className="sidebar-link nav-link active text-white fw-bold">
             Dashboard
           </NavLink>
           {visibleMenus.map((item) => (

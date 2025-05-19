@@ -1,3 +1,8 @@
+.breadcrumb-nav {
+  margin-top: 5px;
+  z-index: 99999999 !important;
+}
+
 .breadcrumb {
   font-size: 0.95rem;
   color: #64748b;
@@ -7,7 +12,7 @@
   flex-wrap: wrap;
   align-items: center;
   margin-left: 0rem;
-   background-color: transparent;
+  background-color: transparent;
 }
 
 .breadcrumb-item {

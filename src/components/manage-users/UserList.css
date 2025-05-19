@@ -1,0 +1,132 @@
+.users-page {
+  padding: 2rem;
+  background-color: #f8f9fa;
+}
+
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.users-header h3 {
+  margin: 0;
+}
+
+.users-table {
+  background: #fff;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.users-table th,
+.users-table td {
+  vertical-align: middle;
+}
+
+.form-select,
+.form-control {
+  max-width: 200px;
+}
+
+.user-drawer-modal .modal-dialog {
+  position: fixed;
+  right: 0;
+  top: 0;
+  margin: 0;
+  height: 100vh;
+  transform: none !important;
+}
+
+.user-drawer-modal .modal-content {
+  height: 100vh;
+  border-radius: 0;
+  border-left: 1px solid #dee2e6;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.action-icon {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.action-icon:hover {
+  transform: scale(1.2);
+}
+
+.add-user-btn {
+  font-weight: 500;
+  padding: 6px 16px;
+}
+.manage-user-section {
+  padding: 0px !important;
+}
+
+.user-pagination {
+  display: flex;
+  justify-content: flex-end;
+  /* margin-top: 0rem; */
+}
+
+.manage-users-form {
+  display: block;
+  input,
+  select {
+    max-width: 100%;
+  }
+}
+
+.user-search-btn {
+  width: 35px;
+  margin: 0px;
+  height: 33px;
+  background: #1f548e !important;
+  position: relative;
+  display: flex !important;
+  justify-content: space-evenly;
+  border: none !important;
+  i {    
+    font-size: 15px;;
+    position: absolute;
+    align-items: center;
+    color: #fff;
+  }
+}
+.plus-circle {
+  margin-right:10px;
+}
+
+
+@media screen and (min-width: 601px) and (max-width: 650px) {
+}
+
+@media (max-width: 500px) {
+  .manage-user-section {
+    input,
+    select {
+      margin-bottom: 10px;
+    }
+  }
+  .show-500-before {
+    /* display: block !important; */
+    height:30px;
+    justify-content: center;
+    align-items: center;
+    display: flex !important;
+  }
+  .show-500-after {
+    display: none !important;
+  }
+}
+
+@media (min-width: 501px) {
+  .show-500-before {
+    display: none !important;
+  }
+  .show-500-after {
+    display: block !important;
+  }
+}
+

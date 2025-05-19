@@ -1,11 +1,14 @@
 // File: src/components/Breadcrumb.jsx
 import React from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import "./Breadcrumb.css"; // optional for custom styles
 
 const Breadcrumb = ({ items }) => {
+const role = useSelector((state) => state.auth.role);
+
   return (
-    <nav aria-label="breadcrumb" className="mb-1">
+    <nav aria-label="breadcrumb" className="mb-1 breadcrumb-nav">
       <ol className="breadcrumb">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;

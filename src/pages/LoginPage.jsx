@@ -2,6 +2,7 @@
 import React, {useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../store/authSlice";
+import { clearUsersList } from "../store/userManagementSlice";
 import { useNavigate } from "react-router-dom";
 
 import "./LoginPage.css";
@@ -26,7 +27,10 @@ const LoginPage = () => {
       } else if (role === 'super-admin') {
         navigate('/school/dashboard');
       }
+    } else {
+      dispatch(clearUsersList());
     }
+
   }, [isAuthenticated, role, navigate]);
 
   const handleLogin = (e) => {
