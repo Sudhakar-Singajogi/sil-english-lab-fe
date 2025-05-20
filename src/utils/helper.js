@@ -1,11 +1,10 @@
 import { useRef } from "react";
 import axios from "axios";
 
-
-export const getTotalPages = function(totalResults, perPage) {
+export const getTotalPages = function (totalResults, perPage) {
   if (perPage <= 0) return 0;
   return Math.ceil(totalResults / perPage);
-}
+};
 
 export const useCachedRequest = () => {
   const cache = useRef({});
@@ -21,3 +20,11 @@ export const useCachedRequest = () => {
 
   return sendRequest;
 };
+
+export function isFeatureAllowed({ role, feature, allowedFeatures }) {
+  if (role === "system-admin") return true;
+  if (!feature || !allowedFeatures || !Array.isArray(allowedFeatures))
+    return false;
+  return allowedFeatures.includes(feature);
+}
+

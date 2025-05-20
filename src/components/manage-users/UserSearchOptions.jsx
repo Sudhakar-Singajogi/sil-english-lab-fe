@@ -1,24 +1,8 @@
-// File: src/pages/system-admin/UserList.jsx
 import React, { useRef, useEffect, useState } from "react";
 import { Button, Form, Offcanvas } from "react-bootstrap";
-
+import useACL from "../../CustomHooks/useACL";
 import { fetchSchools } from "./Service";
 import "./UserSearchOptions.css";
-import { useSelector, useDispatch } from "react-redux";
-
-const customSelectStyles = {
-  control: (provided) => ({
-    ...provided,
-    minHeight: "32px",
-    fontSize: "0.875rem",
-    borderColor: "#ced4da",
-    boxShadow: "none",
-  }),
-  menu: (provided) => ({
-    ...provided,
-    zIndex: 9999,
-  }),
-};
 
 function UserSearchOptions({
   role,
@@ -35,13 +19,9 @@ function UserSearchOptions({
   const [schoolList, setSchoolList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const prevSchoolSelected = useRef("");
-  const allowedFeatures = useSelector(
-    (state) => state.auth.lacInfo.allowedFeatures
-  );
+  const { featureAllowed } = useACL();
 
-  console.log("schoolSelected:", schoolSelected);
-
-  const loadOptions = async (inputValue) => {
+  const loadOptions = async () => {
     const result = await fetchSchools();
     const schools = result.schools;
 
@@ -128,7 +108,7 @@ function UserSearchOptions({
             <option value="inactive">Inactive</option>
           </Form.Select>
         </div>
-        {allowedFeatures.includes("add-user") && (
+        {featureAllowed("add-user") && (
           <div className="d-flex justify-content-between align-items-center">
             <Button
               variant="primary"

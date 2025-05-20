@@ -1,47 +1,27 @@
-// File: src/pages/system-admin/UserList.jsx
-import React, { use, useCallback, useEffect, useState } from "react";
-// import ListGrid from "../Grid/ListGrid";
+import React, { useEffect, useState } from "react";
 import AdvancedGrid from "../Grid/Advancedgrid";
 import { useSelector, useDispatch } from "react-redux";
 
 import { fetchUsers } from "../../store/userManagementSlice";
-import { Pencil, ToggleOn, ToggleOff } from "react-bootstrap-icons";
 import "./UserList.css";
 import DrawerForm from "../../components/DrawerForm";
 import { fetchUserByEmail } from "./Service";
-
 import userFormSchema from "../../schema/userFormSchema";
 import Breadcrumb from "../../components/Breadcrumb";
 import PaginationComponent from "../PaginationComponent";
 import { getTotalPages } from "../../utils/helper";
 import Loader from "../Loader";
 import UserSearchOptions from "./UserSearchOptions";
-
-const roleColors = {
-  "system-admin": "danger",
-  "super-admin": "warning",
-  teacher: "info",
-  student: "secondary",
-};
-
-const renderRole = (role) => (
-  <span className={`badge bg-${roleColors[role] || "dark"}`}>{role}</span>
-);
-
-const renderStatus = (status) => (
-  <span className={`badge bg-${status === "active" ? "success" : "secondary"}`}>
-    {status}
-  </span>
-);
+import useACL from "../../CustomHooks/useACL";
+import { getUserColumns } from "../GridColumns/userColumns";
 
 const UserList = () => {
   const dispatch = useDispatch();
   const [showDrawer, setShowDrawer] = useState(false);
   const [editData, setEditData] = useState({});
   const role = useSelector((state) => state.auth.role);
-  const allowedFeatures = useSelector(
-    (state) => state.auth.lacInfo.allowedFeatures
-  );
+  const { featureAllowed } = useACL();
+
   let schoolId = null;
   if (role !== "system-admin") {
     schoolId = useSelector((state) => state.auth.schoolInfo.id);
@@ -74,8 +54,6 @@ const UserList = () => {
         status: statusFilter,
       })
     );
-
-    // setTotalPages(totalRows, perPage)
   }, [
     dispatch,
     page,
@@ -93,7 +71,6 @@ const UserList = () => {
     const getAUser = async (searchByEmail) => {
       const fetchedUser = await fetchUserByEmail(searchByEmail);
 
-      console.log("user is", fetchedUser.users);
       setSchoolUsers(() => fetchedUser.users);
       setPage(1);
       setTotalPages(1);
@@ -109,61 +86,22 @@ const UserList = () => {
   if (role === "super-admin") {
     pathprefix = "/school";
   }
+  const handleEdit = (row) => {
+    setEditData(row);
+    setShowDrawer(true);
+  };
 
-  const columns = [
-    { key: "fullName", title: "Name" },
-    { key: "email", title: "Email" },
-    { key: "role", title: "Role", render: renderRole },
-    {
-      key: "status",
-      title: "Status",
-      render: renderStatus,
-    },
-    {
-      key: "actions",
-      title: "Actions",
-      edit: allowedFeatures.includes("edit-user"),
-      delete: allowedFeatures.includes("delete-user"),
-      render: (_, row) => (
-        <div className="d-flex gap-2">
-          {allowedFeatures.includes("edit-user") && (
-            <Pencil
-              role="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                alert(`Edit ${row.fullName}`);
-              }}
-              size={18} // or 20
-              className="text-primary me-2 cursor-pointer"
-            />
-          )}
-          {row.status === "active"
-            ? allowedFeatures.includes("delete-user") && (
-                <ToggleOn
-                  role="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    alert(`Deactivate ${row.fullName}`);
-                  }}
-                  size={22}
-                  className="text-success cursor-pointer"
-                />
-              )
-            : allowedFeatures.includes("delete-user") && (
-                <ToggleOff
-                  role="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    alert(`Activate ${row.fullName}`);
-                  }}
-                  size={22}
-                  className="text-muted cursor-pointer"
-                />
-              )}
-        </div>
-      ),
-    },
-  ];
+  const handleToggleStatus = (row, activate) => {
+    console.log(`${activate ? "Activate" : "Deactivate"} user`, row);
+    // TODO: Dispatch action here
+  };
+
+  const columns = getUserColumns(
+    handleEdit,
+    handleToggleStatus,
+    featureAllowed
+  );
+
   let userActionIcon = () =>
     editData ? (
       <i className="me-1 bi bi-pencil-fill"> Edit user</i>
@@ -187,8 +125,6 @@ const UserList = () => {
   const getSchoolSelected = () => {
     return schoolId ? schoolId : SchId;
   };
-
-  // const visibleUsers = allUsers.slice((page-1)*perPage, page*perPage);
 
   return (
     <>
