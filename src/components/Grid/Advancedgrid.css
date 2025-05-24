@@ -1,3 +1,6 @@
+.row {
+  width: 100% !important;
+}
 .listgrid-container table {
   background-color: #fff;
   border-radius: 6px;

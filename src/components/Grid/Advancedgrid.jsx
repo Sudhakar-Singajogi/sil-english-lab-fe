@@ -120,7 +120,7 @@ const AdvancedGrid = ({
   }, [data, sortConfig]);
 
   return (
-    <div className="listgrid-container">
+    <div className="grid-row row">
       {enableBulkActions && selectedRows.length > 0 && (
         <div className="bulk-actions-bar">
           <div>

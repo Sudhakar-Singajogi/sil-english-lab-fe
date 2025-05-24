@@ -180,3 +180,22 @@
   flex: 1;
   overflow-y: auto;
 }
+
+
+@media (max-width: 768px) {
+  .teacher-sidebar {
+    display: none !important;
+  }
+  .teacher-layout {
+    flex-direction: column;
+  }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    padding: 1rem;
+  }
+  .main-content {
+    padding: 1rem;
+  }
+}

@@ -1,0 +1,66 @@
+.assign-lessons-page {
+  background-color: #f9fbfd;
+  min-height: 100vh;
+  font-size: 0.95rem;
+}
+
+.assign-lessons-page h4 {
+  font-weight: 600;
+  color: #2d3e50;
+}
+
+.assign-lessons-page .card {
+  border-radius: 10px;
+}
+
+.assign-lessons-page .card-title {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.assign-lessons-page .form-label {
+  font-weight: 500;
+}
+
+.assign-lessons-page .table th,
+.assign-lessons-page .table td {
+  vertical-align: middle;
+}
+
+.assign-lessons-page .btn-sm {
+  font-size: 0.75rem;
+}
+
+.assign-lessons-page .btn-primary {
+  background-color: #1e3a8a;
+  border-color: #1e3a8a;
+}
+.recently-assigned-title {
+  margin-bottom: 0.7rem !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+}
+
+.recently-assigned-grid tr td {
+  padding: 7px;
+}
+
+.recent-assigned-section {
+  display: grid;
+  grid-template-columns: 25% 1fr;
+  width: 100%;
+}
+
+.avatar
+{
+    margin-left: 3rem;
+}
+
+
+.teacher-card {
+    text-align: center;
+    p {
+        margin: 0px;
+    }
+}

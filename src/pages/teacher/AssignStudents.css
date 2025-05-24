@@ -35,21 +35,17 @@
   border-radius: 8px;
   margin-bottom: 20px;
   background-color: #f9f9f9;
-  width:100%;
-  /* grid-template-columns: 200px 1fr; */
+  width: 100%;
+  grid-template-columns: 200px 1fr;
   .assigned-teacher {
     display: grid;
-    grid-template-columns: 120px 1fr;
+    grid-template-columns: 80px 1fr;
     position: relative;
   }
 }
-.std-cnt {
-  position: absolute;
-  left:5rem;
-  top:0rem
-}
 
 .avatar {
+  margin-left:0px !important;
   background: #79c6e0;
   border-radius: 50%;
   width: 65px;
@@ -158,13 +154,72 @@
 }
 
 .assigned-students {
-  margin-top:2rem;
+  margin-top: 2rem;
 }
 
 .alert-box {
-  padding:9px !important;
+  padding: 9px !important;
   div.alert-heading.h4 {
-    margin-top:10px;
+    margin-top: 10px;
     font-size: 1rem;
+  }
+}
+
+.listgrid-container th,
+  .listgrid-container td {
+    font-size: 12px;
+  }
+
+@media (max-width: 600px) {
+
+  .assigned-info {
+  display: grid;
+  grid-template-columns: auto !important;
+}
+  .std-cnt {
+    position: absolute;
+    left: 5rem;
+    top: 0rem;
+  }
+  .assign-container {
+    padding: 0px;
+    border: none;
+  }
+  .filters {
+    grid-template-columns: 1fr 1fr;
+  }
+  .assigned-info {
+    padding: 0px;
+  }
+  .avatar {
+    margin-top: 1rem;
+    margin-left: 2.5rem !important;
+  }
+
+
+  .assigned-teacher {
+    position: relative;
+  }
+  .std-cnt {
+    position: absolute;
+    top: 1rem;
+    left: 9rem;
+  }
+  listgrid-container {
+    width: 100%;
+  }
+  .listgrid-container th,
+  .listgrid-container td {
+    font-size: 12px;
+  }
+
+  .table-responsive {
+    overflow: scroll !important;
+  }
+
+  .assigned-info {
+    .assigned-teacher {
+      padding-bottom: 1rem;
+    }
   }
 }

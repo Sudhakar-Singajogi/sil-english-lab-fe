@@ -50,15 +50,25 @@ const Sidebar = ({ isOpen }) => {
               </NavLink>
             </li>
             <li>
-             
-              
               <NavLink
                 to={pathprefix + "/assign-students"}
                 key={pathprefix + "assign-students"}
                 className="sidebar-link nav-link active text-white fw-bold"
                 onClick={toggleSidebar}
               >
-                <i className="bi bi-chevron-bar-contract"></i> <span>Assign Students</span>
+                <i className="bi bi-chevron-bar-contract"></i>{" "}
+                <span>Assign Students</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to={pathprefix + "/assign-lessons-chapters"}
+                key={pathprefix + "assign-lessons-chapters"}
+                className="sidebar-link nav-link active text-white fw-bold"
+                onClick={toggleSidebar}
+              >
+                <i className="bi bi-chevron-bar-contract"></i>{" "}
+                <span>Assign Lessons</span>
               </NavLink>
             </li>
           </ul>

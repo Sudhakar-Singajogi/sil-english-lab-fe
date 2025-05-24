@@ -189,3 +189,14 @@ filter: brightness(1.4);
     transform: translateY(0) scale(1) rotate(var(--angle));
   }
 }
+
+
+@media (max-width: 600px) {
+  .login-container {
+    width: 100%;
+  }
+  .background-icons img {
+    width: 40px;
+    height: 40px;
+  }
+}

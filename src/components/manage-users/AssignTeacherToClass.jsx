@@ -411,7 +411,8 @@ const AssignTeacherToClass = () => {
           )}
         </div>
 
-        <div className="assign-inline assigned-students">
+      </div >
+    <div className="assign-inline assigned-students">
           <AdvancedGrid
             columns={columns}
             data={students}
@@ -431,8 +432,7 @@ const AssignTeacherToClass = () => {
             renderExpandedRow={(row) => <></>}
             modalOpenFn={(record) => fetchUserDetails(record)}
           />
-        </div>
-      </div>
+    </div>
 
       <ConfirmDialog
         show={showConfirm}

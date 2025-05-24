@@ -1,0 +1,54 @@
+/* AssignNewLessons.css */
+.assign-lessons-container {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  font-size: 0.95rem;
+  width: 100%;
+}
+
+.assign-lessons-container h5 {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.lesson-grid {
+  display: grid;
+  /* grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); */
+  gap: 10px;
+  padding: 0.5rem 0;
+}
+
+.lesson-item {
+  background-color: #f8f9fa;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.2s;
+}
+
+.lesson-item:hover {
+  background-color: #eef4ff;
+  border-color: #b3d4fc;
+}
+
+@media (max-width: 600px) {
+    .form-select {
+    font-size: 0.95rem;
+    padding: 0.5rem;
+  }
+  .assign-lessons-container {
+    padding: 0px !important;
+    .filters {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+    .recently-assigned-grid {
+
+        th, td {
+            font-size: 13px;
+          }
+    }
+  }
+}

@@ -12,6 +12,8 @@ import TeacherAppLayout from "./layouts/teacher/TeacherAppLayout";
 import AssignStudents from "./pages/teacher/AssignStudents";
 import AssignClassToTeacher from "./pages/system-admin/AssignClassToTeacher";
 
+import AssignChapterLessons from "./pages/teacher/AssignLessonsChapters";
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -61,6 +63,7 @@ const AppRoutes = () => {
       >
         <Route path="dashboard" element={<Dashboard />} /> 
         <Route path="assign-students" element={<AssignClassToTeacher />} />
+        <Route path="assign-lessons-chapters" element={<AssignChapterLessons />} />
         
         {/* Add other nested school routes */}
       </Route>
