@@ -69,7 +69,7 @@ export function renderFieldsFromSchema({
                 {type === "select" ? (
                   <Form.Select {...commonProps} className={`${className}`}>
                     <option value="">Select</option>
-                    {options.map((opt) => (
+                    {options&& options.map((opt) => (
                       <option key={opt.value} value={opt.value} >
                         {opt.label} 
                       </option>

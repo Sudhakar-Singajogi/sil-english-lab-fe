@@ -75,9 +75,10 @@ export const addUser = async (data) => {
 export const fetchUserByClassSection = async (
   whichClass,
   whichSection,
+  whichSchool,
   fromCache = true
 ) => {
-  const url = `/users/class/${whichClass}/section/${whichSection}`;
+  const url = `/users/class/${whichClass}/section/${whichSection}/school/${whichSchool}`;
   try {
     const response = await axiosInstance.get(url, { cache: fromCache });
     console.log("response is", response.data.data);

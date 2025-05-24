@@ -1,12 +1,14 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useRef, useCallback, useEffect, useState } from "react";
 import "../../pages/teacher/AssignStudents.css";
 import AdvancedGrid from "../Grid/Advancedgrid";
 import { getStudentsColumns } from "../../components/GridColumns/assignStudents";
 import { useSelector, useDispatch } from "react-redux";
+import { setAllSchools } from "../../store/authSlice";
 import {
   fetchUserByClassSection,
   assignTeacherToClassSec,
   updateUser,
+  fetchSchools,
 } from "./Service";
 import ConfirmDialog from "../alerts/ConfirmDialog";
 import AlertDialog from "../alerts/AlertDialog";
@@ -17,14 +19,21 @@ import { toast } from "react-toastify";
 import userFormSchema from "../../schema/userFormSchema";
 
 const AssignTeacherToClass = () => {
-  const [school, setSchool] = useState("");
+  const dispatch = useDispatch();
+  const role = useSelector((state) => state.auth.role);
+  const [schoolList, setSchoolList] = useState([]);
+  const prevSchoolSelected = useRef("");
   const [classNum, setClassNum] = useState("");
   const [section, setSection] = useState("");
   const { userId: teacherId } = useSelector((state) => state.auth.user);
   const schoolInfo = useSelector((state) => state.auth.schoolInfo);
+  const [schoolId, setSchoolId] = useState(
+    role === "super-admin" || role === "teacher" ? schoolInfo.id : null
+  );
+  const allSchools = useSelector((state) => state.auth.allSchools);
   const { allTeachers: schoolTeachers } = useSelector((state) => state.auth);
   const [teacherList, setTeacherList] = useState(null);
-  const role = useSelector((state) => state.auth.role);
+
   const [selectedTeacher, setSelectedTeacher] = useState(
     role === "teacher" ? teacherId : null
   );
@@ -41,6 +50,27 @@ const AssignTeacherToClass = () => {
   const [editData, setEditData] = useState({});
   const [showDrawer, setShowDrawer] = useState(false);
   const [submitError, setSubmitError] = useState(null);
+
+  const loadOptions = useCallback(async () => {
+    if (allSchools === null) {
+      const result = await fetchSchools();
+      const schools = result.schools;
+
+      const options = schools.map((role) => ({
+        label: role.name,
+        value: role.id,
+      }));
+      setSchoolList(options);
+
+      dispatch(setAllSchools(options));
+    } else {
+      setSchoolList(allSchools);
+    }
+  }, [dispatch, allSchools]);
+
+  useEffect(() => {
+    loadOptions();
+  }, [loadOptions]);
 
   const handleEdit = (row) => {
     console.log("row is", row);
@@ -72,7 +102,11 @@ const AssignTeacherToClass = () => {
 
   useEffect(() => {
     const getUserByclsSec = async (classNum, section) => {
-      const res = await fetchUserByClassSection(classNum, section);
+      let schId = schoolInfo?.id;
+      if (role === "system-admin") {
+        schId = schoolId;
+      }
+      const res = await fetchUserByClassSection(classNum, section, schId);
 
       if (res.users.length > 0) {
         setStudents(res.users);
@@ -104,20 +138,43 @@ const AssignTeacherToClass = () => {
       }
     };
 
-    if (classNum && section) {
+    if (classNum && section && role !== "system-admin") {
       setAlertMsg("");
       setAlertVariant("");
       setShowAlert(false);
       getUserByclsSec(classNum, section);
+    } else {
+      if (classNum && section && role === "system-admin") {
+        setAlertMsg(() => "");
+        if (schoolId === "") {
+          console.log("till here");
+          setShowAlert(true);
+          setAlertMsg("Please select school");
+          setAlertVariant("danger");
+        } else {
+          setAlertMsg("");
+          setAlertVariant("");
+          setShowAlert(false);
+          getUserByclsSec(classNum, section);
+        }
+      }
     }
-  }, [classNum, section]);
+  }, [classNum, section, schoolId]);
+
+  useEffect(() => {
+    console.log("ShowAlert:", showAlert);
+  }, [showAlert]);
 
   const handleClassChange = (value) => {
     setClassNum(value);
+    setAlertMsg("");
+    setShowAlert(false);
   };
 
   const handleSectionChange = (value) => {
     setSection(value);
+    setShowAlert(false);
+    setAlertMsg("");
   };
 
   const handleAssignTeacher = (value) => {
@@ -265,18 +322,25 @@ const AssignTeacherToClass = () => {
       <div className="filters">
         {role === "system-admin" && (
           <>
-            <div className="col-md-4 col-sm-12 col-xs-12">
+            <div>
               <select
-                value={school}
-                onChange={(e) => setSchool(e.target.value)}
+                value={schoolId}
+                onChange={(e) => setSchoolId(e.target.value)}
               >
                 <option value="">Select School</option>
-                <option>Grand Oak Public School</option>
+                {/* <option>Grand Oak Public School</option> */}
+                {allSchools &&
+                  allSchools.length > 0 &&
+                  allSchools.map((school) => (
+                    <option key={school.value} value={school.value}>
+                      {school.label}
+                    </option>
+                  ))}
               </select>
             </div>
           </>
         )}
-        <div className="col-md-4 col-sm-12 col-xs-12">
+        <div>
           <select
             value={classNum}
             onChange={(e) => handleClassChange(e.target.value)}
@@ -289,7 +353,7 @@ const AssignTeacherToClass = () => {
             ))}
           </select>
         </div>
-        <div className="col-md-4">
+        <div>
           <select
             value={section}
             onChange={(e) => handleSectionChange(e.target.value)}
@@ -305,7 +369,7 @@ const AssignTeacherToClass = () => {
         <Alert
           className="alert-box"
           variant={alertvariant}
-          onClose={() => setShowAlert(false)}
+          onClose={() => setShowAlert(() => false)}
           dismissible
         >
           <Alert.Heading>{alertMsg}</Alert.Heading>
@@ -346,11 +410,6 @@ const AssignTeacherToClass = () => {
             </>
           )}
         </div>
-        {/* <div>
-          <div className="assigned-label">Assigned Teacher</div>
-          <div className="teacher-name">Aditi Sharma</div>
-          <div className="student-count">25 students</div>
-        </div> */}
 
         <div className="assign-inline assigned-students">
           <AdvancedGrid
@@ -365,7 +424,9 @@ const AssignTeacherToClass = () => {
               { label: "Export", onClick: () => {} },
             ]}
             enableRowHighlight={true}
-            enableActionDropdown={role === "teacher" ?(teacherId == selectedTeacher) : true}
+            enableActionDropdown={
+              role === "teacher" ? teacherId == selectedTeacher : true
+            }
             enableRowExpand={true}
             renderExpandedRow={(row) => <></>}
             modalOpenFn={(record) => fetchUserDetails(record)}

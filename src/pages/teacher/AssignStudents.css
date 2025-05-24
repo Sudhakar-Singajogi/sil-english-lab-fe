@@ -11,9 +11,10 @@
 }
 
 .filters {
-  display: flex;
+  display: grid;
   gap: 10px;
   margin-bottom: 20px;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
 .filters select {

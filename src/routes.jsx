@@ -31,6 +31,7 @@ const AppRoutes = () => {
       >
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="manage-users" element={<UserList />} />
+        <Route path="manage-assignstudents" element={<AssignClassToTeacher />} />
         
       </Route>
 
@@ -40,6 +41,7 @@ const AppRoutes = () => {
           <PrivateRoute allowedRoles={["super-admin"]}>
             <AppLayout />
           </PrivateRoute>
+          
         }
       >
         <Route path="dashboard" element={<SuperAdminDashboard />} />
