@@ -22,6 +22,7 @@ const AdvancedGrid = ({
   enableActionDropdown = false,
   enableRowExpand = false,
   renderExpandedRow = null,
+  modalOpenFn = () => {},
 }) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [localSelected, setLocalSelected] = useState([]);
@@ -32,6 +33,8 @@ const AdvancedGrid = ({
   }, [selectedRows]);
 
   const isAllSelected = data.length > 0 && localSelected.length === data.length;
+
+  console.log('grid dats is:', data);
 
   const toggleRow = (row) => {
     const exists = localSelected.find((r) => r.id === row.id);
@@ -69,7 +72,8 @@ const AdvancedGrid = ({
   //     );
   //   };
 
-  const showDropdown = (col) => (
+  const showDropdown = (col, row) => (
+    console.log("col", col),
     <td key={col.key}>
       <div className="dropdown">
         <button
@@ -84,7 +88,7 @@ const AdvancedGrid = ({
           <>
             <ul className="dropdown-menu">
               {col.edit && (
-                <li>
+                <li onClick={() => modalOpenFn(row)}>
                   {/* <button className="dropdown-item">Edit</button> */}
                   <i className="bi bi-pencil-fill"></i> Edit
                 </li>
@@ -92,7 +96,7 @@ const AdvancedGrid = ({
 
               {col.delete && (
                 <li>
-                  <i className="bi bi-trash3"></i> Delete
+                  <i className="bi bi-trash3"></i> Deleted
                 </li>
               )}
             </ul>
@@ -201,7 +205,7 @@ const AdvancedGrid = ({
                     key={item.id || idx}
                     onClick={() => onRowClick?.(item)}
                     className={
-                      enableRowHighlight &&
+                      enableRowHighlight && localSelected.length>0 &&
                       localSelected.some((r) => r.id === item.id)
                         ? "table-active"
                         : ""
@@ -211,7 +215,7 @@ const AdvancedGrid = ({
                       <td>
                         <input
                           type="checkbox"
-                          checked={localSelected.some((r) => r.id === item.id)}
+                          checked={localSelected.length>0 && localSelected.some((r) => r.id === item.id)}
                           onChange={(e) => {
                             e.stopPropagation();
                             toggleRow(item);
@@ -236,7 +240,7 @@ const AdvancedGrid = ({
                     )} */}
                     {columns.map((col) =>
                       enableActionDropdown && col.key === "actions" ? (
-                        showDropdown(col)
+                        showDropdown(col, item)
                       ) : (
                         <td key={col.key}>
                           {col.render

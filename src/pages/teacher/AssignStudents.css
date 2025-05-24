@@ -1,0 +1,169 @@
+.main-content {
+  padding: 0.5rem;
+}
+.assign-container {
+  font-family: sans-serif;
+  max-width: 1024px;
+  /* margin: auto; */
+  border: 1px solid #eee;
+  padding: 1rem;
+  border-radius: 5px;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filters select {
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  flex: 1;
+  width: 90%;
+  /* max-width: 200px; */
+}
+
+.assigned-info {
+  display: grid;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  width:100%;
+  /* grid-template-columns: 200px 1fr; */
+  .assigned-teacher {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    position: relative;
+  }
+}
+.std-cnt {
+  position: absolute;
+  left:5rem;
+  top:0rem
+}
+
+.avatar {
+  background: #79c6e0;
+  border-radius: 50%;
+  width: 65px;
+  height: 65px;
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.assigned-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.teacher-name {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.student-count {
+  font-size: 13px;
+  color: #888;
+}
+
+.change-btn {
+  margin-left: auto;
+  background-color: #eee;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: none !important;
+  select {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline-color: #f9f9f9 !important;
+  }
+}
+
+.assign-box {
+  border: 1px solid #eee;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+.assign-box label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.assign-row {
+  display: flex;
+  gap: 10px;
+}
+
+.assign-row select {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.assign-btn {
+  background-color: #2d66f6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.student-table th,
+.student-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.student-table th {
+  background-color: #f2f2f2;
+}
+
+.assign-student-avatar {
+  width: 40px !important;
+  border-radius: 50%;
+}
+
+.assign-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.assign-inline select {
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.assigned-students {
+  margin-top:2rem;
+}
+
+.alert-box {
+  padding:9px !important;
+  div.alert-heading.h4 {
+    margin-top:10px;
+    font-size: 1rem;
+  }
+}

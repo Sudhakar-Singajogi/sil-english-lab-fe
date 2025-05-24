@@ -7,6 +7,10 @@ import AdminDashboard from "./pages/system-admin/Dashboard";
 import SuperAdminDashboard from "./pages/super-admin/Dashboard";
 import UserList from "./components/manage-users/UserList";
 import SessionExpired from "./components/SessionExpired";
+import Dashboard from "./pages/teacher/Dashboard";
+import TeacherAppLayout from "./layouts/teacher/TeacherAppLayout";
+import AssignStudents from "./pages/teacher/AssignStudents";
+import AssignClassToTeacher from "./pages/system-admin/AssignClassToTeacher";
 
 const AppRoutes = () => {
   return (
@@ -27,6 +31,7 @@ const AppRoutes = () => {
       >
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="manage-users" element={<UserList />} />
+        
       </Route>
 
       <Route
@@ -39,6 +44,22 @@ const AppRoutes = () => {
       >
         <Route path="dashboard" element={<SuperAdminDashboard />} />
         <Route path="manage-users" element={<UserList />} />
+        {/* <Route path="assign-students" element={<AssignStudents />} />  */}
+        <Route path="manage-assignstudents" element={<AssignClassToTeacher />} />
+        {/* Add other nested school routes */}
+      </Route>
+
+      <Route
+        path="/teacher"
+        element={
+          <PrivateRoute allowedRoles={["teacher"]}>
+            <TeacherAppLayout />
+          </PrivateRoute>
+        }
+      >
+        <Route path="dashboard" element={<Dashboard />} /> 
+        <Route path="assign-students" element={<AssignClassToTeacher />} />
+        
         {/* Add other nested school routes */}
       </Route>
 

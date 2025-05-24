@@ -1,8 +1,10 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Button, Form, Offcanvas } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import useACL from "../../CustomHooks/useACL";
 import { fetchSchools } from "./Service";
 import "./UserSearchOptions.css";
+import { setAllSchools } from "../../store/authSlice";
 
 function UserSearchOptions({
   role,
@@ -15,21 +17,50 @@ function UserSearchOptions({
   selectedRole,
   selectedStatus,
   setShowDrawer,
+  onSearchByClass,
+  onSearchBySection,
+  selectedClass,
+  selectedSection,
 }) {
   const [schoolList, setSchoolList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const prevSchoolSelected = useRef("");
   const { featureAllowed } = useACL();
+  const dispatch = useDispatch();
+  const allSchools = useSelector((state) => state?.auth.allSchools);
+  
+  // prepare the list with all the classes till class-10
+
+  const classList = [];
+  for (let i = 1; i <= 10; i++) {
+    classList.push({ label: `Class-${i}`, value: `${i}` });
+  }
+
+  // prepare the list of sections  till A, B, C
+
+  const sectionsList = [
+    { label: "Section-A", value: "A" },
+    { label: "Section-B", value: "B" },
+    { label: "Section-C", value: "C" },
+  ];
 
   const loadOptions = async () => {
-    const result = await fetchSchools();
-    const schools = result.schools;
+    if(allSchools === null) {
+      const result = await fetchSchools();
+      const schools = result.schools;
+  
+      const options = schools.map((role) => ({
+        label: role.name,
+        value: role.id,
+      }));
+      setSchoolList(options);
+  
+      dispatch(setAllSchools(options));
 
-    const options = schools.map((role) => ({
-      label: role.name,
-      value: role.id,
-    }));
-    setSchoolList(options);
+    } else {
+      setSchoolList(allSchools);
+    }
+
   };
 
   useEffect(() => {
@@ -86,6 +117,34 @@ function UserSearchOptions({
               </Form.Select>
             </>
           )}
+
+          <Form.Select
+            value={selectedClass || ""}
+            onChange={(e) => onSearchByClass(e.target.value)}
+            size="sm"
+            // disabled={schoolList.length === 0} // disable until options load
+          >
+            <option value="">All Classes</option>
+            {classList.map((cls) => (
+              <option key={cls.value} value={cls.value}>
+                {cls.label}
+              </option>
+            ))}
+          </Form.Select>
+
+          <Form.Select
+            value={selectedSection || ""}
+            onChange={(e) => onSearchBySection(e.target.value)}
+            size="sm"
+            // disabled={schoolList.length === 0} // disable until options load
+          >
+            <option value="">All Sections</option>
+            {sectionsList.map((sec) => (
+              <option key={sec.value} value={sec.value}>
+                {sec.label}
+              </option>
+            ))}
+          </Form.Select>
 
           <Form.Select
             onChange={(e) => onRoleChange(e.target.value)}

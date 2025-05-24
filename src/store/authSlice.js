@@ -10,7 +10,7 @@ export const loginUser = createAsyncThunk(
         password,
       });
       console.log("response is", response);
-      const { token, user, schoolInfo, licenseTierInfo, lacInfo, allMenuItems } =
+      const { token, user, schoolInfo, licenseTierInfo, lacInfo, allMenuItems, allTeachers } =
         response.data;
 
       return {
@@ -20,7 +20,8 @@ export const loginUser = createAsyncThunk(
         schoolInfo,
         licenseTierInfo,
         lacInfo,
-        allMenuItems
+        allMenuItems,
+        allTeachers
       };
     } catch (error) {
       const message =
@@ -41,6 +42,8 @@ const initialState = {
   isAuthenticated: false,
   loading: false,
   error: null,
+  allSchools: null,
+  allTeachers:[]
 };
 
 const authSlice = createSlice({
@@ -56,7 +59,12 @@ const authSlice = createSlice({
       state.lacInfo = null;
       state.allMenuItems=null;
       state.isAuthenticated = false;
+      state.allSchools = null;
+      state.allTeachers=[];
       localStorage.clear();
+    },
+    setAllSchools: (state, action) => {
+      state.allSchools = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -66,7 +74,7 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        const { token, user, role, schoolInfo, licenseTierInfo, lacInfo, allMenuItems } =
+        const { token, user, role, schoolInfo, licenseTierInfo, lacInfo, allMenuItems, allTeachers } =
           action.payload;
         state.loading = false;
         state.token = token;
@@ -75,7 +83,8 @@ const authSlice = createSlice({
         state.schoolInfo = schoolInfo;
         state.licenseTierInfo = licenseTierInfo;
         state.lacInfo = lacInfo;
-        state.allMenuItems =allMenuItems
+        state.allMenuItems =allMenuItems,
+        state.allTeachers=allTeachers,
         state.isAuthenticated = true;
 
         localStorage.setItem("token", token);
@@ -88,5 +97,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, setAllSchools } = authSlice.actions;
 export default authSlice.reducer;

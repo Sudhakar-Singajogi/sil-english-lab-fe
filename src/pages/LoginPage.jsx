@@ -24,8 +24,10 @@ const LoginPage = () => {
     if (isAuthenticated) {
       if (role === 'system-admin') {
         navigate('/admin/dashboard');
-      } else if (role === 'super-admin') {
+      } else if (role === 'super-admin' || role === 'sub-admin') {
         navigate('/school/dashboard');
+      } else if (role === 'teacher') {
+        navigate('/teacher/dashboard');
       }
     }
     

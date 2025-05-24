@@ -1,3 +1,4 @@
+import { FormCheck } from "react-bootstrap";
 import axiosInstance from "../../utils/axiosInstance";
 
 export const checkSessionExpired = (error) => {
@@ -15,39 +16,132 @@ export const fetchSchools = async () => {
 };
 
 export const fetchUserByEmail = async (email) => {
-    try {
+  try {
+    if (email) {
+      const response = await axiosInstance.get(`/users/email/${email}`, {});
+      console.log("response is", response.data.data);
+      console.log("response is", response.status);
 
-        if (email) {
-          const response = await axiosInstance.get(`/users/email/${email}`, {});
-          console.log("response is", response.data.data);
-          console.log("response is", response.status);
-      
-          if (response.status !== 200) {
-            return {
-              schools: [],
-              resultTotal: 0,
-              totalRows: 0,
-              hasMore: false,
-            };
-            /* */
-          } else {
-              const fetchedUser = response.data.data;
-            return {
-              users: [fetchedUser],
-              resultTotal: 1,
-              totalRows: 1,
-              hasMore: false,
-            };
-          }
-        }
-    } catch(exception) {
-        console.log("exception is", exception.response);
+      if (response.status !== 200) {
         return {
-              users: [],
-              resultTotal: 0,
-              totalRows: 0,
-              hasMore: false,
-            };
-        
+          schools: [],
+          resultTotal: 0,
+          totalRows: 0,
+          hasMore: false,
+        };
+        /* */
+      } else {
+        const fetchedUser = response.data.data;
+        return {
+          users: [fetchedUser],
+          resultTotal: 1,
+          totalRows: 1,
+          hasMore: false,
+        };
+      }
     }
+  } catch (exception) {
+    console.log("exception is", exception.response);
+    return {
+      users: [],
+      resultTotal: 0,
+      totalRows: 0,
+      hasMore: false,
+    };
+  }
+};
+
+export const updateUser = async (id, data) => {
+  try {
+    const response = await axiosInstance.patch(`/users/${id}`, data);
+    console.log("response is", response);
+    return response;
+  } catch (error) {
+    console.log("error is", error);
+    return { status: 400 };
+  }
+};
+export const addUser = async (data) => {
+  try {
+    const response = await axiosInstance.post(`/users/create`, data);
+    console.log("response is", response);
+    return response;
+  } catch (error) {
+    console.log("error is", error);
+    return { status: 400 };
+  }
+};
+
+export const fetchUserByClassSection = async (
+  whichClass,
+  whichSection,
+  fromCache = true
+) => {
+  const url = `/users/class/${whichClass}/section/${whichSection}`;
+  try {
+    const response = await axiosInstance.get(url, { cache: fromCache });
+    console.log("response is", response.data.data);
+    console.log("response is", response.status);
+
+    if (response.status !== 200) {
+      return {
+        users: [],
+        resultTotal: 0,
+        totalRows: 0,
+        hasMore: false,
+        assignedTeacher: {},
+      };
+      /* */
+    } else {
+      const fetchedUser = response.data.data;
+      return {
+        users: fetchedUser.resultData,
+        resultTotal: fetchedUser.resultData.length,
+        totalRows: fetchedUser.resultData.length,
+        assignedTeacher: fetchedUser.assignTeacher,
+        hasMore: false,
+      };
+    }
+  } catch (exception) {
+    console.log("exception is", exception.response);
+    if (
+      exception?.response?.status == 404 &&
+      exception?.response?.data?.error_type === "Resource not found"
+    ) {
+      return {
+        users: [],
+        resultTotal: 0,
+        totalRows: 0,
+        assignedTeacher: {},
+        hasMore: false,
+      };
+    }
+    if (exception.response.data.message === "Unauthorized or invalid token") {
+      checkSessionExpired();
+    }
+    return {
+      users: [],
+      resultTotal: 0,
+      totalRows: 0,
+      hasMore: false,
+    };
+  }
+}; 
+
+export const assignTeacherToClassSec = async (payload) => {
+  const resp = await axiosInstance.post(`/assignstudents/toteacher`, payload);
+  console.log("assignment responseresp:", resp.status);
+  if (resp.status === 201 && resp.data.success) {
+    return {
+      success: true,
+      message: "Assignstudent created successfully",
+      data: resp.data.data,
+    };
+  } else {
+    return {
+      success: false,
+      message: "Failed to assign teacher to the class and section ",
+      data: null,
+    };
+  }
 };

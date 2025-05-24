@@ -17,6 +17,8 @@ const Sidebar = ({ isOpen }) => {
   const lacInfo = useSelector((state) => state.auth.lacInfo);
   const allMenuItems = useSelector((state) => state.auth.allMenuItems);
 
+  console.log("loged in role", role);
+
   // Filter menu items for non-system-admin roles
   const visibleMenus =
     role === "system-admin"

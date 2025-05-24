@@ -21,6 +21,8 @@ export function renderFieldsFromSchema({
     sections[section].push(field);
   });
 
+  console.log("sections are", sections);
+
   return Object.entries(sections).map(([sectionName, fields], sectionIndex) => (
     <div key={sectionIndex} className="mb-2">
       {sectionName !== "default" && (
@@ -42,14 +44,17 @@ export function renderFieldsFromSchema({
             disabled = false,
             col = 12,
             icon,
+            className="",
+            defaultSelect=""
           } = field;
+
+          console.log("defaultSelect:", defaultSelect)
 
           const commonProps = {
             name,
             value: formData[name] || "",
             onChange,
             placeholder,
-            required,
             disabled,
             isInvalid: validated && (!!errors[name] || (required && !formData[name])),
           };
@@ -62,11 +67,11 @@ export function renderFieldsFromSchema({
                   {label}
                 </Form.Label>
                 {type === "select" ? (
-                  <Form.Select {...commonProps}>
+                  <Form.Select {...commonProps} className={`${className}`}>
                     <option value="">Select</option>
                     {options.map((opt) => (
-                      <option key={opt.value} value={opt.value}>
-                        {opt.label}
+                      <option key={opt.value} value={opt.value} >
+                        {opt.label} 
                       </option>
                     ))}
                   </Form.Select>

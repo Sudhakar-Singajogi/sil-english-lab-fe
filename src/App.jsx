@@ -1,16 +1,8 @@
 // File: /src/App.jsx
 import React from "react";
-// import { Routes, Route } from 'react-router-dom';
-// import { BrowserRouter as Router } from "react-router-dom";
-
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import AppRoutes from "./routes";
-
-import Home from "./pages/Home";
-import Footer from "./components/Footer";
-import Navbar from "./components/Navbar";
-import BasicsOfEnglish from "./pages/EnglishBasics/BasicsOfEnglish";
-import ChapterContentPage from "./pages/EnglishBasics/ChapterContentPage";
 
 const App = () => {
   return (
@@ -25,6 +17,7 @@ const App = () => {
 
     </Routes> */} 
           <AppRoutes /> 
+          <ToastContainer position="top-right" autoClose={3000} />
       </main>
       {/* <Footer /> */}
     </>

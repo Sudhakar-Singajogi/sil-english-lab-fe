@@ -103,6 +103,25 @@
   max-height: unset !important;
 }
 
+.dropdown-menu li {
+  cursor: pointer;
+  padding-left: 10px;
+  padding-top: 5px;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f1f2f4 !important;
+  color: rgb(63, 62, 62);;
+}
+
+.cls-sec {
+      margin-top: 8px;
+    margin-left: 0px
+}
+
+.add-edit-title-icon {
+  font-size: 28px;
+}
 
 @media screen and (min-width: 601px) and (max-width: 650px) {
 }
