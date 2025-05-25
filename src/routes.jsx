@@ -34,6 +34,7 @@ const AppRoutes = () => {
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="manage-users" element={<UserList />} />
         <Route path="manage-assignstudents" element={<AssignClassToTeacher />} />
+        <Route path="manage-assignlessons" element={<AssignChapterLessons />} />
         
       </Route>
 
@@ -50,6 +51,7 @@ const AppRoutes = () => {
         <Route path="manage-users" element={<UserList />} />
         {/* <Route path="assign-students" element={<AssignStudents />} />  */}
         <Route path="manage-assignstudents" element={<AssignClassToTeacher />} />
+        <Route path="manage-assignlessons" element={<AssignChapterLessons />} />
         {/* Add other nested school routes */}
       </Route>
 

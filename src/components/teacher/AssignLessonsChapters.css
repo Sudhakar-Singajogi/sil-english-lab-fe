@@ -1,7 +1,13 @@
+.assign-lessons-container {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  padding: 10px !important;
+  
+}
 .assign-lessons-page {
   background-color: #f9fbfd;
   min-height: 100vh;
   font-size: 0.95rem;
+  padding-right: 0px !important;
 }
 
 .assign-lessons-page h4 {
@@ -67,19 +73,166 @@
   }
 }
 
-@media (max-width: 600px) {
+.recent-assigned-section {
+  .teacher-card {
+    .teacheravatar {
+      background: #79c6e0;
+      border-radius: 50%;
+      width: 65px;
+      height: 65px;
+      margin-right: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+.teacher-info {
+  position: absolute;
+  top: 1rem;
+  right: 8rem;
+}
+.assign-lessons-page .card-title {
+  text-align: left;
+}
+
+.recent-assigned-section {
+  .teacher-card {
+    border-bottom: 1px solid #eee;
+  }
+}
+
+@media (min-width: 375px) {
+  .assign-lessons-page {
+    .align-items-end {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr !important;
+    }
+  }
+  .teacher-card {
+    h5.card-title {
+      font-size: 1rem;
+      margin-top: 10px;
+    }
+  }
+}
+
+@media (max-width: 374px) {
+  .assign-lessons-container {
+    .lessons-filter {
+      /* gap: 2px !important; */
+    }
+  }
+  .assign-lessons-page {
+    .align-items-end {
+      display: grid;
+      grid-template-columns: 1fr !important;
+    }
+    .align-items-end {
+      .form-select {
+        max-width: 100% !important;
+      }
+    }
+    .teacher-card {
+      h5.card-title {
+        font-size: 1rem;
+        margin-top: 10px;
+      }
+    }
+    .form-select,
+    .form-control {
+      width: 80% !important;
+    }
+
+    .align-items-end {
+     .form-select,
+    .form-control {
+      width: 100% !important;
+    } 
+    }
+  }
+
+  .recent-assigned-section {
+    .teacher-card {
+      h5.card-title {
+        font-size: 12px;
+        margin-top: 10px;
+      }
+      .teacheravatar {
+        margin-left: 0rem !important;
+      }
+      .teacher-info {
+        p {
+          font-size: 12px;
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 475px) and (max-width: 574px) {
+  .recent-assigned-section {
+    .teacher-card {
+      h5.card-title {
+        font-size: 14px;
+        margin-top: 10px;
+        margin-left: 10px;
+      }
+      .teacheravatar {
+        margin-left: 1rem !important;
+      }
+      .teacher-info {
+        left: 12rem;
+        .bg-warning {
+          padding-top: 7px;
+          padding-bottom: 7px !important;
+          font-size: 14px;
+        }
+        p {
+          font-size: 13px;
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 575px) and (max-width: 700px) {
+  .recent-assigned-section {
+    .teacher-card {
+      h5.card-title {
+        font-size: 1rem;
+        margin-top: 10px;
+        margin-left: 10px;
+      }
+      .teacheravatar {
+        margin-left: 1.5rem !important;
+      }
+      .teacher-info {
+        left: 12rem;
+        .bg-warning {
+          padding-top: 10px;
+          padding-bottom: 10px !important;
+          font-size: 14px;
+        }
+        p {
+          font-size: 15px;
+          margin-left: 0px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 700px) {
   .form-select {
     font-size: 0.95rem;
     padding: 0.5rem;
   }
   .card-body {
     padding: 0px !important;
-  }
-  .assign-lessons-page {
-    .align-items-end {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-    }
   }
   .recent-assigned-section {
     display: block !important;
@@ -120,5 +273,17 @@
         font-size: 13px;
       }
     }
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 920px) {
+  .lessons-filter-section {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .assign-lessons-container {
+    padding: 10px !important;
   }
 }

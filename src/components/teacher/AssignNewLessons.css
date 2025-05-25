@@ -6,6 +6,15 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
   font-size: 0.95rem;
   width: 100%;
+  .lessons-filter {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 20px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .lessons-filter-section {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 }
 
 .assign-lessons-container h5 {
@@ -34,21 +43,21 @@
 }
 
 @media (max-width: 600px) {
-    .form-select {
+  .form-select {
     font-size: 0.95rem;
     padding: 0.5rem;
   }
   .assign-lessons-container {
-    padding: 0px !important;
-    .filters {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-    }
-    .recently-assigned-grid {
+    /* padding: 0px !important; */
 
-        th, td {
-            font-size: 13px;
-          }
+    .recently-assigned-grid {
+      th,
+      td {
+        font-size: 13px;
+      }
+    }
+    .lessons-filter-section {
+      grid-template-columns: auto;
     }
   }
 }

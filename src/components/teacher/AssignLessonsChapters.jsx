@@ -23,7 +23,7 @@ const AssignLessonsChapters = () => {
 
       {/* Filter Section */}
       <div className="row g-3 align-items-end mb-4">
-        <div className="col-md-2">
+        <div className="">
           <label className="form-label">School</label>
           <select
             className="form-select w-100"
@@ -36,7 +36,7 @@ const AssignLessonsChapters = () => {
             {/* Add dynamic school list */}
           </select>
         </div>
-        <div className="col-md-2">
+        <div className="">
           <label className="form-label">Class</label>
           <select
             className="form-select w-100"
@@ -49,7 +49,7 @@ const AssignLessonsChapters = () => {
             <option>9</option>
           </select>
         </div>
-        <div className="col-md-2">
+        <div className="">
           <label className="form-label">Section</label>
           <select
             className="form-select w-100"
@@ -69,7 +69,7 @@ const AssignLessonsChapters = () => {
         <div className="card shadow-sm recent-assigned-section">
           <div>
             <div className="card-body teacher-card">
-              <div className="avatar">
+              <div className="teacheravatar">
                 <img
                   src="/assets/icons/teacher-female.svg"
                   className="assign-student-avatar teacher-avatar"

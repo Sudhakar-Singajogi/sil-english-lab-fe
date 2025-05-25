@@ -36,24 +36,24 @@ const Sidebar = ({ isOpen }) => {
         </div>
         <nav>
           <ul>
-            <li>
+            <li >
               {/* 
 
               <span>Dashboard</span> */}
               <NavLink
                 to={pathprefix + "/dashboard"}
                 key={pathprefix + "/dashboard"}
-                className="sidebar-link nav-link active text-white fw-bold"
+                className="sidebar-link nav-link active text-white "
                 onClick={toggleSidebar}
               >
                 <i className="bi bi-speedometer"></i> <span>Dashboard</span>
               </NavLink>
             </li>
-            <li>
+            <li className="active-item">
               <NavLink
                 to={pathprefix + "/assign-students"}
                 key={pathprefix + "assign-students"}
-                className="sidebar-link nav-link active text-white fw-bold"
+                className="sidebar-link nav-link active text-white "
                 onClick={toggleSidebar}
               >
                 <i className="bi bi-chevron-bar-contract"></i>{" "}
@@ -64,7 +64,7 @@ const Sidebar = ({ isOpen }) => {
               <NavLink
                 to={pathprefix + "/assign-lessons-chapters"}
                 key={pathprefix + "assign-lessons-chapters"}
-                className="sidebar-link nav-link active text-white fw-bold"
+                className="sidebar-link nav-link active text-white "
                 onClick={toggleSidebar}
               >
                 <i className="bi bi-chevron-bar-contract"></i>{" "}
