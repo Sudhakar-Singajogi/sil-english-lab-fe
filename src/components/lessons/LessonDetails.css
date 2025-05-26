@@ -1,17 +1,17 @@
-/* LessonDetails.css */
+.show-as-column-vsm {
+  display: none;
+}
 .lesson-details-container {
-  /* display: flex; */
   flex-direction: row;
   min-height: 100vh;
   background-color: #f9fbfd;
 }
 
-.lesson-sidebar-desktop { 
+.lesson-sidebar-desktop {
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* padding: 1rem 0.5rem; */
   border: 1px solid #eee;
   width: 95%;
   margin-bottom: 1rem;
@@ -51,7 +51,6 @@
 }
 
 .lesson-main-panel {
-  /* flex: 1; */
   padding: 0rem !important;
   display: grid;
   grid-template-columns: 75px 1fr;
@@ -59,6 +58,7 @@
   width: 100%;
   height: 100%;
   overflow-y: auto;
+  position: relative;
 }
 
 .sidebar-btn i,
@@ -80,11 +80,70 @@
 }
 
 .lesson-content-section {
-  /* margin: 1rem; */
-  width: 98%;
+  width: 100%;
   border: 1px solid #eee;
   border-radius: 5px;
   padding: 1rem;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  position: relative;
+}
+
+.lesson-swipe-indicator {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  width: 20px;
+  height: 20px;
+  background: url("/assets/icons/swipe-left-arrow.svg") no-repeat center center;
+  background-size: contain;
+  opacity: 0.3;
+  animation: pulseSwipe 1.2s infinite;
+}
+
+@keyframes pulseSwipe {
+  0% {
+    transform: translateX(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateX(6px);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 0.3;
+  }
+}
+
+/* Swipe animations */
+@keyframes swipeInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes swipeInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.swipe-left {
+  animation: swipeInLeft 0.4s ease-in-out;
+}
+
+.swipe-right {
+  animation: swipeInRight 0.4s ease-in-out;
 }
 
 @keyframes underlineSlide {
@@ -121,6 +180,7 @@
   font-weight: 700;
   color: #1e3a8a;
   margin-bottom: 0.5rem;
+  font-size: 1.2rem;
 }
 
 .lesson-meta .badge {
@@ -159,6 +219,7 @@ textarea.form-control {
   border-radius: 0.5rem;
   border: 1px solid #d1d5db;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  max-width: 100% !important;
 }
 
 .list-group-item {
@@ -181,14 +242,13 @@ textarea.form-control {
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .lesson-details-container {
     flex-direction: column;
   }
   .lesson-sidebar-desktop {
     flex-direction: row;
     width: 100%;
-    /* border-right: none; */
     border-bottom: 1px solid #e2e8f0;
     justify-content: space-around;
   }
@@ -198,20 +258,24 @@ textarea.form-control {
   .sidebar-btn i {
     font-size: 1.2rem;
   }
-
   .show-as-column-lg {
     display: none !important;
   }
   .show-as-column-md {
     flex-direction: column !important;
-    /* display: contents; */
   }
   .lesson-details-container {
     display: flex !important;
   }
 }
 
-@media (min-width: 786px) {
+@media (min-width: 769px) {
+  .lesson-sidebar-desktop {
+    height: 75px;
+  }
+  .lesson-content-section {
+    width: 98% !important;
+  }
   .show-as-column-lg {
     flex-direction: row !important;
     display: flex;
@@ -222,10 +286,76 @@ textarea.form-control {
   .show-as-column-md {
     display: none !important;
   }
-
   .lesson-main-panel {
     flex: 1;
     padding: 2rem;
-    display: flex !important; 
+    display: flex !important;
+  }
+  .listen-media {
+    /* display: grid;
+    grid-template-columns: 1fr 200px;
+    grid-gap: 1rem; */
+  }
+}
+
+@media (min-width: 500px) {
+  .show-as-column-vsm {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .lesson-content-section {
+    .lesson-title {
+      font-size: 14px;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .lesson-intro {
+    p {
+      font-size: 14px;
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .listen-actions {
+    display: grid !important;
+    grid-template-columns: 0.5fr 0.5fr 0.5fr 0.5fr;
+    gap: 0.5rem;
+  }
+  .lesson-main-panel {
+    display: flex !important;
+  }
+
+  .lesson-intro p,
+  .lesson-read p,
+  .lesson-speak p,
+  .lesson-write p {
+    font-size: 0.78rem !important;
+  }
+  .show-as-column-lg {
+    display: none !important;
+  }
+  .show-as-column-md {
+    display: none !important;
+  }
+  .show-as-column-vsm {
+    display: flex !important;
+  }
+
+  .lesson-sidebar-desktop .nav-icon {
+    font-size: 0.6rem;
+    margin: 0px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    i {
+      margin-bottom: 0rem !important;
+    }
+  }
+  .main-content {
+    overflow-y: hidden;
   }
 }

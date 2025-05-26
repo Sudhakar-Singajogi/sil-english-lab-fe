@@ -7,13 +7,13 @@ import AdminDashboard from "./pages/system-admin/Dashboard";
 import SuperAdminDashboard from "./pages/super-admin/Dashboard";
 import UserList from "./components/manage-users/UserList";
 import SessionExpired from "./components/SessionExpired";
-import Dashboard from "./pages/teacher/Dashboard";
+import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import TeacherAppLayout from "./layouts/teacher/TeacherAppLayout";
 import AssignStudents from "./pages/teacher/AssignStudents";
 import AssignClassToTeacher from "./pages/system-admin/AssignClassToTeacher";
 
 import AssignChapterLessons from "./pages/teacher/AssignLessonsChapters";
-import LessonDetails from "./components/lessos/LessonDetails";
+import LessonDetails from "./components/lessons/LessonDetails";
 
 const AppRoutes = () => {
   return (
@@ -36,6 +36,7 @@ const AppRoutes = () => {
         <Route path="manage-users" element={<UserList />} />
         <Route path="manage-assignstudents" element={<AssignClassToTeacher />} />
         <Route path="manage-assignlessons" element={<AssignChapterLessons />} />
+        <Route path="lesson-details/:lessonSlug" element={<LessonDetails />} />
         
       </Route>
 
@@ -53,6 +54,7 @@ const AppRoutes = () => {
         {/* <Route path="assign-students" element={<AssignStudents />} />  */}
         <Route path="manage-assignstudents" element={<AssignClassToTeacher />} />
         <Route path="manage-assignlessons" element={<AssignChapterLessons />} />
+        <Route path="lesson-details/:lessonSlug" element={<LessonDetails />} />
         {/* Add other nested school routes */}
       </Route>
 
@@ -64,10 +66,11 @@ const AppRoutes = () => {
           </PrivateRoute>
         }
       >
-        <Route path="dashboard" element={<Dashboard />} /> 
+        <Route path="dashboard" element={<TeacherDashboard />} /> 
         <Route path="assign-students" element={<AssignClassToTeacher />} />
         <Route path="assign-lessons-chapters" element={<AssignChapterLessons />} />
-        <Route path="lesson-details" element={<LessonDetails />} />
+        <Route path="lesson-details/:lessonSlug" element={<LessonDetails />} />
+        
         
         {/* Add other nested school routes */}
       </Route>
