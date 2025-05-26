@@ -9,7 +9,8 @@ import App from "./App";
 import store, { persistor } from "./store/store";
 import { injectStore } from "./utils/axiosInstance";
 import Loader from "./components/Loader";
-import { UIProvider } from "./context/UIContext"
+import { UIProvider } from "./context/UIContext";
+import { LessonProvider } from "./context/LessonDetailsContext";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -23,9 +24,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <PersistGate loading={<Loader />} persistor={persistor}>
         <UIProvider>
-          <Router>
-            <App />
-          </Router>
+          <LessonProvider>
+            <Router>
+              <App />
+            </Router>
+          </LessonProvider>
         </UIProvider>
       </PersistGate>
     </Provider>

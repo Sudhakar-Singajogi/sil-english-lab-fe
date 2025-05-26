@@ -39,6 +39,7 @@
   padding: 20px;
   /* min-height: 0; important for flex-scrollable area */
   padding-top: 0px;
+  padding-top:25px;
 }
 
 .dashboard-content {

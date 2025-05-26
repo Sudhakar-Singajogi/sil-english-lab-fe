@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/authSlice";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import "./Topbar.css";
 const Topbar = ({ onToggleSidebar }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.auth.user);
+  const token = useSelector((state) => state.auth.token);
   const role = useSelector((state) => state.auth.role);
 
   const { licenseTierId: licenseTier, licenseDisplay: license } =
@@ -16,9 +16,19 @@ const Topbar = ({ onToggleSidebar }) => {
       : useSelector((state) => state.auth.schoolInfo);
 
   const handleLogout = () => {
+    console.log('logout')
     dispatch(logout());
-    navigate("/login");
+    // navigate("/login");
   };
+
+  
+  useEffect(() => {
+    console.log("Will call to login if token already got cleard");
+    if (!token) {
+      console.log("Token cleared, navigating to login...");
+      navigate("/login");
+    }
+  }, [token, navigate]);
 
   const handleToggleSidebar = () => {
     onToggleSidebar();

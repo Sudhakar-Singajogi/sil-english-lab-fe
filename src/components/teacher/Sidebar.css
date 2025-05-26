@@ -1,9 +1,7 @@
 
-
-.teacher-sidebar nav
-{
-  margin-top:4rem;
-  border-top:1px solid #34485c;
+.teacher-sidebar nav {
+  margin-top: 4rem;
+  border-top: 1px solid #34485c;
   z-index: 9999999;
 }
 .teacher-sidebar nav ul {
@@ -21,14 +19,19 @@
 }
 
 .teacher-sidebar nav ul li:hover {
-  background-color: #17324c;
+  background-color: #475569;
+  margin-top: 1px;
+  margin-bottom: 1px;
 }
 .teacher-sidebar nav ul li a:hover {
-  color: #87bdf2 !important; 
+  color: #87bdf2 !important;
 }
 
 .teacher-sidebar nav ul li span {
   margin-left: 10px;
+}
+.sidebar-menu {
+  margin-top: 1rem !important;
 }
 
 .sidebar-footer {
@@ -59,18 +62,99 @@
     .school-details {
       p {
         margin: 0px;
-        color:#c2c2c2;
+        color: #c2c2c2;
       }
     }
-
   }
 }
 
+.sidebar-menu {
+  nav {
+    width: 100%;
+  }
+}
 
-.active-item { 
-    background-color: #17324c; 
-    a{
-      color: #87bdf2 !important;
+.sidebar-menu .active {
+  padding: 4px;
+  font-weight: 500;
+}
 
-    }
+.teacher-sidebar nav ul li:has(> .active) {
+  background-color: #475569 !important;
+}
+.sidebar-menu .active {
+  border-left: none !important;
+}
+
+.open-side-bar {
+  animation: slideInLeft 0.3s ease-in-out;
+  display: block !important;
+}
+
+.close-side-bar {
+  animation: slideInRight 0.3s ease-in forwards;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-260px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-260);
+    opacity: 0;
+  }
+}
+
+.mobile-sidebar {
+  position: fixed;
+  top: 45px;
+  left: 0;
+  width: 180px;
+  height: calc(100vh - 50px);
+  background-color: #1e293b;
+  z-index: 999;
+  border-right: 1px solid #334155;
+  overflow-y: auto;
+  /* animation: slideInLeft 0.3s ease-in-out; */
+  display: none;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobile-nav-list .nav-item {
+  padding: 14px 8px;
+  border-bottom: 1px solid #374151;
+  color: #f1f5f9;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.mobile-nav-list .nav-item:hover {
+  background-color: #334155;
+}
+
+.mobile-nav-list .nav-item.active {
+  background-color: #475569;
+  font-weight: 600;
 }

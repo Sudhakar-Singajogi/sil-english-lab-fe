@@ -3,11 +3,17 @@ import "./AppLayout.css";
 import { useUI } from "../../context/UIContext";
 import Sidebar from "../../components/teacher/Sidebar";
 import Topbar from "../../components/teacher/Topbar";
+import MobileSidebar from "../../components/teacher/MobileSidebar";
+import { useEffect } from "react";
 
 const TeacherAppLayout = () => {
   const { isSidebarOpen, dispatch } = useUI();
 
   const toggleSidebar = () => dispatch({ type: "TOGGLE_SIDEBAR" });
+
+  useEffect(() => {
+    console.log("isSidebarOpen", isSidebarOpen);
+  }, [isSidebarOpen]);
 
   return (
     // <main className="layout">
@@ -24,8 +30,14 @@ const TeacherAppLayout = () => {
     // </main>
 
     <div className="teacher-layout">
-      <aside className="teacher-sidebar">
-        <Sidebar />        
+      
+      <aside>
+        <div className="teacher-sidebar md-d-none">
+          <Sidebar />
+        </div>
+        <div className="lg-d-none">
+          <MobileSidebar  isSidebarOpen={isSidebarOpen} />
+        </div>
       </aside>
       <main className="teacher-content">
         <Topbar />

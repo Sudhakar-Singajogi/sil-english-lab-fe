@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../store/authSlice";
 import { useNavigate } from "react-router-dom";
+import { useUI } from "../../context/UIContext";
 import "./Topbar.css";
-import { Button } from "react-bootstrap";
+
 
 const Topbar = ({ onToggleSidebar }) => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { isSidebarOpen, dispatch:UIDispatch } = useUI();
+
   const { fullName: userName } = useSelector((state) => state.auth.user);
   const role = useSelector((state) => state.auth.role);
+  const token = useSelector((state) => state.auth.token);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const { licenseTierId: licenseTier, licenseDisplay: license } =
@@ -18,13 +22,27 @@ const Topbar = ({ onToggleSidebar }) => {
       : useSelector((state) => state.auth.schoolInfo);
 
   const handleLogout = () => {
+    console.log("logout");
     dispatch(logout());
     navigate("/login");
   };
 
+  useEffect(() => {
+    console.log("Will call to login if token already got cleard");
+    if (!token) {
+      console.log("Token cleared, navigating to login...");
+      navigate("/login");
+    }
+  }, [token, navigate]);
+
   const handleToggleSidebar = () => {
-    onToggleSidebar();
+    console.log("hey clicked on the hamburger");
+    UIDispatch({ type: "TOGGLE_SIDEBAR" });
   };
+
+  useEffect(() => {
+    console.log("isSidebarOpen", isSidebarOpen);
+  }, [isSidebarOpen]);
 
   const getmedalIcon = () => {
     // let licenseTier = "level2";
@@ -42,48 +60,57 @@ const Topbar = ({ onToggleSidebar }) => {
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light ">
-        <header className="header teacher-school-info">
-          
-          <div className="welcome-text">
-            {" "}
-            Welcome back{","}
-            {userName.charAt(0).toUpperCase() + userName.slice(1)}
-          </div>
-          <div className="teacher-topbar-actions">
-            <div className="teacher-profile">
-              <i
-                class="bi-person-fill-down"
-                onClick={() => setShowProfileMenu((prev) => !prev)}
-              ></i>
-              {showProfileMenu && (
-                <div className="teacher-profile-menu">
-                  <ul>
-                    <li>
-                      <span className="teacher-topbar-icon user-logout">
-                        <a className="logout-link">
-                          <i class="bi bi-pencil-square"></i> Profile
-                        </a>
-                      </span>
-                    </li>
-                    <li>
-                      <span className="teacher-topbar-icon user-logout">
-                        <a className="logout-link" onClick={handleLogout}>
-                          <i class="bi bi-box-arrow-in-right"></i> Logout
-                        </a>
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-              )}
+        <div className="topbar-container d-flex align-items-center justify-content-between w-100">
+          <div className="d-flex align-items-center">
+            <button
+              className="hamburger d-lg-none"
+              onClick={handleToggleSidebar}
+            >
+              ☰
+            </button>
+            <div className="welcome-text">
+              <div className="welcome-text">
+                {" "}
+                Welcome back{","}
+                {userName.charAt(0).toUpperCase() + userName.slice(1)}
+              </div>
             </div>
           </div>
-        </header>
-        
+          <div className="teacher-topbar-actions">
+            <header className="header teacher-school-info">
+              <div className="teacher-topbar-actions">
+                <div className="teacher-profile">
+                  <i
+                    className="bi-person-fill-down"
+                    onClick={() => setShowProfileMenu((prev) => !prev)}
+                  ></i>
+                  {showProfileMenu && (
+                    <div className="teacher-profile-menu">
+                      <ul>
+                        <li>
+                          <span className="teacher-topbar-icon user-logout">
+                            <a className="logout-link">
+                              <i className="bi bi-pencil-square"></i> Profile
+                            </a>
+                          </span>
+                        </li>
+                        <li>
+                          <span className="teacher-topbar-icon user-logout">
+                            <a className="logout-link" onClick={handleLogout}>
+                              <i className="bi bi-box-arrow-in-right"></i>{" "}
+                              Logout
+                            </a>
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </header>
+          </div>
+        </div>
       </nav>
-
-      {/* <button className="hamburger" onClick={() => handleToggleSidebar()}>
-        ☰
-      </button> */}
     </>
   );
 };

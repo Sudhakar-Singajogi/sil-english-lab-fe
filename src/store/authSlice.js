@@ -10,8 +10,15 @@ export const loginUser = createAsyncThunk(
         password,
       });
       console.log("response is", response);
-      const { token, user, schoolInfo, licenseTierInfo, lacInfo, allMenuItems, allTeachers } =
-        response.data;
+      const {
+        token,
+        user,
+        schoolInfo,
+        licenseTierInfo,
+        lacInfo,
+        allMenuItems,
+        allTeachers,
+      } = response.data;
 
       return {
         token,
@@ -21,7 +28,7 @@ export const loginUser = createAsyncThunk(
         licenseTierInfo,
         lacInfo,
         allMenuItems,
-        allTeachers
+        allTeachers,
       };
     } catch (error) {
       const message =
@@ -38,12 +45,12 @@ const initialState = {
   schoolInfo: null,
   licenseTierInfo: null,
   lacInfo: null,
-  allMenuItems:null,
+  allMenuItems: null,
   isAuthenticated: false,
   loading: false,
   error: null,
   allSchools: null,
-  allTeachers:[]
+  allTeachers: [],
 };
 
 const authSlice = createSlice({
@@ -51,6 +58,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
+      console.log('logout called');
       state.user = null;
       state.token = null;
       state.role = null;
@@ -60,8 +68,7 @@ const authSlice = createSlice({
       state.allMenuItems=null;
       state.isAuthenticated = false;
       state.allSchools = null;
-      state.allTeachers=[];
-      localStorage.clear();
+      state.allTeachers=[]; 
     },
     setAllSchools: (state, action) => {
       state.allSchools = action.payload;
@@ -74,8 +81,16 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        const { token, user, role, schoolInfo, licenseTierInfo, lacInfo, allMenuItems, allTeachers } =
-          action.payload;
+        const {
+          token,
+          user,
+          role,
+          schoolInfo,
+          licenseTierInfo,
+          lacInfo,
+          allMenuItems,
+          allTeachers,
+        } = action.payload;
         state.loading = false;
         state.token = token;
         state.user = user;
@@ -83,9 +98,9 @@ const authSlice = createSlice({
         state.schoolInfo = schoolInfo;
         state.licenseTierInfo = licenseTierInfo;
         state.lacInfo = lacInfo;
-        state.allMenuItems =allMenuItems,
-        state.allTeachers=allTeachers,
-        state.isAuthenticated = true;
+        (state.allMenuItems = allMenuItems),
+          (state.allTeachers = allTeachers),
+          (state.isAuthenticated = true);
 
         localStorage.setItem("token", token);
         localStorage.setItem("role", role);

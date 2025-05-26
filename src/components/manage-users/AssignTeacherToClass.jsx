@@ -52,7 +52,7 @@ const AssignTeacherToClass = () => {
   const [submitError, setSubmitError] = useState(null);
 
   const loadOptions = useCallback(async () => {
-    if (allSchools === null) {
+    if (allSchools === null && role !== "teacher") {
       const result = await fetchSchools();
       const schools = result.schools;
 

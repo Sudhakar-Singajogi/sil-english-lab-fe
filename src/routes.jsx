@@ -13,6 +13,7 @@ import AssignStudents from "./pages/teacher/AssignStudents";
 import AssignClassToTeacher from "./pages/system-admin/AssignClassToTeacher";
 
 import AssignChapterLessons from "./pages/teacher/AssignLessonsChapters";
+import LessonDetails from "./components/lessos/LessonDetails";
 
 const AppRoutes = () => {
   return (
@@ -66,6 +67,7 @@ const AppRoutes = () => {
         <Route path="dashboard" element={<Dashboard />} /> 
         <Route path="assign-students" element={<AssignClassToTeacher />} />
         <Route path="assign-lessons-chapters" element={<AssignChapterLessons />} />
+        <Route path="lesson-details" element={<LessonDetails />} />
         
         {/* Add other nested school routes */}
       </Route>

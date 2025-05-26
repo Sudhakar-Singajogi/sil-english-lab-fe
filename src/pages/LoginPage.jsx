@@ -36,6 +36,7 @@ const LoginPage = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
+    console.log('hey login here');
     dispatch(loginUser({ loginId, password }));
   };
 

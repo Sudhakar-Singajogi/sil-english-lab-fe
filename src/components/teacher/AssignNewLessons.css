@@ -17,6 +17,10 @@
   }
 }
 
+.lessons-filter:last-child {
+  margin-left:10px;
+}
+
 .assign-lessons-container h5 {
   font-weight: 600;
   color: #2c3e50;

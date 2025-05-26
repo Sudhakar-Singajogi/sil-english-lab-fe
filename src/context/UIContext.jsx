@@ -3,7 +3,7 @@ import React, { createContext, useContext, useReducer } from "react";
 const UIContext = createContext();
 
 const initialState = {
-  isSidebarOpen: false,
+  isSidebarOpen: null,
   theme: "light",         // for future: dark/light toggle
   language: "en",         // for future: multi-language
 };
