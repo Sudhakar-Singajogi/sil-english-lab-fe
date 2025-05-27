@@ -40,6 +40,8 @@
   /* min-height: 0; important for flex-scrollable area */
   padding-top: 0px;
   padding-top:25px;
+  margin-top: 4rem;
+  /* overflow: hidden; */
 }
 
 .dashboard-content {
@@ -98,3 +100,4 @@
     width: 72%;
   }
 }
+

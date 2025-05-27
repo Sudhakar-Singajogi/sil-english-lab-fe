@@ -1,0 +1,156 @@
+.lesson-write-container {
+  background-color: #fff;
+  /* padding: 1.5rem; */
+  padding-top: 1rem;
+  border-radius: 12px;
+  /* box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); */
+  margin-bottom: 2rem;
+  max-width: 800px;
+  /* margin-left: auto;
+  margin-right: auto; */
+}
+
+.lesson-write-header h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #1e3a8a;
+}
+
+.lesson-write-header small {
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.write-footer {
+    margin: 0.5rem;
+    display: grid;
+    grid-template-columns: 100px 1fr;
+}
+.prompt-section {
+  margin: 1.5rem 0;
+}
+.writing-task {
+    .task-header {
+        display: grid;
+        grid-template-columns: 1fr 0.5fr;
+        h4 {
+            font-size: 1.2rem;;
+        }
+    }
+}
+
+.prompt-section h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: #111827;
+}
+
+.prompt-section .chapter-info {
+  font-size: 0.85rem;
+  color: #475569;
+  margin-bottom: 1rem;
+  display: block;
+  text-align: right;
+}
+
+.prompt-section textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  resize: vertical;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.word-count-submit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.word-count {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.submit-btn {
+  background-color: #1e3a8a;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 1rem;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.submit-btn:hover {
+  background-color: #162c5b;
+}
+
+.ai-feedback {
+  margin-top: 2rem;
+}
+
+.ai-feedback h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #1e3a8a;
+}
+
+.ai-feedback ul {
+  margin-bottom: 1rem;
+  padding-left: 1.25rem;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.feedback-score {
+  background-color: #f1f5f9;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  display: inline-block;
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-bottom: 0.75rem;
+}
+
+.feedback-note {
+  font-size: 0.9rem;
+  color: #475569;
+  margin-bottom: 1rem;
+}
+
+.resubmit-btn {
+  background-color: transparent;
+  border: 1px solid #1e3a8a;
+  color: #1e3a8a;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.resubmit-btn:hover {
+  background-color: #1e3a8a;
+  color: #fff;
+}
+
+
+@media (max-width: 499px) {
+    .writing-task {
+    .task-header { 
+        h4 {
+            font-size: 1rem;;
+        }
+    }
+}
+  
+}

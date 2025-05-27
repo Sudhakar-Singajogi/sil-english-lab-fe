@@ -6,6 +6,9 @@ import { useSearchParams, useParams, useNavigate } from "react-router-dom";
 import "./LessonDetails.css";
 
 const Listen = lazy(() => import("./Listen"));
+const ListenRead =lazy(()=> import("./LessonRead"))
+const LessonWrite = lazy(() => import("./LessonWrite"));
+const LessonVocabulary = lazy(() => import("./LessonVocabulary"));
 
 const iconMap = {
   Intro: "book",
@@ -117,14 +120,16 @@ const LessonDetails = ({ fetchLesson }) => {
             className={`lesson-content-section ${swipeClass}`}
             {...swipeHandlers}
           >
-            <h4 className="lesson-title">
-              Lesson {lesson.number}: {lesson.title}
-            </h4>
-            <div className="lesson-meta mb-3">
-              <span className="badge bg-secondary">{lesson.cefr}</span>
-              <span className="badge bg-light text-dark ms-2">
-                {lesson.duration}
-              </span>
+            <div className="lesson-header">
+              <h4 className="lesson-title">
+                Lesson {lesson.number}: {lesson.title}
+              </h4>
+              <div className="lesson-meta">
+                <span className="badge bg-secondary">{lesson.cefr}</span>
+                <span className="badge bg-light text-dark ms-2">
+                  {lesson.duration}
+                </span>
+              </div>
             </div>
 
             {activeTab === "Intro" && (
@@ -136,11 +141,6 @@ const LessonDetails = ({ fetchLesson }) => {
                   <source src={lesson.audioUrl} type="audio/mpeg" />
                   Your browser does not support the audio element.
                 </audio>
-                {/* <div className="lesson-actions mt-3">
-                <button className="btn btn-primary">Start Lesson</button>
-                <button className="btn btn-outline-secondary ms-2">Download</button>
-                <button className="btn btn-outline-secondary ms-2">Share</button>
-              </div> */}
               </div>
             )}
 
@@ -152,14 +152,18 @@ const LessonDetails = ({ fetchLesson }) => {
 
             {activeTab === "Read" && (
               <div className="lesson-read fade-in">
-                <div className="card p-3">
+                <Suspense fallback={<div>Loading Listen Section...</div>}>
+                <ListenRead />
+                
+                </Suspense>
+                {/* <div className="card p-3">
                   <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit...
                   </p>
                 </div>
                 <button className="btn btn-outline-primary mt-3">
                   <i className="bi bi-mic me-2"></i> Start Reading
-                </button>
+                </button> */}
               </div>
             )}
 
@@ -173,26 +177,19 @@ const LessonDetails = ({ fetchLesson }) => {
             )}
 
             {activeTab === "Write" && (
-              <div className="lesson-write fade-in">
-                <p>Write a short paragraph about your last vacation.</p>
-                <div>
-                  <textarea
-                    className="form-control"
-                    rows="4"
-                    placeholder="Type here..."
-                  ></textarea>
+              <Suspense fallback={<div>Loading Listen Section...</div>}>
+                <div className="lesson-write fade-in">
+                  <LessonWrite />
                 </div>
-              </div>
+              </Suspense>
             )}
 
             {activeTab === "Vocabulary" && (
-              <div className="lesson-vocab fade-in">
-                <ul className="list-group">
-                  <li className="list-group-item">Word 1 - Definition</li>
-                  <li className="list-group-item">Word 2 - Definition</li>
-                  <li className="list-group-item">Word 3 - Definition</li>
-                </ul>
-              </div>
+              <Suspense fallback={<div>Loading Listen Section...</div>}>
+                <div className="lesson-vocab fade-in">
+                  <LessonVocabulary />
+                </div>
+              </Suspense>
             )}
           </div>
         </div>

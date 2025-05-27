@@ -1,0 +1,114 @@
+.lesson-read {
+    margin-top:1rem;
+     display: flex;
+  height: 100vh;
+  overflow: overlay;
+}
+.lesson-read-container {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+  font-family: 'Segoe UI', sans-serif;
+  max-width: 900px;
+  margin: auto;
+}
+
+.lesson-read-container h2 {
+  font-size: 1.5rem;
+  color: #1e3a8a;
+  margin-bottom: 1rem;
+}
+
+.reading-text {
+  font-size: 1rem;
+  color: #334155;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+h3 {
+  margin-top: 2rem;
+  font-size: 1.25rem;
+  color: #1e3a8a;
+}
+
+.question-list {
+  margin-top: 1rem;
+}
+
+.question-card {
+  background-color: #f9fbfd;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.question {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #0f172a;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+
+.choice:hover {
+  background-color: #f1f5f9;
+}
+
+.choice.selected {
+  background-color: #e0f2fe;
+  font-weight: 500;
+  border-left: 4px solid #1e3a8a;
+}
+
+.submit-btn {
+  background-color: #1e3a8a;
+  color: white;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 1.5rem;
+}
+
+.submit-btn:hover {
+  background-color: #254edb;
+}
+
+@media screen and (max-width: 768px) {
+  .lesson-read-container {
+    padding: 1rem;
+  }
+  .lesson-read {
+    overflow: overlay;
+  }
+
+  .choice {
+    font-size: 0.95rem;
+  }
+}
+
+@media screen and (min-width: 768px) {
+    .lesson-read {
+        overflow: overlay;
+
+    }
+}
