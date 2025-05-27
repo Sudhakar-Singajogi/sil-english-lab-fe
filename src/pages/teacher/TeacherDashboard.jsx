@@ -1,12 +1,73 @@
 import React from "react";
 import "./TeacherDashboard.css";
+import CardSlider from "../../components/Carousel/CardSlider";
+
+const lessonSlides = () => {
+  return (
+    <>
+      <div>
+        <div className="lesson-card">
+          <div className="title-row">
+            <h5>Lesson 2</h5>
+            <span className="badge">A1</span>
+          </div>
+          <p>Chapter 1</p>
+          <div className="progress-bar">
+            <div className="progress-fill" style={{ width: "45%" }}></div>
+          </div>
+          <div className="lesson-footer">
+            <span>In Progress</span>
+            <p>
+              <button className="resume-btn">
+                <i className="bi bi-play-circle"></i> <span>Resume</span>
+              </button>
+            </p>
+          </div>
+        </div>
+
+        <div className="lesson-card">
+          <div className="title-row">
+            <h5>A2 level</h5>
+            <span className="badge">A2</span>
+          </div>
+          <p>Chapter 1</p>
+          <div className="progress-bar empty"></div>
+          <div className="lesson-footer">
+            <span>Due tomorrow</span>
+            <p>
+              <button className="resume-btn">
+                <i className="bi bi-play-circle"></i> <span>Resume</span>
+              </button>
+            </p>
+          </div>
+        </div>
+
+        <div className="lesson-card">
+          <div className="title-row">
+            <h5>A2 level</h5>
+            <span className="badge">A2</span>
+          </div>
+          <p>Chapter 1</p>
+          <div className="progress-bar empty"></div>
+          <div className="lesson-footer">
+            <span>In completion</span>
+            <p>
+              <button className="resume-btn">
+                <i className="bi bi-play-circle"></i> <span>Resume</span>
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
 
 const TeacherDashboard = () => {
   return (
     <div className="teacher-dashboard">
       <header className="dashboard-header">
         <div className="avatar-progress">
-          
           <div>
             <h5 className="section-title">Overall Progress</h5>
             <span className="status">In Progress</span>
@@ -30,45 +91,7 @@ const TeacherDashboard = () => {
       </div>
 
       <div className="lessons-section">
-        <div className="lesson-card">
-          <div className="title-row">
-            <h5>Lesson 2</h5>
-            <span className="badge">A1</span>
-          </div>
-          <p>Chapter 1</p>
-          <div className="progress-bar">
-            <div className="progress-fill" style={{ width: "45%" }}></div>
-          </div>
-          <div className="lesson-footer">
-            <span>In Progress</span>
-            <button className="resume-btn">Resume</button>
-          </div>
-        </div>
-
-        <div className="lesson-card">
-          <div className="title-row">
-            <h5>A2 level</h5>
-            <span className="badge">A2</span>
-          </div>
-          <p>Chapter 1</p>
-          <div className="progress-bar empty"></div>
-          <div className="lesson-footer">
-            <span>Due tomorrow</span>
-            <button className="resume-btn">Resume</button>
-          </div>
-        </div>
-
-        <div className="lesson-card">
-          <div className="title-row">
-            <h5>Lesson 1</h5>
-            <span className="badge">A1</span>
-          </div>
-          <p>Incomplete</p>
-          <div className="progress-bar empty"></div>
-          <div className="lesson-footer">
-            <button className="resume-btn">Resume</button>
-          </div>
-        </div>
+        <CardSlider children={lessonSlides()} />
       </div>
 
       <div className="suggestions-info-grid">

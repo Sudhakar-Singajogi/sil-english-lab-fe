@@ -1,0 +1,141 @@
+/* Ensure proper spacing and arrow visibility */
+.slider-container {
+  position: relative;
+  padding: 1rem 0;
+  max-width: 100%;
+  overflow: visible;
+}
+
+.slick-slider {
+  box-sizing: border-box;
+}
+
+.slick-list {
+  overflow: hidden;
+}
+
+.slick-slide > div {
+  display: flex;
+  justify-content: center;
+  padding: 0 0.5rem;
+}
+
+/* Each slide should be self-contained and same height */
+.lesson-card {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 250px;
+  height: 100%;
+  /* margin-left:50px */
+  border-right: 1px solid #eee;
+}
+
+.lesson-card:last-child {
+  border-right: none !important;
+}
+
+/* Custom arrows */
+.custom-arrow {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  background: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #1e3a8a;
+}
+
+.prev-arrow {
+  left: -16px;
+}
+
+.next-arrow {
+  right: -16px;
+}
+
+/* Dots */
+.slick-dots li button:before {
+  font-size: 10px;
+  color: #ccc;
+}
+
+.slick-dots li.slick-active button:before {
+  color: #1e3a8a;
+}
+
+.carousel-control-prev {
+  left: -1rem !important;
+}
+
+.carousel-control-next {
+  right: -0.5rem !important;
+}
+
+/* Adjustments for small screens */
+@media (max-width: 768px) {
+  .lesson-card {
+    padding: 0.75rem;
+    min-height: 200px;
+  }
+
+  .custom-arrow {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lesson-card {
+    min-height: 190px;
+    padding: 0.5rem;
+  }
+}
+
+.bi-chevron-right::before {
+  margin-right: 5px;
+}
+
+.bi-chevron-left::before {
+  margin-left: -25px !important;
+}
+
+img.carousel-controls {
+  width: 30px !important;
+  height: 30px !important;
+}
+
+.carousel-control-next,
+.carousel-control-prev {
+  width: 6% !important;
+  top: 0rem !important;
+}
+
+@media screen and (min-width: 500px) and (max-width: 1024px) {
+  .carousel-item .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 900px) {
+  .carousel-item .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .lesson-card {
+    border-right: 1px solid #eee !important;
+  }
+}
