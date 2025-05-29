@@ -8,7 +8,7 @@ const initialState = {
   language: "en",         // for future: multi-language
 };
 
-function uiReducer(state, action) {
+function uiReducer(state, action) { 
   switch (action.type) {
     case "TOGGLE_SIDEBAR":
       return { ...state, isSidebarOpen: !state.isSidebarOpen };

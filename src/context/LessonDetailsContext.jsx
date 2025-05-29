@@ -1,6 +1,14 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useReducer, useState } from "react";
+import { fetchAChapter } from "../service/apiService";
+
 
 const LessonDetailsContext = createContext();
+
+const initialState = {
+  lesson: null,
+  chaptersDetails: {},
+  lessonsDetails: {},
+};
 
 const fetchLesson = async (lessonId) => {
   // Simulate a network delay
@@ -19,24 +27,58 @@ const fetchLesson = async (lessonId) => {
   };
 };
 
-export const LessonProvider = ({ children }) => {
-  const [lessonCache, setLessonCache] = useState({});
+const getLessonDetails = async (lessonId) => {
+  // if (lessonsDetails[lessonId]) {
+  //   return lessonsDetails[lessonId];
+  // } else {
+  //   const lessonData = {"lesson": "Testing lesson"}; //await fetchLesson(lessonId);
+  //   setLessonsDetails(prev => ({ ...prev, [lessonId]: lessonData }));
+  //   return lessonData;
+  // }
+};
 
-  const getLesson = async (lessonId, fetchFn) => {
-    if (lessonCache[lessonId]) {
-      return lessonCache[lessonId];
-    } else {
-      const lessonData = await fetchLesson(lessonId);
-      setLessonCache(prev => ({ ...prev, [lessonId]: lessonData }));
-      return lessonData;
+const lessonDetailsReducer = (state, action) => {
+  switch (action.type) {
+    case "SET_LESSON":
+      return {
+        ...state,
+        lesson: action.payload,
+      };
+
+    default:
+      return state;
+  }
+};
+
+
+export const LessonProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(lessonDetailsReducer, initialState);
+  const fetchAndSetLesson = async (lessonId) => {
+    const lessonData = await fetchLesson(lessonId);
+    console.log("lessonData is", lessonData);
+    dispatch({ type: "SET_LESSON", payload: lessonData });
+  };
+
+  const getChapterDetails = async (chapterId) => {
+    const existing = state.chaptersDetails[chapterId];
+    if (existing) {
+      console.log("existing is", existing);
+      return existing;
     }
+
+    const chapterData = await fetchAChapter(chapterId);
+    console.log("chapterData is", chapterData);
+    dispatch({ type: "SET_CHAPTER_DETAILS", payload: chapterData });
+    return chapterData;
   };
 
   return (
-    <LessonDetailsContext.Provider value={{ getLesson }}>
+    <LessonDetailsContext.Provider
+      value={{ state, dispatch, fetchAndSetLesson, getChapterDetails }}
+    >
       {children}
     </LessonDetailsContext.Provider>
   );
 };
 
-export const useLesson = () => useContext(LessonDetailsContext);
+export const LessonChapterDetails = () => useContext(LessonDetailsContext);

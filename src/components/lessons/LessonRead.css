@@ -1,15 +1,31 @@
 .lesson-read {
-    margin-top:1rem;
-     display: flex;
-  height: 100vh;
-  overflow: overlay;
+  display: flex;
 }
+
+.reading-comprehension-header {
+  display: grid;
+  grid-template-columns: 1fr 100px;
+  .record-icon {
+    background-color: #eee;
+    border-radius: 50%;
+    padding: 0.3rem;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    line-height: 22px;
+    text-align: center;
+  }
+  .record-icon:hover {
+    background-color: #dad7d7;
+  }
+}
+
 .lesson-read-container {
   background-color: #ffffff;
-  padding: 1.5rem;
+  padding: 0.5rem;
   border-radius: 8px;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
   max-width: 900px;
   margin: auto;
 }
@@ -39,9 +55,11 @@ h3 {
 
 .question-card {
   background-color: #f9fbfd;
-  border: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
   border-radius: 6px;
-  padding: 1rem;
+  padding: 0rem;
+  padding-left:1rem !important;
+  padding-right:1rem !important;
   margin-bottom: 1rem;
 }
 
@@ -86,17 +104,89 @@ h3 {
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  margin-top: 1.5rem;
+  /* margin-top: 1.5rem; */
 }
 
 .submit-btn:hover {
   background-color: #254edb;
 }
 
-@media screen and (max-width: 768px) {
-  .lesson-read-container {
-    padding: 1rem;
+.mcq-header {
+  .bi-mouse2,
+  .small-tex {
+    cursor: pointer !important;
+    font-weight: 500;
+    color: #1e3a8a;
   }
+}
+
+
+.lesson-read-container {
+        margin-top:1rem;
+    }
+  .reading-comprehension-header {
+    grid-template-columns: 1fr 200px;
+    h2 {
+      font-size: 1rem;
+    }
+  }
+
+  .record-icon { 
+    cursor: pointer;
+    width: 25px;
+    height: 25px; 
+    margin: 0px;
+    padding: 0px;
+  }
+  .record-icon:hover {
+    background-color: #dad7d7;
+  }
+
+  .reading-text {
+    margin-top:1rem;
+    font-size: 0.9rem !important;
+  }
+
+  .mcq-header {
+    font-size: 1rem;
+  }
+
+  .modal-body {
+    padding-top: 0px; 
+  }
+
+@media (max-width: 500px) {
+    .lesson-read-container {
+        margin-top:1rem;
+    }
+  .reading-comprehension-header {
+    grid-template-columns: 1fr 200px;
+    h2 {
+      font-size: 1rem;
+    }
+  }
+
+  .record-icon { 
+    cursor: pointer;
+    width: 25px;
+    height: 25px; 
+    margin: 0px;
+    padding: 0px;
+  }
+  .record-icon:hover {
+    background-color: #dad7d7;
+  }
+
+  .reading-text {
+    margin-top:1rem;
+  }
+
+  .mcq-header {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
   .lesson-read {
     overflow: overlay;
   }
@@ -107,8 +197,11 @@ h3 {
 }
 
 @media screen and (min-width: 768px) {
-    .lesson-read {
-        overflow: overlay;
+  .lesson-read {
+    overflow: overlay;
+  }
+}
 
-    }
+.modal {
+  z-index: 999999999 !important;
 }

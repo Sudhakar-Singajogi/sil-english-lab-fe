@@ -1,13 +1,19 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "./AssignLessonsChapters.css";
 import AssignNewLessons from "./AssignNewLessons";
+import { LessonChapterDetails } from "../../context/LessonDetailsContext";
 
 const AssignLessonsChapters = () => {
+  const dispatch = useDispatch();
   const [filters, setFilters] = useState({
     school: "",
     class: "",
     section: "",
   });
+  const role = useSelector((state) => state.auth.role);
+  
+  // const { chaptersDetails, lessonsDetails, dispatch: lessonDispatcher } = LessonChapterDetails();
 
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -23,19 +29,22 @@ const AssignLessonsChapters = () => {
 
       {/* Filter Section */}
       <div className="row g-3 align-items-end mb-4">
-        <div className="">
-          <label className="form-label">School</label>
-          <select
-            className="form-select w-100"
-            name="school"
-            value={filters.school}
-            onChange={handleFilterChange}
-          >
-            <option value="">Select</option>
-            <option>BOSH MODEL School</option>
-            {/* Add dynamic school list */}
-          </select>
-        </div>
+        {role === "system-admin" && (
+          <div className="">
+            <label className="form-label">School</label>
+            <select
+              className="form-select w-100"
+              name="school"
+              value={filters.school}
+              onChange={handleFilterChange}
+            >
+              <option value="">Select</option>
+              <option>BOSH MODEL School</option>
+              {/* Add dynamic school list */}
+            </select>
+          </div>
+        )}
+
         <div className="">
           <label className="form-label">Class</label>
           <select
@@ -75,7 +84,7 @@ const AssignLessonsChapters = () => {
                   className="assign-student-avatar teacher-avatar"
                 />
               </div>
-                <h5 className="card-title">Aditi Sharma</h5>
+              <h5 className="card-title">Aditi Sharma</h5>
               <div className="teacher-info">
                 <span className="badge bg-warning text-dark mb-2">
                   Currently Assigned

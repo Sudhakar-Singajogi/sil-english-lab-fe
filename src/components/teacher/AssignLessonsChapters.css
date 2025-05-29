@@ -1,7 +1,6 @@
 .assign-lessons-container {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
   padding: 10px !important;
-  
 }
 .assign-lessons-page {
   background-color: #f9fbfd;
@@ -146,10 +145,10 @@
     }
 
     .align-items-end {
-     .form-select,
-    .form-control {
-      width: 100% !important;
-    } 
+      .form-select,
+      .form-control {
+        width: 100% !important;
+      }
     }
   }
 
@@ -276,14 +275,30 @@
   }
 }
 
+.lessons-filter-section {
+  grid-template-columns: 1fr 1fr !important;
+}
 @media screen and (min-width: 768px) and (max-width: 920px) {
-  .lessons-filter-section {
-    grid-template-columns: 1fr 1fr !important;
-  }
 }
 
 @media (max-width: 600px) {
   .assign-lessons-container {
     padding: 10px !important;
+  }
+}
+
+@media (min-width: 700px) {
+  .teacher-info {
+    width: 100%;
+    position: relative !important;
+    margin-left: 7rem !important;
+  }
+}
+
+@media screen and (min-width: 700px) and (max-width: 768px) {
+  .teacher-info { 
+    p {
+      font-size: 13px;
+    }
   }
 }

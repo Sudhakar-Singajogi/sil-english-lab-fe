@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./AssignNewLessons.css";
+import { fetchChapterBylevel } from "../../service/apiService";
+import { useSelector } from "react-redux";
 
 const AssignNewLessons = () => {
   const [level, setLevel] = useState("");
@@ -9,7 +11,8 @@ const AssignNewLessons = () => {
   const [assignTo, setAssignTo] = useState("class");
   const [classValue, setClassValue] = useState("");
   const [sectionValue, setSectionValue] = useState("");
-
+  const [levelChapters, setLevelChapters] = useState({});
+  const { allowedChapters } = useSelector((state) => state.auth.lacInfo);
   const lessons = ["Lesson 1", "Lesson 2", "Lesson 3", "Lesson 4"];
 
   const handleLessonChange = (lesson) => {
@@ -30,9 +33,48 @@ const AssignNewLessons = () => {
       classValue,
       sectionValue,
     };
-    console.log("Assignment Data:", payload);
     // TODO: Dispatch Redux action or API call
   };
+
+  const filterAllowedChapters = (chapters) => {
+    if (!allowedChapters || !Array.isArray(allowedChapters)) {
+      return;
+    }
+
+    const chapters_level = chapters.filter((chapter) =>
+      allowedChapters.some((c) => c.chapterId === chapter.documentId)
+    );
+
+    console.log("chapters_level is", chapters_level);
+
+    setLevelChapters((prev) => ({
+      ...prev,
+      [level]: chapters_level,
+    }));
+  };
+
+  useEffect(() => {
+    const chapterlevels = async () => {
+      const chaps = { ...levelChapters };
+      if (chaps[level] && chaps[level].length > 0) {
+        return;
+      }
+
+      const response = await fetchChapterBylevel(level);
+
+      if (response && Array.isArray(response.chapters)) {
+        filterAllowedChapters(response.chapters);
+      }
+    };
+
+    if (level === "") return;
+    chapterlevels();
+  }, [level]);
+
+  useEffect(() => {
+    const chapLevel = { ...levelChapters };
+    console.log("levelChapters: ", chapLevel[level]);
+  }, [level, levelChapters]);
 
   return (
     <div className="card shadow-sm assign-lessons-container">
@@ -62,9 +104,13 @@ const AssignNewLessons = () => {
               value={chapter}
               onChange={(e) => setChapter(e.target.value)}
             >
-              <option value="">Chapter</option>
-              <option>Chapter 1</option>
-              <option>Chapter 2</option>
+              <option value="">Select Chapter</option>
+              {Array.isArray(levelChapters[level]) &&
+                levelChapters[level].map((chapter) => (
+                  <option key={chapter?.documentId} value={chapter?.documentId}>
+                    {chapter?.title}
+                  </option>
+                ))}
             </select>
           </div>
         </div>
@@ -108,67 +154,66 @@ const AssignNewLessons = () => {
             </button>
           </div>
         </div>
-
       </div>
-        <div className="lesson-grid mb-4">
-          <div className="table-responsive">
-            <table className="table table-bordered table-sm recently-assigned-grid">
-              <thead className="table-light">
-                <tr>
-                  <th>Lesson Name</th>
-                  <th>Chapter</th>
-                  <th>Assigned On</th>
-                  <th>Status</th>
-                  {/* <th>Actions</th> */}
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Greeting Words</td>
-                  <td>Chapter 1</td>
-                  <td>12 May</td>
-                  <td>
-                    <span className="badge bg-info text-dark">In Progress</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Greeting Words</td>
-                  <td>Chapter 1</td>
-                  <td>12 May</td>
-                  <td>
-                    <span className="badge bg-info text-dark">In Progress</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Greeting Words</td>
-                  <td>Chapter 1</td>
-                  <td>12 May</td>
-                  <td>
-                    <span className="badge bg-info text-dark">In Progress</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Greeting Words</td>
-                  <td>Chapter 1</td>
-                  <td>12 May</td>
-                  <td>
-                    <span className="badge bg-info text-dark">In Progress</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Greeting Words</td>
-                  <td>Chapter 1</td>
-                  <td>12 May</td>
-                  <td>
-                    <span className="badge bg-info text-dark">In Progress</span>
-                  </td>
-                </tr>
+      <div className="lesson-grid mb-4">
+        <div className="table-responsive">
+          <table className="table table-bordered table-sm recently-assigned-grid">
+            <thead className="table-light">
+              <tr>
+                <th>Lesson Name</th>
+                <th>Chapter</th>
+                <th>Assigned On</th>
+                <th>Status</th>
+                {/* <th>Actions</th> */}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Greeting Words</td>
+                <td>Chapter 1</td>
+                <td>12 May</td>
+                <td>
+                  <span className="badge bg-info text-dark">In Progress</span>
+                </td>
+              </tr>
+              <tr>
+                <td>Greeting Words</td>
+                <td>Chapter 1</td>
+                <td>12 May</td>
+                <td>
+                  <span className="badge bg-info text-dark">In Progress</span>
+                </td>
+              </tr>
+              <tr>
+                <td>Greeting Words</td>
+                <td>Chapter 1</td>
+                <td>12 May</td>
+                <td>
+                  <span className="badge bg-info text-dark">In Progress</span>
+                </td>
+              </tr>
+              <tr>
+                <td>Greeting Words</td>
+                <td>Chapter 1</td>
+                <td>12 May</td>
+                <td>
+                  <span className="badge bg-info text-dark">In Progress</span>
+                </td>
+              </tr>
+              <tr>
+                <td>Greeting Words</td>
+                <td>Chapter 1</td>
+                <td>12 May</td>
+                <td>
+                  <span className="badge bg-info text-dark">In Progress</span>
+                </td>
+              </tr>
 
-                {/* Map more rows */}
-              </tbody>
-            </table>
-          </div>
+              {/* Map more rows */}
+            </tbody>
+          </table>
         </div>
+      </div>
     </div>
   );
 };

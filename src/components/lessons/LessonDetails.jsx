@@ -1,12 +1,12 @@
 // LessonDetails.jsx with dynamic path param + query param for tab + swipe
 import React, { useEffect, useState, lazy, Suspense } from "react";
 import { useSwipeable } from "react-swipeable";
-import { useLesson } from "../../context/LessonDetailsContext";
+import { LessonChapterDetails } from "../../context/LessonDetailsContext";
 import { useSearchParams, useParams, useNavigate } from "react-router-dom";
 import "./LessonDetails.css";
 
 const Listen = lazy(() => import("./Listen"));
-const ListenRead =lazy(()=> import("./LessonRead"))
+const ListenRead = lazy(() => import("./LessonRead"));
 const LessonWrite = lazy(() => import("./LessonWrite"));
 const LessonVocabulary = lazy(() => import("./LessonVocabulary"));
 
@@ -22,13 +22,15 @@ const iconMap = {
 const sections = ["Intro", "Listen", "Speak", "Read", "Write", "Vocabulary"];
 
 const LessonDetails = ({ fetchLesson }) => {
-  const { getLesson } = useLesson();
-  const [lesson, setLesson] = useState(null);
+  const { state, fetchAndSetLesson } = LessonChapterDetails();
+  const { lesson } = state;
+  const [lessonId, setLessonId] = useState(null);
+  const [chapterId, seChapterId] = useState(null);
+
   const [activeTab, setActiveTab] = useState("Intro");
   const [swipeClass, setSwipeClass] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   const { lessonSlug } = useParams();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const tabFromUrl = searchParams.get("tab");
@@ -39,8 +41,14 @@ const LessonDetails = ({ fetchLesson }) => {
 
   useEffect(() => {
     const lessonId = lessonSlug; // Use slug as ID or decode as needed
-    getLesson(lessonId, fetchLesson).then(setLesson);
-  }, [lessonSlug]);
+
+    const getALesson = async () => {
+      const resp = await fetchAndSetLesson(lessonId);
+      console.log("resp is", resp);
+    };
+
+    getALesson();
+  }, [lesson?.id]);
 
   useEffect(() => {
     setSearchParams({ tab: activeTab });
@@ -153,8 +161,7 @@ const LessonDetails = ({ fetchLesson }) => {
             {activeTab === "Read" && (
               <div className="lesson-read fade-in">
                 <Suspense fallback={<div>Loading Listen Section...</div>}>
-                <ListenRead />
-                
+                  <ListenRead />
                 </Suspense>
                 {/* <div className="card p-3">
                   <p>
