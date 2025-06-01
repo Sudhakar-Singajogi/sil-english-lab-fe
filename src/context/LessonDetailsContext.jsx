@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useReducer, useState } from "react";
-import { fetchAChapter } from "../service/apiService";
-
+import { fetchAChapter, fetchLessonsByChapter } from "../service/apiService";
 
 const LessonDetailsContext = createContext();
 
@@ -8,6 +7,8 @@ const initialState = {
   lesson: null,
   chaptersDetails: {},
   lessonsDetails: {},
+  chapterLessons: null,
+  lessonsIds: null,
 };
 
 const fetchLesson = async (lessonId) => {
@@ -44,12 +45,43 @@ const lessonDetailsReducer = (state, action) => {
         ...state,
         lesson: action.payload,
       };
+    case "SET_LESSONS_BY_CHAPTER":
+      return {
+        ...state,
+        chaptersDetails: {
+          ...state.chaptersDetails,
+          [action.payload.id]: action.payload,
+        },
+      };
+    case "SET_CHAPTER_LESSON_IDS":
+      return {
+        ...state,
+        lessonsIds: {
+          ...state.lessonsIds,
+          [action.payload.chapterId]: action.payload.lessonIds,
+        },
+      };
+    case "SET_CHAPTER_LESSONS":
+      return {
+        ...state,
+        chapterLessons: {
+          ...state.chapterLessons,
+          [action.payload.chapterId]: action.payload.lessons,
+        },
+      };
+    case "RESET_LESSON_DETAILS":
+      return {
+        ...state,
+        chaptersDetails: {},
+        lessonsDetails: {},
+        chapterLessons: null,
+        lessonsIds: null,
+      };
 
     default:
       return state;
   }
 };
-
 
 export const LessonProvider = ({ children }) => {
   const [state, dispatch] = useReducer(lessonDetailsReducer, initialState);
@@ -72,9 +104,50 @@ export const LessonProvider = ({ children }) => {
     return chapterData;
   };
 
+  const lessonsByChapter = async (allowedChapters, chapterId) => {
+    const resp = await fetchLessonsByChapter(chapterId);
+
+    if (resp.resultData.length > 0) {
+      // Step 1: Get allowedLessons for the selected chapterId from Redux
+      const allowed = allowedChapters.find((c) => c.chapterId === chapterId);
+      const allowedLessonIds =
+        allowed?.allowedLessons?.map((l) => l.lessonId) || [];
+
+      // Step 2: Filter lessons from API to include only allowed ones
+      const filteredLessons = resp.resultData.filter((lesson) =>
+        allowedLessonIds.includes(lesson.documentId)
+      );
+
+      if (filteredLessons.length > 0) {
+        const ids = filteredLessons.map((lesson) => lesson.documentId);
+
+        dispatch({
+          type: "SET_CHAPTER_LESSON_IDS",
+          payload: { chapterId, lessonIds: ids },
+        });
+
+        dispatch({
+          type: "SET_CHAPTER_LESSONS",
+          payload: { chapterId, lessons: filteredLessons },
+        });
+      }
+
+      console.log("Filtered lessons response:", filteredLessons);
+    }
+  };
+
+  const resetChapterLessons = () => dispatch({ type: "RESET_LESSON_DETAILS" });
+
   return (
     <LessonDetailsContext.Provider
-      value={{ state, dispatch, fetchAndSetLesson, getChapterDetails }}
+      value={{
+        state,
+        dispatch,
+        fetchAndSetLesson,
+        getChapterDetails,
+        lessonsByChapter,
+        resetChapterLessons
+      }}
     >
       {children}
     </LessonDetailsContext.Provider>

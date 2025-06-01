@@ -45,7 +45,7 @@ const AssignLessonsChapters = () => {
           </div>
         )}
 
-        <div className="">
+        {/* <div className="">
           <label className="form-label">Class</label>
           <select
             className="form-select w-100"
@@ -70,7 +70,7 @@ const AssignLessonsChapters = () => {
             <option>10</option>
             <option>9</option>
           </select>
-        </div>
+        </div> */}
       </div>
 
       {/* Assigned Info Card */}

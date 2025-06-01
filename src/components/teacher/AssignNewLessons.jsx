@@ -1,38 +1,77 @@
 import React, { useEffect, useState } from "react";
 import "./AssignNewLessons.css";
-import { fetchChapterBylevel } from "../../service/apiService";
+
+import {
+  fetchChapterBylevel,
+  fetchLessonsByChapter,
+  assignlessons,
+} from "../../service/apiService";
 import { useSelector } from "react-redux";
+import Loader from "../Loader";
+import { LessonChapterDetails } from "../../context/LessonDetailsContext";
+import { Alert, Form } from "react-bootstrap";
+import AssignNewLessonsFilters from "./AssignNewLessonsFilters";
+import { toast } from "react-toastify";
 
 const AssignNewLessons = () => {
   const [level, setLevel] = useState("");
   const [chapter, setChapter] = useState("");
+  const [chapterName, setChapterName] = useState("");
+  const [startDate, setStartDate] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [selectedLessons, setSelectedLessons] = useState([]);
-  const [assignTo, setAssignTo] = useState("class");
-  const [classValue, setClassValue] = useState("");
-  const [sectionValue, setSectionValue] = useState("");
+  // const [assignTo, setAssignTo] = useState("class");
+  // const [classValue, setClassValue] = useState("");
+  // const [sectionValue, setSectionValue] = useState("");
   const [levelChapters, setLevelChapters] = useState({});
   const { allowedChapters } = useSelector((state) => state.auth.lacInfo);
-  const lessons = ["Lesson 1", "Lesson 2", "Lesson 3", "Lesson 4"];
+  const { userId, fullName } = useSelector((state) => state.auth.user);
+  const { schoolInfo } = useSelector((state) => state.auth);
+  const [isLessonsSelected, setIsLessonsSelected] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAssingLessonSuccessfull, setIsAssingLessonSuccessfull] = useState(false);
 
-  const handleLessonChange = (lesson) => {
-    setSelectedLessons((prev) =>
-      prev.includes(lesson)
-        ? prev.filter((l) => l !== lesson)
-        : [...prev, lesson]
-    );
-  };
+  const {
+    state: { lessonsIds, chapterLessons },
+    lessonsByChapter,
+    resetChapterLessons
+  } = LessonChapterDetails();
 
-  const handleAssign = () => {
-    const payload = {
-      level,
-      chapter,
-      dueDate,
-      selectedLessons,
-      assignTo,
-      classValue,
-      sectionValue,
-    };
+  const handleAssign = async (payload) => {
+    if (selectedLessons.length > 0) {
+      setIsLessonsSelected(false);
+
+      const reqPayload = {
+        schoolId: schoolInfo?.id,
+        level: payload.level,
+        chapterId: payload.chapter,
+        lessonIds: selectedLessons,
+        assignTo: payload.assignedTo.toLowerCase(),
+        classId: parseInt(payload.selectedClass),
+        startDate: payload.startDate,
+        dueDate: payload.dueDate,
+        assignedBy: `${userId} || ${fullName}`,
+      };
+
+      if (payload?.selectedSection) {
+        reqPayload.section = payload?.selectedSection;
+      }
+      console.log("reqPayload is: ", reqPayload);
+      const resp = await assignlessons(reqPayload);
+
+      if (resp.success) {
+        setIsAssingLessonSuccessfull(true);
+        setSelectedLessons([]);
+        toast.success( resp.message);
+         await resetChapterLessons();
+      }
+
+      console.log("response is: ", resp);
+    } else {
+      setIsLessonsSelected(true);
+    }
+    // const payload =
+
     // TODO: Dispatch Redux action or API call
   };
 
@@ -76,140 +115,100 @@ const AssignNewLessons = () => {
     console.log("levelChapters: ", chapLevel[level]);
   }, [level, levelChapters]);
 
+  useEffect(() => {
+    const getLesson = async () => {
+      setIsLoading(true);
+      await lessonsByChapter(allowedChapters, chapter); // ✅ calling directly
+      setIsLoading(false);
+    };
+
+    if (chapter === "") return;
+    getLesson();
+  }, [chapter]);
+
+  useEffect(() => {
+    console.log("lessonsIds are", chapterLessons);
+  }, [chapterLessons]);
+
+  const setIsChecked = (lessonId, isChecked) => {
+    const prevVals = [...selectedLessons];
+    //find the index whether the lesson is already selected
+
+    if (prevVals.length > 0 && !isChecked) {
+      const index = prevVals.indexOf(lessonId);
+
+      //remove the lesson from the array
+      console.log(prevVals.splice(index, 1));
+      setSelectedLessons([...prevVals]);
+    } else {
+      setSelectedLessons([...prevVals, lessonId]);
+    }
+
+    if (isChecked && lessonId) {
+      setIsLessonsSelected(false);
+    }
+
+    //
+  };
+
   return (
     <div className="card shadow-sm assign-lessons-container">
       <h5 className="mb-4">Assign New Lessons</h5>
       <div className="d-grid lessons-filter-section">
-        <div className="mb-3 lessons-filter">
-          <div className="">
-            <label className="form-label">Select</label>
-            <select
-              className="form-select"
-              value={level}
-              onChange={(e) => setLevel(e.target.value)}
-            >
-              <option value="">Level</option>
-              <option>A1</option>
-              <option>A2</option>
-              <option>B1</option>
-              <option>B2</option>
-              <option>C1</option>
-              <option>C2</option>
-            </select>
-          </div>
-          <div className="">
-            <label className="form-label">Select</label>
-            <select
-              className="form-select"
-              value={chapter}
-              onChange={(e) => setChapter(e.target.value)}
-            >
-              <option value="">Select Chapter</option>
-              {Array.isArray(levelChapters[level]) &&
-                levelChapters[level].map((chapter) => (
-                  <option key={chapter?.documentId} value={chapter?.documentId}>
-                    {chapter?.title}
-                  </option>
-                ))}
-            </select>
-          </div>
-        </div>
-        <div className="mb-3 lessons-filter">
-          <div className="">
-            <label className="form-label">Start Date</label>
-            <input
-              type="date"
-              className="form-control"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-            />
-          </div>
-          <div className="">
-            <label className="form-label">Due Date</label>
-            <input
-              type="date"
-              className="form-control"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="mb-3 lessons-filter">
-          <div className="">
-            <label className="form-label">Assign To</label>
-            <select
-              className="form-select"
-              value={chapter}
-              onChange={(e) => setChapter(e.target.value)}
-            >
-              <option value=""></option>
-              <option>Class</option>
-              <option>Student</option>
-            </select>
-          </div>
-          <div className="col-md-2 mt-4">
-            {/* <label className="form-label">Action</label> */}
-            <button className="btn btn-primary mt-2" onClick={handleAssign}>
-              Assign
-            </button>
-          </div>
-        </div>
+        <AssignNewLessonsFilters
+          level={level}
+          setLevel={setLevel}
+          chapter={chapter}
+          setChapter={setChapter}
+          setChapterName = {setChapterName}
+          levelChapters={levelChapters}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          dueDate={dueDate}
+          setDueDate={setDueDate}
+          handleAssign={handleAssign}
+          isAssingLessonSuccessfull={isAssingLessonSuccessfull} 
+        />
       </div>
       <div className="lesson-grid mb-4">
         <div className="table-responsive">
+          {isLessonsSelected && (
+            <Alert variant="danger">
+              Please select atleast one lesson to assign
+            </Alert>
+          )}
+          {isLoading && <Loader />}
           <table className="table table-bordered table-sm recently-assigned-grid">
             <thead className="table-light">
               <tr>
+                <th></th>
+                <th>Level</th>
+                {/* <th>Chapter</th> */}
+                <th>Chapter Title</th>
                 <th>Lesson Name</th>
-                <th>Chapter</th>
-                <th>Assigned On</th>
-                <th>Status</th>
                 {/* <th>Actions</th> */}
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Greeting Words</td>
-                <td>Chapter 1</td>
-                <td>12 May</td>
-                <td>
-                  <span className="badge bg-info text-dark">In Progress</span>
-                </td>
-              </tr>
-              <tr>
-                <td>Greeting Words</td>
-                <td>Chapter 1</td>
-                <td>12 May</td>
-                <td>
-                  <span className="badge bg-info text-dark">In Progress</span>
-                </td>
-              </tr>
-              <tr>
-                <td>Greeting Words</td>
-                <td>Chapter 1</td>
-                <td>12 May</td>
-                <td>
-                  <span className="badge bg-info text-dark">In Progress</span>
-                </td>
-              </tr>
-              <tr>
-                <td>Greeting Words</td>
-                <td>Chapter 1</td>
-                <td>12 May</td>
-                <td>
-                  <span className="badge bg-info text-dark">In Progress</span>
-                </td>
-              </tr>
-              <tr>
-                <td>Greeting Words</td>
-                <td>Chapter 1</td>
-                <td>12 May</td>
-                <td>
-                  <span className="badge bg-info text-dark">In Progress</span>
-                </td>
-              </tr>
-
-              {/* Map more rows */}
+              {chapterLessons &&
+                chapterLessons[chapter] &&
+                chapterLessons[chapter].map((lesson) => (
+                  <tr key={lesson?.documentId}>
+                    <td>
+                      <Form.Check
+                        type="checkbox"
+                        checked={selectedLessons.includes(lesson?.documentId)}
+                        onChange={(e) =>
+                          setIsChecked(lesson?.documentId, e.target.checked)
+                        }
+                      />
+                    </td>
+                    <td>{level}</td>
+                    {/* <td>{chapter}</td> */}
+                    <td>{chapterName}</td>
+                    <td>{lesson?.title}</td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

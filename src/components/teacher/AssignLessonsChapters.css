@@ -99,6 +99,7 @@
 .recent-assigned-section {
   .teacher-card {
     border-bottom: 1px solid #eee;
+    padding-bottom:1.5rem;
   }
 }
 
