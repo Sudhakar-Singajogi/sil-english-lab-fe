@@ -2,6 +2,14 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
   padding: 10px !important;
 }
+
+.assign-lessons-page {
+  .badge {
+    padding: 5px;
+    /* border-radius: 50%; */
+    font-size: 10px;
+  }
+}
 .assign-lessons-page {
   background-color: #f9fbfd;
   min-height: 100vh;
@@ -33,6 +41,11 @@
   vertical-align: middle;
 }
 
+.assign-lessons-page .table th {
+  background-color: #475569;
+  color: #fff;
+}
+
 .assign-lessons-page .btn-sm {
   font-size: 0.75rem;
 }
@@ -53,7 +66,7 @@
 
 .recent-assigned-section {
   display: grid;
-  grid-template-columns: 20% 1fr !important;
+  /* grid-template-columns: 20% 1fr !important; */
   width: 100%;
 }
 
@@ -99,8 +112,28 @@
 .recent-assigned-section {
   .teacher-card {
     border-bottom: 1px solid #eee;
-    padding-bottom:1.5rem;
+    padding-bottom: 1.5rem;
   }
+}
+
+.assigned-lesson-actions {
+  display: grid;
+  grid-template-columns: 1.5rem 1.5rem;
+}
+
+.assigned-lesson-actions span i {
+  cursor: pointer;
+  margin: 10px;
+}
+
+.assigned-lesson-actions span i.bi-check-circle:hover {
+  color: green !important;
+  font-weight: bold !important;
+}
+
+.del-assinged-lesson:hover {
+  color: red !important;
+  font-weight: bold !important;
 }
 
 @media (min-width: 375px) {
@@ -297,7 +330,7 @@
 }
 
 @media screen and (min-width: 700px) and (max-width: 768px) {
-  .teacher-info { 
+  .teacher-info {
     p {
       font-size: 13px;
     }

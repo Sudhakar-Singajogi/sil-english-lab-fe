@@ -6,7 +6,7 @@ const ConfirmDialog = ({ show, message, onConfirm, onCancel }) => {
     <>
       <Modal show={show} onHide={onCancel} centered backdrop="static">
         <Modal.Header closeButton>
-          <Modal.Title><i class="bi bi-check-circle"></i> Confirmation</Modal.Title>
+          <Modal.Title><i className="bi bi-check-circle"></i> Confirmation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>{message}</p>

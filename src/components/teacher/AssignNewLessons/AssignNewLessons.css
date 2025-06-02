@@ -18,7 +18,7 @@
 }
 
 .lessons-filter:last-child {
-  margin-left:10px;
+  margin-left: 10px;
 }
 
 .assign-lessons-container h5 {
@@ -44,6 +44,60 @@
 .lesson-item:hover {
   background-color: #eef4ff;
   border-color: #b3d4fc;
+}
+
+.is-assigned {
+  color: rgb(13, 99, 70);
+  font-size: 1.3rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.not-assigned {
+  color: rgb(222, 41, 4);
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.offcanvas-body {
+  padding-top: 1rem !important;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.offcanvas-header {
+  background: #475569;
+  color: #ffffff;
+  .btn-close {
+    --bs-btn-close-color: #ffffff !important;
+  }
+}
+
+.assign-student-lessons {
+  width: 100%;
+  .form-select,
+  .form-control {
+    max-width: 100% !important;
+  }
+}
+
+.student-table-wrapper {
+  max-height: 450px; /* adjust as needed */
+  overflow-y: auto;
+}
+
+.student-table-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sticky-header th {
+  position: sticky;
+  top: 0;
+  background: #f8f9fa;
+  z-index: 1;
+  text-align: center !important;
 }
 
 @media (max-width: 600px) {

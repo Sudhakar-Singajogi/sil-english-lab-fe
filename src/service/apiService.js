@@ -67,6 +67,40 @@ export const assignlessons = async (payload) => {
   return resp;
 };
 
+export const assignedChapLessStats = async () => {
+  try {
+    const response = await axiosInstance.get(
+      `/assignlessons/byteacher?limit=5`,
+      {
+        cache: false,
+      }
+    );
+    console.log("response is", response);
+
+    if (response.status === 200) {
+      const respData = response.data.data;
+      return {
+        resultData: {
+          recentlyAssigned: respData.resultData,
+          assignedStats: respData.assignedStats,
+        },
+        resultTotal: respData.resultData.length,
+        totalRows: response.data.data.totalRows,
+        hasMore: response.data.data.hasMore,
+      };
+    } else {
+      return {
+        resultData: [],
+        resultTotal: 0,
+        totalRows: 0,
+        hasMore: false,
+      };
+    }
+  } catch (exception) {
+    return checkCatchException(exception);
+  }
+};
+
 const callGETAPI = async (url, fromCache) => {
   try {
     const response = await axiosInstance.get(url, { cache: fromCache });
@@ -95,24 +129,56 @@ const callGETAPI = async (url, fromCache) => {
       };
     }
   } catch (exception) {
-    console.log("exception is", exception.response);
-    if (
-      exception?.response?.status == 404 &&
-      exception?.response?.data?.error_type === "Resource not found"
-    ) {
-      //
+    return checkCatchException(exception);
+  }
+};
+
+const checkCatchException = (exception) => {
+  console.log("exception is", exception.response);
+  if (
+    exception?.response?.status == 404 &&
+    exception?.response?.data?.error_type === "Resource not found"
+  ) {
+    //
+  }
+  if (exception.response.data.message === "Unauthorized or invalid token") {
+    checkSessionExpired();
+  }
+  return {
+    resultData: [],
+    resultTotal: 0,
+    totalRows: 0,
+    hasMore: false,
+  };
+};
+
+
+export const callDeleteAPI = async (url) => {
+  try {
+    const resp = await axiosInstance.delete(url);
+    console.log("delete resp is: ", resp);
+
+    if (resp.status === 200) {
+      return {
+        success: true,
+        message: resp.data.message,
+        data: resp.data.data,
+      };
     }
+  } catch (exception) {
     if (exception.response.data.message === "Unauthorized or invalid token") {
       checkSessionExpired();
     }
+
     return {
-      resultData: [],
-      resultTotal: 0,
-      totalRows: 0,
-      hasMore: false,
+      success: false,
+      message:
+        exception?.response?.data?.message || "Failed to assign lessons ",
+      data: null,
     };
   }
 };
+
 
 const callPOSTAPI = async (url, payload) => {
   try {
@@ -133,7 +199,8 @@ const callPOSTAPI = async (url, payload) => {
 
     return {
       success: false,
-      message: exception?.response?.data?.message || "Failed to assign lessons ",
+      message:
+        exception?.response?.data?.message || "Failed to assign lessons ",
       data: null,
     };
   }

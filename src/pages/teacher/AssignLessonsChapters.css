@@ -48,7 +48,7 @@
 
 .recent-assigned-section {
   display: grid;
-  grid-template-columns: 25% 1fr;
+  /* grid-template-columns: 25% 1fr; */
   width: 100%;
 }
 

@@ -1,4 +1,9 @@
+import { Button } from "bootstrap/dist/js/bootstrap.bundle.min";
 import React, { useEffect, useState } from "react";
+import { Alert, Form } from "react-bootstrap";
+import useStudentSelector from "./hooks/useStudentSelector";
+import useSILDrawer from "../../hooks/useSILDrawer";
+import AssignStudentSelector from "./AssignStudentSelector";
 
 function AssignNewLessonsFilters({
   level,
@@ -9,8 +14,31 @@ function AssignNewLessonsFilters({
   levelChapters,
   handleAssign,
   isAssingLessonSuccessfull,
+  setStartDate,
+  setAssignedTo,
+  setSelectedClass,
+  setSelectedSection,
+  selectedSection,
+  setValidationErrMsg,
 }) {
   const [enableAssignBtn, setEnableAssignBtn] = useState(false);
+  const [hideSection, setHideSection] = useState(false);
+  const [showStudentList, setShowStudentList] = useState(false);
+
+  const { show, open, close } = useSILDrawer();
+
+  const {
+    isDrawerOpen,
+    openDrawer,
+    closeDrawer,
+    selectedSec,
+    setSelectedSec,
+    students,
+    selectedStudents,
+    toggleStudent,
+    reset,
+  } = useStudentSelector();
+
   const [selectedFilters, setSelectedFilters] = useState({
     level: "",
     chapter: "",
@@ -25,10 +53,26 @@ function AssignNewLessonsFilters({
     const { level, chapter, startDate, dueDate, assignedTo, selectedClass } =
       selectedFilters;
 
-    let isValid =
+    // Reset validation state initially
+    setValidationErrMsg("");
+
+    // Check if all required fields are present
+    const isAllFieldsSelected =
       level && chapter && startDate && dueDate && assignedTo && selectedClass;
 
-    setEnableAssignBtn(!!isValid);
+    // If both dates exist, check validity
+    if (startDate && dueDate) {
+      const start = new Date(startDate);
+      const due = new Date(dueDate);
+
+      if (due <= start) {
+        setValidationErrMsg("Due date should be greater than start date");
+        setEnableAssignBtn(false);
+        return; // Early exit to prevent enabling button
+      }
+    }
+
+    setEnableAssignBtn(!!isAllFieldsSelected);
   }, [selectedFilters]);
 
   useEffect(() => {
@@ -49,11 +93,42 @@ function AssignNewLessonsFilters({
   const handelChange = (e) => {
     const { name, value } = e.target;
 
+    if (name === "assignedTo") {
+      setHideSection(true);
+    }
+
     if (name === "chapter") {
       const chapterName = levelChapters[level].find(
         (chapter) => chapter.documentId === value
       )?.title;
       setChapterName(chapterName);
+    }
+
+    if (name === "startDate") {
+      setStartDate(value);
+    }
+
+    if (name === "assignedTo") {
+      setAssignedTo(value);
+    }
+
+    if (name === "selectedClass") {
+      setSelectedClass(value);
+    }
+
+    if (name === "selectedSection") {
+      setSelectedSection(value);
+    }
+
+    if (name === "dueDate") {
+      //get the start date and comapre with the duedate, duedate has to be greater than start date
+      const dueDate = new Date(value);
+      const startDate = new Date(selectedFilters?.startDate);
+
+      if (dueDate < startDate) {
+        setValidationErrMsg("Due date should be greater than start date");
+        setEnableAssignBtn(false);
+      }
     }
 
     setSelectedFilters((prev) => {
@@ -63,8 +138,20 @@ function AssignNewLessonsFilters({
     });
   };
 
+  // const handleAssignLessons = () => {
+  //   const params = { ...selectedFilters };
+  //   handleAssign(params);
+  // };
   const handleAssignLessons = () => {
-    const params = { ...selectedFilters };
+    const params = {
+      ...selectedFilters,
+      selectedSection:
+        selectedFilters.assignedTo === "Student"
+          ? selectedSection
+          : selectedFilters.selectedSection,
+      selectedStudents:
+        selectedFilters.assignedTo === "Student" ? selectedStudents : [],
+    };
     handleAssign(params);
   };
 
@@ -120,6 +207,7 @@ function AssignNewLessonsFilters({
             className="form-control"
             name="startDate"
             value={selectedFilters?.startDate}
+            min={new Date().toISOString().split("T")[0]}
             onChange={(e) => {
               handelChange(e);
             }}
@@ -132,6 +220,15 @@ function AssignNewLessonsFilters({
             className="form-control"
             name="dueDate"
             value={selectedFilters?.dueDate}
+            min={
+              selectedFilters?.startDate
+                ? new Date(
+                    new Date(selectedFilters.startDate).getTime() + 86400000
+                  )
+                    .toISOString()
+                    .split("T")[0]
+                : new Date().toISOString().split("T")[0]
+            }
             onChange={(e) => {
               handelChange(e);
             }}
@@ -181,20 +278,35 @@ function AssignNewLessonsFilters({
       </div>
       <div className="mb-3 lessons-filter">
         <div className="">
-          <label className="form-label">Select Section</label>
-          <select
-            className="form-select"
-            name="selectedSection"
-            value={selectedFilters?.selectedSection}
-            onChange={(e) => {
-              handelChange(e);
-            }}
-          >
-            <option value=""></option>
-            <option value="A">Section A</option>
-            <option value="B">Section B</option>
-            <option value="C">Section C</option>
-          </select>
+          {selectedFilters.assignedTo === "Student" ? (
+            <div className="d-flex flex-column">
+              <AssignStudentSelector
+                onSectionChange={(e) =>
+                  handelChange({
+                    target: { name: "selectedSection", value: e.target.value },
+                  })
+                }
+                onStudentsSelect={(id, checked) => {
+                  // Optional: store selected student ids
+                }}
+              />
+            </div>
+          ) : (
+            <div className="">
+              <label className="form-label">Select Section</label>
+              <select
+                className="form-select"
+                name="selectedSection"
+                value={selectedFilters?.selectedSection}
+                onChange={(e) => handelChange(e)}
+              >
+                <option value=""></option>
+                <option value="A">Section A</option>
+                <option value="B">Section B</option>
+                <option value="C">Section C</option>
+              </select>
+            </div>
+          )}
         </div>
         <div className="col-md-2 mt-4">
           {/* <label className="form-label">Action</label> */}

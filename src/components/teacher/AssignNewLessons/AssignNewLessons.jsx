@@ -1,41 +1,69 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "./AssignNewLessons.css";
-
 import {
   fetchChapterBylevel,
   fetchLessonsByChapter,
   assignlessons,
-} from "../../service/apiService";
+} from "../../../service/apiService";
 import { useSelector } from "react-redux";
-import Loader from "../Loader";
-import { LessonChapterDetails } from "../../context/LessonDetailsContext";
+import Loader from "../../Loader";
+import { LessonChapterDetails } from "../../../context/LessonDetailsContext";
 import { Alert, Form } from "react-bootstrap";
 import AssignNewLessonsFilters from "./AssignNewLessonsFilters";
 import { toast } from "react-toastify";
+import { formatTimeStateIntoDate } from "../../../utils/helper";
+import LessonRow from "./LessonRow";
+import useAssignedMap from "./hooks/useAssignedMap";
+import useChapters from "./hooks/useChapters";
+import useLessons from "./hooks/useLessons";
 
-const AssignNewLessons = () => {
+const AssignNewLessons = ({ lessonsChapterStats }) => {
   const [level, setLevel] = useState("");
   const [chapter, setChapter] = useState("");
   const [chapterName, setChapterName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [selectedLessons, setSelectedLessons] = useState([]);
-  // const [assignTo, setAssignTo] = useState("class");
-  // const [classValue, setClassValue] = useState("");
-  // const [sectionValue, setSectionValue] = useState("");
-  const [levelChapters, setLevelChapters] = useState({});
-  const { allowedChapters } = useSelector((state) => state.auth.lacInfo);
+  const [assignedTo, setAssignedTo] = useState("");
+  const [selectedClass, setSelectedClass] = useState("");
+  const [selectedSection, setSelectedSection] = useState("");
+  const [validationErrMsg, setValidationErrMsg] = useState("");
+
+  // const { allowedChapters } = useSelector((state) => state.auth.lacInfo);
+  const rawAllowedChapters = useSelector(
+    (state) => state.auth.lacInfo.allowedChapters
+  );
+  const allowedChapters = useMemo(
+    () => rawAllowedChapters,
+    [rawAllowedChapters]
+  );
+
   const { userId, fullName } = useSelector((state) => state.auth.user);
   const { schoolInfo } = useSelector((state) => state.auth);
   const [isLessonsSelected, setIsLessonsSelected] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isAssingLessonSuccessfull, setIsAssingLessonSuccessfull] = useState(false);
+
+  const [isAssingLessonSuccessfull, setIsAssingLessonSuccessfull] =
+    useState(false);
+  const levelChapters = useChapters(level, allowedChapters);
 
   const {
     state: { lessonsIds, chapterLessons },
     lessonsByChapter,
-    resetChapterLessons
+    resetChapterLessons,
   } = LessonChapterDetails();
+
+  const isLoading = useLessons(chapter, allowedChapters, lessonsByChapter);
+
+  const assignedLessons = useAssignedMap(
+    chapter,
+    chapterLessons,
+    lessonsChapterStats,
+    startDate,
+    dueDate,
+    assignedTo,
+    selectedClass,
+    selectedSection
+  );
 
   const handleAssign = async (payload) => {
     if (selectedLessons.length > 0) {
@@ -62,73 +90,15 @@ const AssignNewLessons = () => {
       if (resp.success) {
         setIsAssingLessonSuccessfull(true);
         setSelectedLessons([]);
-        toast.success( resp.message);
-         await resetChapterLessons();
+        toast.success(resp.message);
+        await resetChapterLessons();
       }
 
       console.log("response is: ", resp);
     } else {
       setIsLessonsSelected(true);
     }
-    // const payload =
-
-    // TODO: Dispatch Redux action or API call
   };
-
-  const filterAllowedChapters = (chapters) => {
-    if (!allowedChapters || !Array.isArray(allowedChapters)) {
-      return;
-    }
-
-    const chapters_level = chapters.filter((chapter) =>
-      allowedChapters.some((c) => c.chapterId === chapter.documentId)
-    );
-
-    console.log("chapters_level is", chapters_level);
-
-    setLevelChapters((prev) => ({
-      ...prev,
-      [level]: chapters_level,
-    }));
-  };
-
-  useEffect(() => {
-    const chapterlevels = async () => {
-      const chaps = { ...levelChapters };
-      if (chaps[level] && chaps[level].length > 0) {
-        return;
-      }
-
-      const response = await fetchChapterBylevel(level);
-
-      if (response && Array.isArray(response.chapters)) {
-        filterAllowedChapters(response.chapters);
-      }
-    };
-
-    if (level === "") return;
-    chapterlevels();
-  }, [level]);
-
-  useEffect(() => {
-    const chapLevel = { ...levelChapters };
-    console.log("levelChapters: ", chapLevel[level]);
-  }, [level, levelChapters]);
-
-  useEffect(() => {
-    const getLesson = async () => {
-      setIsLoading(true);
-      await lessonsByChapter(allowedChapters, chapter); // ✅ calling directly
-      setIsLoading(false);
-    };
-
-    if (chapter === "") return;
-    getLesson();
-  }, [chapter]);
-
-  useEffect(() => {
-    console.log("lessonsIds are", chapterLessons);
-  }, [chapterLessons]);
 
   const setIsChecked = (lessonId, isChecked) => {
     const prevVals = [...selectedLessons];
@@ -147,27 +117,36 @@ const AssignNewLessons = () => {
     if (isChecked && lessonId) {
       setIsLessonsSelected(false);
     }
-
-    //
   };
 
   return (
     <div className="card shadow-sm assign-lessons-container">
       <h5 className="mb-4">Assign New Lessons</h5>
+      <div className="d-row">
+        {validationErrMsg !== "" && (
+          <Alert show={true} variant="danger">
+            {validationErrMsg}
+          </Alert>
+        )}
+      </div>
       <div className="d-grid lessons-filter-section">
         <AssignNewLessonsFilters
           level={level}
           setLevel={setLevel}
           chapter={chapter}
           setChapter={setChapter}
-          setChapterName = {setChapterName}
+          setChapterName={setChapterName}
           levelChapters={levelChapters}
           startDate={startDate}
           setStartDate={setStartDate}
+          setAssignedTo={setAssignedTo}
           dueDate={dueDate}
           setDueDate={setDueDate}
           handleAssign={handleAssign}
-          isAssingLessonSuccessfull={isAssingLessonSuccessfull} 
+          isAssingLessonSuccessfull={isAssingLessonSuccessfull}
+          setSelectedClass={setSelectedClass}
+          setSelectedSection={setSelectedSection}
+          setValidationErrMsg={setValidationErrMsg}
         />
       </div>
       <div className="lesson-grid mb-4">
@@ -186,28 +165,22 @@ const AssignNewLessons = () => {
                 {/* <th>Chapter</th> */}
                 <th>Chapter Title</th>
                 <th>Lesson Name</th>
-                {/* <th>Actions</th> */}
+                <th>Is Assigned</th>
               </tr>
             </thead>
             <tbody>
               {chapterLessons &&
                 chapterLessons[chapter] &&
                 chapterLessons[chapter].map((lesson) => (
-                  <tr key={lesson?.documentId}>
-                    <td>
-                      <Form.Check
-                        type="checkbox"
-                        checked={selectedLessons.includes(lesson?.documentId)}
-                        onChange={(e) =>
-                          setIsChecked(lesson?.documentId, e.target.checked)
-                        }
-                      />
-                    </td>
-                    <td>{level}</td>
-                    {/* <td>{chapter}</td> */}
-                    <td>{chapterName}</td>
-                    <td>{lesson?.title}</td>
-                  </tr>
+                  <LessonRow
+                    key={lesson?.documentId}
+                    lesson={lesson}
+                    level={level}
+                    chapterName={chapterName}
+                    isChecked={selectedLessons.includes(lesson?.documentId)}
+                    isAssigned={assignedLessons[lesson?.documentId]}
+                    onCheckChange={setIsChecked}
+                  />
                 ))}
             </tbody>
           </table>

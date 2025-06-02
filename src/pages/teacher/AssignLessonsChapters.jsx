@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./AssignLessonsChapters.css";
-import AssignLessonsChapters from "../../components/teacher/AssignLessonsChapters";
+import AssignLessonsChapters from "../../components/teacher/AssignNewLessons/AssignLessonsChapters";
 
 const AssignChapterLessons = () => {
     

@@ -1,5 +1,17 @@
-import React, { createContext, useContext, useReducer, useState } from "react";
-import { fetchAChapter, fetchLessonsByChapter } from "../service/apiService";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useReducer,
+  useState,
+} from "react";
+import {
+  fetchAChapter,
+  fetchLessonsByChapter,
+  assignedChapLessStats,
+  callDeleteAPI
+} from "../service/apiService";
 
 const LessonDetailsContext = createContext();
 
@@ -9,6 +21,7 @@ const initialState = {
   lessonsDetails: {},
   chapterLessons: null,
   lessonsIds: null,
+  lessonsChapterStats: null,
 };
 
 const fetchLesson = async (lessonId) => {
@@ -26,16 +39,6 @@ const fetchLesson = async (lessonId) => {
     audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
     // You can extend this later with read/speak/vocab/etc. data
   };
-};
-
-const getLessonDetails = async (lessonId) => {
-  // if (lessonsDetails[lessonId]) {
-  //   return lessonsDetails[lessonId];
-  // } else {
-  //   const lessonData = {"lesson": "Testing lesson"}; //await fetchLesson(lessonId);
-  //   setLessonsDetails(prev => ({ ...prev, [lessonId]: lessonData }));
-  //   return lessonData;
-  // }
 };
 
 const lessonDetailsReducer = (state, action) => {
@@ -77,6 +80,11 @@ const lessonDetailsReducer = (state, action) => {
         chapterLessons: null,
         lessonsIds: null,
       };
+    case "LESSONS_BY_CHAPTER_STATS":
+      return {
+        ...state,
+        lessonsChapterStats: action.payload,
+      };
 
     default:
       return state;
@@ -104,51 +112,92 @@ export const LessonProvider = ({ children }) => {
     return chapterData;
   };
 
-  const lessonsByChapter = async (allowedChapters, chapterId) => {
-    const resp = await fetchLessonsByChapter(chapterId);
+  const lessonsByChapter = useCallback(
+    async (allowedChapters, chapterId) => {
+      const resp = await fetchLessonsByChapter(chapterId);
 
-    if (resp.resultData.length > 0) {
-      // Step 1: Get allowedLessons for the selected chapterId from Redux
-      const allowed = allowedChapters.find((c) => c.chapterId === chapterId);
-      const allowedLessonIds =
-        allowed?.allowedLessons?.map((l) => l.lessonId) || [];
+      if (resp.resultData.length > 0) {
+        // Step 1: Get allowedLessons for the selected chapterId from Redux
+        const allowed = allowedChapters.find((c) => c.chapterId === chapterId);
+        const allowedLessonIds =
+          allowed?.allowedLessons?.map((l) => l.lessonId) || [];
 
-      // Step 2: Filter lessons from API to include only allowed ones
-      const filteredLessons = resp.resultData.filter((lesson) =>
-        allowedLessonIds.includes(lesson.documentId)
-      );
+        // Step 2: Filter lessons from API to include only allowed ones
+        const filteredLessons = resp.resultData.filter((lesson) =>
+          allowedLessonIds.includes(lesson.documentId)
+        );
 
-      if (filteredLessons.length > 0) {
-        const ids = filteredLessons.map((lesson) => lesson.documentId);
+        if (filteredLessons.length > 0) {
+          const ids = filteredLessons.map((lesson) => lesson.documentId);
 
-        dispatch({
-          type: "SET_CHAPTER_LESSON_IDS",
-          payload: { chapterId, lessonIds: ids },
-        });
+          dispatch({
+            type: "SET_CHAPTER_LESSON_IDS",
+            payload: { chapterId, lessonIds: ids },
+          });
 
-        dispatch({
-          type: "SET_CHAPTER_LESSONS",
-          payload: { chapterId, lessons: filteredLessons },
-        });
+          dispatch({
+            type: "SET_CHAPTER_LESSONS",
+            payload: { chapterId, lessons: filteredLessons },
+          });
+        }
+
+        console.log("Filtered lessons response:", filteredLessons);
       }
-
-      console.log("Filtered lessons response:", filteredLessons);
-    }
-  };
+    },
+    [dispatch]
+  );
 
   const resetChapterLessons = () => dispatch({ type: "RESET_LESSON_DETAILS" });
 
+  const getAssingedChapterLessonsStats = async () => {
+    let resp = await assignedChapLessStats();
+
+    if (resp.resultData.length === 0) {
+      resp = {
+        resultData: {
+          recentlyAssigned: [],
+          assignedStats: { totalChaptersAssigned: 0, totalLessonAssinged: 0 },
+        },
+        resultTotal: 0,
+        totalRows: 0,
+        hasMore: false,
+      };
+    }
+
+    console.log("stats are:", resp);
+
+    dispatch({ type: "LESSONS_BY_CHAPTER_STATS", payload: resp });
+  };
+
+  const deleteAssignedLesson  = async(assignLessonId) => {
+
+     const delResp = await callDeleteAPI(`/assignlessons/delete/${assignLessonId}`);
+     console.log("delResp is", delResp);
+
+     if(delResp.success){
+      getAssingedChapterLessonsStats();
+      return true;
+     }
+     return false;
+
+  }
+
+  const value = useMemo(
+    () => ({
+      state,
+      dispatch,
+      fetchAndSetLesson,
+      getChapterDetails,
+      lessonsByChapter,
+      resetChapterLessons,
+      getAssingedChapterLessonsStats,
+      deleteAssignedLesson
+    }),
+    [state, lessonsByChapter]
+  );
+
   return (
-    <LessonDetailsContext.Provider
-      value={{
-        state,
-        dispatch,
-        fetchAndSetLesson,
-        getChapterDetails,
-        lessonsByChapter,
-        resetChapterLessons
-      }}
-    >
+    <LessonDetailsContext.Provider value={value}>
       {children}
     </LessonDetailsContext.Provider>
   );
