@@ -66,6 +66,7 @@ const AssignNewLessons = ({ lessonsChapterStats }) => {
   );
 
   const handleAssign = async (payload) => {
+
     if (selectedLessons.length > 0) {
       setIsLessonsSelected(false);
 
@@ -84,7 +85,11 @@ const AssignNewLessons = ({ lessonsChapterStats }) => {
       if (payload?.selectedSection) {
         reqPayload.section = payload?.selectedSection;
       }
-      console.log("reqPayload is: ", reqPayload);
+
+      if (payload?.selectedStudents) {
+        reqPayload.studentIds = payload?.selectedStudents;
+      }
+      
       const resp = await assignlessons(reqPayload);
 
       if (resp.success) {

@@ -127,7 +127,72 @@ export const fetchUserByClassSection = async (
       hasMore: false,
     };
   }
-}; 
+};
+
+export const fetchUserByClass = async (
+  { offset, perPage, schoolId, role, searchByClass, searchBySection },
+  fromCache = true
+) => {
+  const url = `/users/class`;
+
+   //prepare the query parmas for hte url
+   const query = new URLSearchParams();
+   if (offset != null) query.append("offset", offset);
+   if (perPage != null) query.append("perPage", perPage);
+   if (schoolId) query.append("schoolId", schoolId);
+   if (role) query.append("role", role);
+   if (searchByClass) query.append("whichClass", searchByClass);
+   if (searchBySection) query.append("section", searchBySection);
+
+  try {
+    const response = await axiosInstance.get(`${url}?${query.toString()}`, { cache: fromCache });
+    console.log("response is", response.data.data);
+    console.log("response is", response.status);
+
+    if (response.status !== 200) {
+      return {
+        users: [],
+        resultTotal: 0,
+        totalRows: 0,
+        hasMore: false,
+        assignedTeacher: {},
+      };
+      /* */
+    } else {
+      const fetchedUser = response.data.data;
+      return {
+        users: fetchedUser.resultData,
+        resultTotal: fetchedUser.resultData.length,
+        totalRows: fetchedUser.resultData.length,
+        assignedTeacher: fetchedUser.assignTeacher,
+        hasMore: false,
+      };
+    }
+  } catch (exception) {
+    console.log("exception is", exception.response);
+    if (
+      exception?.response?.status == 404 &&
+      exception?.response?.data?.error_type === "Resource not found"
+    ) {
+      return {
+        users: [],
+        resultTotal: 0,
+        totalRows: 0,
+        assignedTeacher: {},
+        hasMore: false,
+      };
+    }
+    if (exception.response.data.message === "Unauthorized or invalid token") {
+      checkSessionExpired();
+    }
+    return {
+      users: [],
+      resultTotal: 0,
+      totalRows: 0,
+      hasMore: false,
+    };
+  }
+};
 
 export const assignTeacherToClassSec = async (payload) => {
   const resp = await axiosInstance.post(`/assignstudents/toteacher`, payload);

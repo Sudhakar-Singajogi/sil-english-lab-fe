@@ -378,61 +378,76 @@ const AssignTeacherToClass = () => {
 
       <div className="assigned-info">
         <div className="assigned-teacher">
-          <div className="avatar">
-            <img
-              src="/assets/icons/teacher-female.svg"
-              className="assign-student-avatar teacher-avatar"
-            />
-          </div>
-          <div className="std-cnt">
-            <div className="assigned-label">Assigned Teacher</div>
-            <div className="teacher-name">{teacherName}</div>
+          <div>
+            <div className="avatar">
+              <div>
+                <img
+                  src="/assets/icons/teacher-female.svg"
+                  className="assign-student-avatar teacher-avatar"
+                />
+              </div>
+            </div>
             <div className="student-count">
-              {selectedTeacher && students.length + " students"}
+              
+              {selectedTeacher && (
+                <>
+                  {" "}
+                  <p>Total Classes: {students.length}{" "} </p> 
+                </>
+              )}
+              {selectedTeacher && (
+                <>
+                  {" "}
+                  <p>Total Students: {students.length}{" "} </p> 
+                </>
+              )}
             </div>
           </div>
-          {role !== "teacher" && (
-            <>
-              <button className="btn change-btn">
-                <select
-                  value={role === "system-admin" ? selectedTeacher : ""}
-                  onChange={(e) => handleAssignTeacher(e.target.value)}
-                >
-                  <option value="">Change Assignment</option>
-                  {teacherList &&
-                    teacherList.map((teacher) => (
-                      <option key={teacher.value} value={teacher.value}>
-                        {teacher.label}
-                      </option>
-                    ))}
-                </select>
-              </button>
-            </>
-          )}
         </div>
-
-      </div >
-    <div className="assign-inline assigned-students">
-          <AdvancedGrid
-            columns={columns}
-            data={students}
-            enableSelection={false}
-            enableBulkActions={false}
-            selectedRows={0}
-            onSelectionChange={() => {}}
-            bulkActions={[
-              { label: "Delete", onClick: () => {} },
-              { label: "Export", onClick: () => {} },
-            ]}
-            enableRowHighlight={true}
-            enableActionDropdown={
-              role === "teacher" ? teacherId == selectedTeacher : true
-            }
-            enableRowExpand={true}
-            renderExpandedRow={(row) => <></>}
-            modalOpenFn={(record) => fetchUserDetails(record)}
-          />
-    </div>
+        {role !== "teacher" && (
+          <div>
+            <div className="std-cnt">
+              <div className="assigned-label">Assigned Teacher:{teacherName} </div>
+              {/* <div className="teacher-name">{teacherName}</div> */}
+            </div>
+            <button className="btn change-btn">
+              <select
+                value={role === "system-admin" ? selectedTeacher : ""}
+                onChange={(e) => handleAssignTeacher(e.target.value)}
+              >
+                <option value="">Change Assignment</option>
+                {teacherList &&
+                  teacherList.map((teacher) => (
+                    <option key={teacher.value} value={teacher.value}>
+                      {teacher.label}
+                    </option>
+                  ))}
+              </select>
+            </button>
+          </div>
+        )}
+      </div>
+      <div className="assign-inline assigned-students">
+        <AdvancedGrid
+          columns={columns}
+          data={students}
+          enableSelection={false}
+          enableBulkActions={false}
+          selectedRows={0}
+          onSelectionChange={() => {}}
+          bulkActions={[
+            { label: "Delete", onClick: () => {} },
+            { label: "Export", onClick: () => {} },
+          ]}
+          enableRowHighlight={true}
+          enableActionDropdown={
+            role === "teacher" ? teacherId == selectedTeacher : true
+          }
+          enableRowExpand={true}
+          renderExpandedRow={(row) => <></>}
+          modalOpenFn={(record) => fetchUserDetails(record)}
+        />
+      </div>
 
       <ConfirmDialog
         show={showConfirm}

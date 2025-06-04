@@ -37,7 +37,7 @@ const useAssignedMap = (
       let valid = true;
 
       if (assignedTo) {
-        valid = valid && assignedTo.toLowerCase() === lesson.assignTo;
+        // valid = valid && assignedTo.toLowerCase() === lesson.assignTo;
       }
 
       if (selectedClass) {

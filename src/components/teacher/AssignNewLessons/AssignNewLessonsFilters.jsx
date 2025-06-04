@@ -23,21 +23,7 @@ function AssignNewLessonsFilters({
 }) {
   const [enableAssignBtn, setEnableAssignBtn] = useState(false);
   const [hideSection, setHideSection] = useState(false);
-  const [showStudentList, setShowStudentList] = useState(false);
-
-  const { show, open, close } = useSILDrawer();
-
-  const {
-    isDrawerOpen,
-    openDrawer,
-    closeDrawer,
-    selectedSec,
-    setSelectedSec,
-    students,
-    selectedStudents,
-    toggleStudent,
-    reset,
-  } = useStudentSelector();
+  const [selectedStudents, setSelectedStudents] = useState([]);
 
   const [selectedFilters, setSelectedFilters] = useState({
     level: "",
@@ -90,11 +76,21 @@ function AssignNewLessonsFilters({
     }
   }, [isAssingLessonSuccessfull]);
 
-  const handelChange = (e) => {
-    const { name, value } = e.target;
+  const handelChange = (e, target) => {
+    let name = "";
+    let value = "";
+    if (!e) {
+      name = target.name;
+      value = target.value;
+    } else {
+      console.log("target", e.target.name);
+      name = e.target.name;
+      value = e.target.value;
+    }
 
     if (name === "assignedTo") {
-      setHideSection(true);
+      if (value === "students") setHideSection(true);
+      else setHideSection(false);
     }
 
     if (name === "chapter") {
@@ -138,19 +134,12 @@ function AssignNewLessonsFilters({
     });
   };
 
-  // const handleAssignLessons = () => {
-  //   const params = { ...selectedFilters };
-  //   handleAssign(params);
-  // };
   const handleAssignLessons = () => {
     const params = {
       ...selectedFilters,
-      selectedSection:
-        selectedFilters.assignedTo === "Student"
-          ? selectedSection
-          : selectedFilters.selectedSection,
+      selectedSection: selectedFilters.selectedSection,
       selectedStudents:
-        selectedFilters.assignedTo === "Student" ? selectedStudents : [],
+        selectedFilters.assignedTo === "students" ? selectedStudents : [],
     };
     handleAssign(params);
   };
@@ -248,8 +237,8 @@ function AssignNewLessonsFilters({
             }}
           >
             <option value=""></option>
-            <option>Class</option>
-            <option>Student</option>
+            <option value="class">Class</option>
+            <option value="students">Students</option>
           </select>
         </div>
         <div className="">
@@ -278,16 +267,17 @@ function AssignNewLessonsFilters({
       </div>
       <div className="mb-3 lessons-filter">
         <div className="">
-          {selectedFilters.assignedTo === "Student" ? (
+          {selectedFilters.assignedTo === "students" ? (
             <div className="d-flex flex-column">
               <AssignStudentSelector
-                onSectionChange={(e) =>
-                  handelChange({
-                    target: { name: "selectedSection", value: e.target.value },
-                  })
-                }
-                onStudentsSelect={(id, checked) => {
-                  // Optional: store selected student ids
+                selectedClass={selectedFilters?.selectedClass}
+                onSectionChange={(value) => {
+                  console.log("selected section is: ", value);
+                  handelChange(null, { name: "selectedSection", value: value });
+                }}
+                onStudentsSelect={(studentIds) => {
+                  console.log('studentIds are:', studentIds)
+                  setSelectedStudents(studentIds);
                 }}
               />
             </div>

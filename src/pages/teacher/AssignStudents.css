@@ -4,7 +4,7 @@
 .assign-container {
   font-family: sans-serif;
   max-width: 1024px;
-  /* margin: auto; */
+  margin: auto;
   border: 1px solid #eee;
   padding: 1rem;
   border-radius: 5px;
@@ -36,21 +36,21 @@
   margin-bottom: 20px;
   background-color: #f9f9f9;
   width: 100%;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: 2fr 1fr;
   .assigned-teacher {
     display: grid;
-    grid-template-columns: 80px 1fr;
+    grid-template-columns: 200px 1fr;
     position: relative;
   }
 }
 
 .avatar {
-  margin-left:0px !important;
+  margin-left: 1rem !important;
   background: #79c6e0;
   border-radius: 50%;
   width: 65px;
   height: 65px;
-  margin-right: 15px;
+  /* margin-right: 15px; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -69,6 +69,11 @@
 .student-count {
   font-size: 13px;
   color: #888;
+  p {
+    margin: 0px;
+    font-size: 14px;
+    font-weight: bold;
+  }
 }
 
 .change-btn {
@@ -166,16 +171,15 @@
 }
 
 .listgrid-container th,
-  .listgrid-container td {
-    font-size: 12px;
-  }
+.listgrid-container td {
+  font-size: 12px;
+}
 
 @media (max-width: 600px) {
-
   .assigned-info {
-  display: grid;
-  grid-template-columns: auto !important;
-}
+    display: grid;
+    grid-template-columns: auto !important;
+  }
   .std-cnt {
     position: absolute;
     left: 5rem;
@@ -195,7 +199,6 @@
     margin-top: 1rem;
     margin-left: 2.5rem !important;
   }
-
 
   .assigned-teacher {
     position: relative;
