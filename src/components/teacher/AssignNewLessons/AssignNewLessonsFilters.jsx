@@ -1,8 +1,6 @@
 import { Button } from "bootstrap/dist/js/bootstrap.bundle.min";
 import React, { useEffect, useState } from "react";
 import { Alert, Form } from "react-bootstrap";
-import useStudentSelector from "./hooks/useStudentSelector";
-import useSILDrawer from "../../hooks/useSILDrawer";
 import AssignStudentSelector from "./AssignStudentSelector";
 
 function AssignNewLessonsFilters({

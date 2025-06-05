@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import { isLessonAssigned } from "../../../../utils/helper";
 
 const useAssignedMap = (
   chapter,
@@ -24,41 +25,21 @@ const useAssignedMap = (
       setAssignedLessons({});
       return;
     }
-
+    
     const assignedMap = {};
     const chapterLessonList = chapterLessons[chapter];
 
     recentlyAssigned.forEach((lesson) => {
-      const match = chapterLessonList.find(
-        (l) => l.documentId === lesson.lessonId
-      );
-      if (!match) return;
+      const assigned = isLessonAssigned(lesson, {
+        chapterLessonList,
+        assignedTo,
+        selectedClass,
+        selectedSection,
+        startDate,
+        recentlyAssigned,
+      });
 
-      let valid = true;
-
-      if (assignedTo) {
-        // valid = valid && assignedTo.toLowerCase() === lesson.assignTo;
-      }
-
-      if (selectedClass) {
-        valid = valid && parseInt(selectedClass) === lesson.classId;
-      }
-
-      if (selectedSection && lesson?.section) {
-        valid = valid && selectedSection === lesson.section;
-      } else {
-        valid = valid && valid;
-      }
-      
-      if (startDate) {
-        const start = new Date(startDate);
-        const due = new Date(lesson.dueDate);
-        valid = valid && start <= due;
-      }
-
-      if (valid) {
-        assignedMap[lesson.lessonId] = true;
-      }
+      assignedMap[lesson.lessonId] = assigned;
     });
 
     setAssignedLessons(assignedMap);
@@ -71,7 +52,6 @@ const useAssignedMap = (
     selectedClass,
     selectedSection,
   ]);
-
   return assignedLessons;
 };
 

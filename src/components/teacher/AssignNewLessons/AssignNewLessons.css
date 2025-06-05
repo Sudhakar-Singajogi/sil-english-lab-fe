@@ -100,6 +100,34 @@
   text-align: center !important;
 }
 
+
+.lesson-conflict-card {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.lesson-meta h6 {
+  margin: 0;
+  color: #0056b3;
+}
+
+.student-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.student-chip {
+  background: #e9ecef;
+  border-radius: 50px;
+  padding: 6px 12px;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+}
+
 @media (max-width: 600px) {
   .form-select {
     font-size: 0.95rem;

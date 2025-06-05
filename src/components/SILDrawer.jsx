@@ -8,6 +8,7 @@ const SILDrawer = ({
   title = "Panel",
   placement = "end",
   children,
+  width = "500px", // default width
 }) => {
   return (
     <Offcanvas
@@ -15,6 +16,7 @@ const SILDrawer = ({
       onHide={onClose}
       placement={placement}
       backdrop="static"
+      className="sil-drawer" 
     >
       <Offcanvas.Header closeButton>
         <Offcanvas.Title>{title}</Offcanvas.Title>

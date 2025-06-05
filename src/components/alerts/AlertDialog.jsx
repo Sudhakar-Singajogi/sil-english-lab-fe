@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert, Modal, Button } from 'react-bootstrap';
 
 
-const AlertDialog = ({ show, onClose, title = 'Alert', message = 'Something happened.' }) => {
+const AlertDialog = ({ show, onClose, title = 'Alert', message = 'Something happened.', onOk='', handleOK=() => {} }) => {
   return (
     <Modal show={show} onHide={onClose} centered backdrop="static">
       <Modal.Header closeButton>
@@ -14,7 +14,7 @@ const AlertDialog = ({ show, onClose, title = 'Alert', message = 'Something happ
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant="primary" onClick={onClose}>
+        <Button variant="primary" onClick={onOk === '' ? onClose : handleOK}>
           Okay
         </Button>
       </Modal.Footer>
