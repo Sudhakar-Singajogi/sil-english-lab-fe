@@ -50,7 +50,7 @@ export function isLessonAssigned(
     startDate,
     recentlyAssigned,
   },
-  returnStudents=false
+  returnStudents = false
 ) {
   let valid = true;
 
@@ -72,19 +72,50 @@ export function isLessonAssigned(
   }
 
   if (!valid) return false;
+  console.log("lesson Info:", lesson);
 
-  if (assignedTo === "class" && selectedClass) {
-    const conflicting = recentlyAssigned.filter(
+  if (selectedClass) {
+    const classLevelconflicting = recentlyAssigned.filter(
       (l) =>
-        l.assignTo === "students" &&
+        l.assignTo === "class" &&
         l.classId === parseInt(selectedClass) &&
+        lesson.lessonId === l.lessonId &&
         (!selectedSection || l.section === selectedSection) &&
         new Date(l.startDate) <= new Date(l.dueDate)
     );
-    console.log('conflicting array is:', conflicting);
 
-    return returnStudents ? conflicting : conflicting.length === 0;
+    console.log("classLevelconflicting array is:", classLevelconflicting);
+
+    if (classLevelconflicting?.lessonId === lesson.lessonId) {
+      return returnStudents ? [] : classLevelconflicting.length === 0;
+    }
+
+    const studentLevelconflicting = recentlyAssigned.filter(
+      (l) =>
+        l.assignTo === "students" &&
+        l.classId === parseInt(selectedClass) &&
+        lesson.lessonId === l.lessonId &&
+        (!selectedSection || l.section === selectedSection) &&
+        new Date(l.startDate) <= new Date(l.dueDate)
+    );
+    let stdConflictStds = [];
+    console.log('studentLevelconflicting is', studentLevelconflicting)
+
+    if (Array.isArray(studentLevelconflicting)) {
+      stdConflictStds = studentLevelconflicting
+      stdConflictStds = [...stdConflictStds]
+    } else {
+      stdConflictStds = [...studentLevelconflicting]
+    }
+
+    console.log('studentLevelconflicting are', stdConflictStds)
+    
+
+    return returnStudents ? stdConflictStds : stdConflictStds.length === 0;
   }
 
-  return returnStudents ? [] :  true;
+  return returnStudents ? [] : true;
 }
+
+export const capitalize = (str) =>
+  str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : "";

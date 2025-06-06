@@ -28,3 +28,44 @@
   display: inline-flex;
   align-items: center;
 }
+
+.exclude-student {
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.exclude-student:hover {
+  color: #ff0000 !important;
+}
+
+@media (max-width: 767px) {
+  .conflict-header h6 {
+    font-size: 1rem;
+  }
+  small {
+    font-size: 0.8rem;
+  }
+  .student-chip {
+    font-size: 12px;
+    padding: 3px 5px;
+  }
+  .modal-header {
+    .modal-title {
+      font-size: 1.3rem;
+    }
+  }
+  .modal-body {
+    padding: 0px;
+    .conflict-list-wrapper {
+      p {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .student-chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+  }
+}
