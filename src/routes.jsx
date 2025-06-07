@@ -14,6 +14,9 @@ import AssignClassToTeacher from "./pages/system-admin/AssignClassToTeacher";
 
 import AssignChapterLessons from "./pages/teacher/AssignLessonsChapters";
 import LessonDetails from "./components/lessons/LessonDetails";
+import AssignedLessonsHistory from "./components/teacher/AssignNewLessons/AssignedLessonsHistory";
+import AssignedStudentsLesson from "./components/teacher/AssignNewLessons/AssignedStudentsLesson";
+import StudentAssignedLessons from "./components/teacher/AssignNewLessons/StudentAssignedLessons";
 
 const AppRoutes = () => {
   return (
@@ -37,6 +40,7 @@ const AppRoutes = () => {
         <Route path="manage-assignstudents" element={<AssignClassToTeacher />} />
         <Route path="manage-assignlessons" element={<AssignChapterLessons />} />
         <Route path="lesson-details/:lessonSlug" element={<LessonDetails />} />
+        <Route path="assign-lessons-history" element={<AssignedLessonsHistory />} />
         
       </Route>
 
@@ -55,6 +59,8 @@ const AppRoutes = () => {
         <Route path="manage-assignstudents" element={<AssignClassToTeacher />} />
         <Route path="manage-assignlessons" element={<AssignChapterLessons />} />
         <Route path="lesson-details/:lessonSlug" element={<LessonDetails />} />
+        <Route path="assign-lessons-history" element={<AssignedLessonsHistory />} />
+        <Route path="assigned-students-lesson" element={<AssignedStudentsLesson />} />
         {/* Add other nested school routes */}
       </Route>
 
@@ -70,7 +76,9 @@ const AppRoutes = () => {
         <Route path="assign-students" element={<AssignClassToTeacher />} />
         <Route path="assign-lessons-chapters" element={<AssignChapterLessons />} />
         <Route path="lesson-details/:lessonSlug" element={<LessonDetails />} />
-        
+        <Route path="assign-lessons-history" element={<AssignedLessonsHistory />} />
+        <Route path="assigned-students-lesson" element={<AssignedStudentsLesson />} />
+        <Route path="student-assigned-lesson" element={<StudentAssignedLessons />} />
         
         {/* Add other nested school routes */}
       </Route>

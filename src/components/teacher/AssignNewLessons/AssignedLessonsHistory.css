@@ -1,0 +1,228 @@
+.assigned-history-container {
+  padding: 1rem;
+  /* border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); */
+}
+
+.filter-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.filter-section input {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  flex: 1 1 150px;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.assigned-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.assigned-history-table th,
+.assigned-history-table td {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.status.completed {
+  background-color: #d1f7d1;
+  color: #267326;
+}
+
+.status.pending {
+  background-color: #eee;
+  color: #555;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  align-items: center;
+}
+
+.filter-toggle-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.filter-toggle-wrapper button {
+  /* background-color: #3f51b5; */
+  color: white;
+  padding: 0.3rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Floating filter panel */
+.floating-filter-panel {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  z-index: 10;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 8px;
+  width: 280px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.floating-filter-panel .filter-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.75rem;
+  text-align: left;
+}
+
+.floating-filter-panel label {
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+
+.floating-filter-panel input {
+  padding: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.floating-filter-panel .filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.floating-filter-panel .filter-actions button {
+  padding: 0.4rem 0.75rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.floating-filter-panel .filter-actions button:first-child {
+  background-color: #eee;
+}
+
+.floating-filter-panel .filter-actions button:last-child {
+  background-color: #3f51b5;
+  color: white;
+}
+
+.assigned-cards-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.assigned-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-left: 6px solid #3f51b5;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.assigned-card .card-row {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 0.5rem;
+   
+}
+
+.status-tag {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status-tag.completed {
+  background-color: #e0f7e9;
+  color: #2e7d32;
+}
+
+.status-tag.pending {
+  background-color: #fff4e5;
+  color: #b26a00;
+}
+
+.assigned-cards-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.assign-label {
+    cursor: default
+}
+
+@media (min-width: 1024px) {
+  .assigned-cards-wrapper {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+@media screen and (min-width: 601px) and (max-width: 1023px) {
+.assigned-cards-wrapper {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media screen and (min-width: 335px) and (max-width: 600px) {
+  .assigned-cards-wrapper {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+/* @media (min-width: 500px) {
+  .assigned-cards-wrapper {
+    grid-template-columns: repeat(1, 1fr);
+  }
+} */
+
+.assigned-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  /* border-left: 6px solid #3f51b5; */
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.assigned-card:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .assigned-history-container {
+    h2 {
+      font-size: 1.2rem;
+    }
+  }
+}

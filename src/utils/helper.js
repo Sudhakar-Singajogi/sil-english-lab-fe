@@ -2,6 +2,7 @@ import { useRef } from "react";
 import axios from "axios";
 
 export const getTotalPages = function (totalResults, perPage) {
+  console.log(totalResults, perPage)
   if (perPage <= 0) return 0;
   return Math.ceil(totalResults / perPage);
 };

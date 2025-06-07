@@ -4,10 +4,11 @@ import "./AssignLessonsChapters.css";
 import AssignNewLessons from "./AssignNewLessons";
 import { LessonChapterDetails } from "../../../context/LessonDetailsContext";
 import { formatTimeStateIntoDate } from "../../../utils/helper";
-import { Button } from "react-bootstrap";
+import { Button, ButtonGroup } from "react-bootstrap";
 import { Badge } from "react-bootstrap";
 import ConfirmDialog from "../../alerts/ConfirmDialog";
 import { toast } from "react-toastify";
+import { NavLink } from "react-router-dom";
 import Loader from "../../Loader";
 
 const AssignLessonsChapters = () => {
@@ -54,10 +55,11 @@ const AssignLessonsChapters = () => {
       toast.success("Assigned Lesson deleted successfully");
       setTimeout(() => {
         setIsLoading(false);
-        
-      }, 500)
+      }, 500);
     }
   };
+
+  let pathprefix = "/teacher";
 
   return (
     <div className="container-fluid assign-lessons-page">
@@ -108,9 +110,34 @@ const AssignLessonsChapters = () => {
       <div className="row mb-2">
         <div className="card shadow-sm recent-assigned-section">
           <div className="card-body recent-assign-lesson-body">
-            <h6 className="recently-assigned-title">
-              Recently Assigned Lessons
-            </h6>
+            <div
+              className="recent-assign-lesson-body-header"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 0.5fr",
+                marginBottom: "0.5rem",
+              }}
+            >
+              <div>
+                <h6 className="recently-assigned-title">
+                  Recently Assigned Lessons
+                </h6>
+              </div>
+              <div style={{ textAlign: "right", marginRight: "0rem" }}>
+                <NavLink
+                  to={pathprefix + "/assign-lessons-history"}
+                  key={pathprefix + "/assign-lessons-history"}
+                  className="btn btn-sm"
+                >
+                  <i class="bi bi-eye"></i> View More
+                </NavLink>
+
+                {/* < className="btn btn-sm">
+                  <i class="bi bi-eye"></i> View More
+                </Button> */}
+              </div>
+            </div>
+
             <div className="table-responsive">
               <table className="table table-bordered table-sm recently-assigned-grid">
                 <thead className="table-light">
