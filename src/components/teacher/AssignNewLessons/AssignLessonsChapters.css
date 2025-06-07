@@ -3,6 +3,11 @@
   padding: 10px !important;
 }
 
+.recent-assign-lesson-body {
+    margin-top: 1rem;
+    padding: 0px !important;
+}
+
 .assign-lessons-page {
   .badge {
     padding: 5px;
@@ -300,6 +305,7 @@
   
   .recent-assign-lesson-body {
     margin-top: 1rem;
+    padding: 0px !important;
     .recently-assigned-grid {
       margin-top: 1rem;
       th,

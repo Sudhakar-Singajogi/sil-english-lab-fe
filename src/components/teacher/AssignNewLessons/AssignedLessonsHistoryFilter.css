@@ -1,0 +1,79 @@
+.floating-filter-panel {
+  position: absolute;
+  top: 3rem !important;
+  right: 0;
+  z-index: 10;
+  width: 300px;
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  padding: 16px;
+  transition: all 0.3s ease;
+}
+
+.suggestion-list {
+    list-style: none;
+    padding: 0px;
+
+}
+.filter-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.filter-row label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.filter-row input,
+.filter-row select {
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.filter-actions button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.filter-actions button:first-child {
+  background-color: #6c757d;
+}
+
+.filter-actions button:hover {
+  opacity: 0.9;
+}
+
+
+
+@media screen and (min-width:476px) and  (max-width: 700px) {
+    .history-header {
+        grid-template-columns: 2fr 0.5fr !important;
+    }
+}
+
+@media (max-width: 768px) {
+  .floating-filter-panel {
+    width: 55vw !important;
+    right: 3vw !important;
+  }
+}

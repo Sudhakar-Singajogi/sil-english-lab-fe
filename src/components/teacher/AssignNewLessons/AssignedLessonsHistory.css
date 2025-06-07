@@ -1,5 +1,6 @@
 .assigned-history-container {
   padding: 1rem;
+  position: relative;
   /* border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); */
 }
@@ -65,8 +66,13 @@
   margin-bottom: 1rem;
 }
 
+.history-header {
+    display:grid;
+    grid-template-columns: 2fr 0.3fr;
+}
+
 .filter-toggle-wrapper button {
-  /* background-color: #3f51b5; */
+  background-color: #3f51b5;
   color: white;
   padding: 0.3rem 1rem;
   border: none;
@@ -196,6 +202,21 @@
 @media screen and (min-width: 335px) and (max-width: 600px) {
   .assigned-cards-wrapper {
     grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .history-header{
+    grid-template-columns: 1fr 0.4fr;
+    h2 {
+        font-size: 1rem !important;
+    }
+    .filter-toggle-wrapper {
+        text-align: right;
+    }
+    .filter-toggle-wrapper button {
+        padding:0.2rem 0.8rem
+    }
   }
 }
 

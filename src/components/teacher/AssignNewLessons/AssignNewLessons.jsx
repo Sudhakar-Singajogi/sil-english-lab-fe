@@ -232,7 +232,7 @@ const AssignNewLessons = ({ lessonsChapterStats }) => {
 
   return (
     <div className="card shadow-sm assign-lessons-container">
-      <h5 className="mb-4">Assign New Lessons</h5>
+      <h5 className="mb-4 recently-assigned-title">Assign New Lessons</h5>
       <div className="d-row">
         {validationErrMsg !== "" && (
           <Alert show={true} variant="danger">

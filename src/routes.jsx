@@ -41,6 +41,8 @@ const AppRoutes = () => {
         <Route path="manage-assignlessons" element={<AssignChapterLessons />} />
         <Route path="lesson-details/:lessonSlug" element={<LessonDetails />} />
         <Route path="assign-lessons-history" element={<AssignedLessonsHistory />} />
+        <Route path="assigned-students-lesson/:lessonSlug" element={<AssignedStudentsLesson />} />
+        <Route path="student-assigned-lesson/:studentId" element={<StudentAssignedLessons />} />
         
       </Route>
 
@@ -60,7 +62,8 @@ const AppRoutes = () => {
         <Route path="manage-assignlessons" element={<AssignChapterLessons />} />
         <Route path="lesson-details/:lessonSlug" element={<LessonDetails />} />
         <Route path="assign-lessons-history" element={<AssignedLessonsHistory />} />
-        <Route path="assigned-students-lesson" element={<AssignedStudentsLesson />} />
+        <Route path="assigned-students-lesson/:lessonSlug" element={<AssignedStudentsLesson />} />
+        <Route path="student-assigned-lesson/:studentId" element={<StudentAssignedLessons />} />
         {/* Add other nested school routes */}
       </Route>
 
@@ -77,8 +80,8 @@ const AppRoutes = () => {
         <Route path="assign-lessons-chapters" element={<AssignChapterLessons />} />
         <Route path="lesson-details/:lessonSlug" element={<LessonDetails />} />
         <Route path="assign-lessons-history" element={<AssignedLessonsHistory />} />
-        <Route path="assigned-students-lesson" element={<AssignedStudentsLesson />} />
-        <Route path="student-assigned-lesson" element={<StudentAssignedLessons />} />
+        <Route path="assigned-students-lesson/:lessonSlug" element={<AssignedStudentsLesson />} />
+        <Route path="student-assigned-lesson/:studentId" element={<StudentAssignedLessons />} />
         
         {/* Add other nested school routes */}
       </Route>

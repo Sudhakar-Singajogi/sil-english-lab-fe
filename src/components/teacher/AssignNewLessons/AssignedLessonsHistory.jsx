@@ -1,64 +1,109 @@
 import React, { useState, useEffect, useRef } from "react";
 import PaginationComponent from "../../PaginationComponent";
-import AdvancedGrid from "../../Grid/Advancedgrid";
-import "./AssignedLessonsHistory.css"; // We'll create matching styles
-import { Button, Form } from "react-bootstrap";
-import { getAssignedLessonsCols } from "../../GridColumns/assignedLessons";
+import Loader from "../../Loader";
 import useIsMobileTabDesktop from "../../hooks/useIsMobileTabDesktop";
+import { LessonChapterDetails } from "../../../context/LessonDetailsContext";
 import { getTotalPages } from "../../../utils/helper";
+import AssignedLessonsHistoryFilter from "./AssignedLessonsHistoryFilter";
+import {
+  extractUniqueChapters,
+  getLessonsByChapter,
+} from "./utils/assignedLessonUtils";
+import "./AssignedLessonsHistory.css";
+import { Button } from "react-bootstrap";
 
 const AssignedLessonsHistory = () => {
+  // Store filter criteria for chapter, lesson, class, section, student
   const [filters, setFilters] = useState({
-    chapter: "",
-    lesson: "",
-    class: "",
-    section: "",
-    student: "",
+    chapter: { val: "", id: "" },
+    lesson: { val: "", id: "" },
+    class: { val: "", id: "" },
+    section: { val: "", id: "" },
+    student: { val: "", id: "" },
   });
 
-  const [showFilters, setShowFilters] = useState(false);
-  const whichDevice = useIsMobileTabDesktop(window.innerWidth);
+  const [showLoader, setShowLoader] = useState(false); // Show loader during data fetch
+  const [showFilters, setShowFilters] = useState(false); // Toggle filter panel visibility
+  const [chapters, setChapters] = useState([]); // Store all chapters
+  const [data, setData] = useState([]); // Full assigned lessons data (all)
+  const [filteredData, setFilteredData] = useState([]); // Filtered lessons after applying filters
+  const [currentPage, setCurrentPage] = useState(1); // Current pagination page
+  const [pageSize, setPageSize] = useState(3); // Page size depending on screen
+  const [lessons, setLessons] = useState([]); // Lessons tied to a selected chapter
+  const whichDevice = useIsMobileTabDesktop(window.innerWidth); // Detect device for pagination adjustment
 
-  const toggleFilters = () => {
-    setShowFilters((prev) => !prev);
-  };
+  const {
+    state: { lessonsChapterStats },
+    getCachedAssingedChapterLessonsStats,
+    getAssingedChapterLessonsStats,
+  } = LessonChapterDetails();
 
-  const filterPanelRef = useRef(null);
-
-  const [data, setData] = useState([]); // actual assigned history
-  const [filteredData, setFilteredData] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(3);
-
+  /**
+   * Fetch data from context if not already cached.
+   * Triggers loader only when data is not in memory.
+   */
   useEffect(() => {
-    applyFilters();
-  }, [filters, data, currentPage, pageSize]);
-
-  useEffect(() => {
-    setData(mockData); // replace with real API call
-
-    if (whichDevice === "desktop") {
-      setPageSize(10);
-    } else if (whichDevice === "tablet") {
-      setPageSize(4);
-    } else {
-      setPageSize(2);
+    const prevFetchedLessons = getCachedAssingedChapterLessonsStats();
+    if (!prevFetchedLessons) {
+      setShowLoader(true);
+      const allRecrods = true
+      getAssingedChapterLessonsStats(allRecrods).finally(() => setShowLoader(false));
     }
+  }, []);
 
-    applyFilters();
+  /**
+   * Extract assigned lessons from context on every update.
+   * Extract unique chapters and initialize lesson data.
+   */
+  useEffect(() => {
+    const stats = getCachedAssingedChapterLessonsStats();
+    const recentlyAssigned = stats?.resultData?.recentlyAssigned || [];
+    setData(recentlyAssigned);
+    setChapters(extractUniqueChapters(recentlyAssigned));
+  }, [lessonsChapterStats]);
+
+  /**
+   * Update page size dynamically based on screen size
+   */
+  useEffect(() => {
+    if (whichDevice === "desktop") setPageSize(10);
+    else if (whichDevice === "tablet") setPageSize(4);
+    else setPageSize(2);
   }, [whichDevice]);
 
+  /**
+   * Apply filters and paginate whenever data or filters change
+   */
+  useEffect(() => {
+    applyFilters();
+  }, [data, filters, currentPage, pageSize]);
+
+  /**
+   * Apply filters to lesson data based on selected filters
+   * Then slice based on current page and page size for pagination
+   */
   const applyFilters = () => {
     let result = [...data];
+
+    const keyMap = {
+      chapter: "chapterTitle",
+      lesson: "lessonTitle",
+      class: "classId",
+      section: "section",
+      student: "student", // adjust based on schema
+    };
+
     Object.keys(filters).forEach((key) => {
-      if (filters[key]) {
+      if (filters[key]?.val) {
+        const field = keyMap[key] || key;
         result = result.filter((item) =>
-          item[key].toLowerCase().includes(filters[key].toLowerCase())
+          (item[field] || "")
+            .toString()
+            .toLowerCase()
+            .includes(filters[key].val.toLowerCase())
         );
       }
     });
-
-    console.log("pageSize is", pageSize);
 
     const paginated = result.slice(
       (currentPage - 1) * pageSize,
@@ -67,106 +112,85 @@ const AssignedLessonsHistory = () => {
     setFilteredData(paginated);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFilters({ ...filters, [name]: value });
-    setCurrentPage(1); // reset to first page on filter
+  /**
+   * Generic filter handler to update state with { val, id }
+   * Used for chapter, lesson, class, section, student
+   */
+  const handleFilterChange = (name, value, id) => {
+    setFilters((prev) => ({
+      ...prev,
+      [name]: { val: value, id: id || "" },
+    }));
+    setCurrentPage(1);
   };
 
+  /**
+   * When a chapter is selected:
+   * - update filters
+   * - reset the lesson filter
+   * - extract lessons belonging to selected chapter
+   */
+  const handleChapterSelect = (chapterTitle, id) => {
+    handleFilterChange("chapter", chapterTitle, id);
+    handleFilterChange("lesson", "", ""); // Reset lesson filter
+
+    const recentlyAssigned =
+      lessonsChapterStats?.resultData?.recentlyAssigned || [];
+
+    const chapterLessons = getLessonsByChapter(recentlyAssigned, id);
+    setData(chapterLessons);
+    setLessons(chapterLessons);
+    setCurrentPage(1);
+  };
+
+  /**
+   * Resets all filters to initial blank state
+   */
   const clearFilters = () => {
     setFilters({
-      chapter: "",
-      lesson: "",
-      class: "",
-      section: "",
-      student: "",
+      chapter: { val: "", id: "" },
+      lesson: { val: "", id: "" },
+      class: { val: "", id: "" },
+      section: { val: "", id: "" },
+      student: { val: "", id: "" },
     });
     setCurrentPage(1);
   };
-  
 
   return (
     <div className="assigned-history-container">
-      <div
-        style={{ display: "grid", gridTemplateColumns: "1fr 0.5fr" }}
-        className="history-header"
-      >
-        <div>
-          <h2>Assigned Lessons History</h2>
-        </div>
-        <div style={{ textAlign: "right" }}>
-          <div className="filter-toggle-wrapper">
-            <Button className="btn btn-sm" onClick={toggleFilters}>
-              <i className="bi bi-search"></i> Filter
-            </Button>
+      {showLoader && <Loader />}
 
-            {/* Floating Filter Panel */}
-            {showFilters && (
-              <div className="floating-filter-panel" ref={filterPanelRef}>
-                <div className="filter-row">
-                  <label>Chapter</label>
-                  <input
-                    type="text"
-                    name="chapter"
-                    value={filters.chapter}
-                    onChange={handleInputChange}
-                    placeholder="Enter chapter"
-                  />
-                </div>
-                <div className="filter-row">
-                  <label>Lesson</label>
-                  <input
-                    type="text"
-                    name="lesson"
-                    value={filters.lesson}
-                    onChange={handleInputChange}
-                    placeholder="Enter lesson"
-                  />
-                </div>
-                <div className="filter-row">
-                  <label>Class</label>
-                  <input
-                    type="text"
-                    name="class"
-                    value={filters.class}
-                    onChange={handleInputChange}
-                    placeholder="Enter class"
-                  />
-                </div>
-                <div className="filter-row">
-                  <label>Section</label>
-                  <input
-                    type="text"
-                    name="section"
-                    value={filters.section}
-                    onChange={handleInputChange}
-                    placeholder="Enter section"
-                  />
-                </div>
-                <div className="filter-row">
-                  <label>Student</label>
-                  <input
-                    type="text"
-                    name="student"
-                    value={filters.student}
-                    onChange={handleInputChange}
-                    placeholder="Enter student"
-                  />
-                </div>
-
-                <div className="filter-actions">
-                  <button onClick={clearFilters}>Clear</button>
-                  <button onClick={applyFilters}>Apply</button>
-                </div>
-              </div>
-            )}
-          </div>
+      <div className="history-header">
+        <h2>Assigned Lessons History</h2>
+        <div className="filter-toggle-wrapper">
+          <Button
+            className="btn btn-sm"
+            onClick={() => setShowFilters((p) => !p)}
+          >
+            <i className="bi bi-search"></i> Filter
+          </Button>
         </div>
       </div>
 
-      {/* Filter Toggle Button */}
+      {showFilters && (
+        <AssignedLessonsHistoryFilter
+          filters={filters}
+          chapters={chapters}
+          lessons={lessons}
+          handleInputChange={(e, id) => {
+            handleFilterChange(e.target.name, e.target.value, id);
+          }}
+          handleChapterSelect={handleChapterSelect}
+          clearFilters={clearFilters}
+          applyFilters={() => {
+            applyFilters();
+            setShowFilters((p) => !p);
+          }}
+          handleFilterChange={handleFilterChange}
+        />
+      )}
 
-      {/* Assigned Lesson Cards */}
       <div className="assigned-cards-wrapper">
         {filteredData.length === 0 ? (
           <p>No assigned lessons found.</p>
@@ -174,30 +198,26 @@ const AssignedLessonsHistory = () => {
           filteredData.map((item, idx) => (
             <div className="assigned-card" key={idx}>
               <div className="card-row">
-                {/* <strong>📘 Lesson:</strong> {item.lesson} */}
-                <strong className="assign-label" title="Lesson">📘 </strong> {item.lesson}
+                <strong className="assign-label">📘</strong> {item.lessonTitle}
               </div>
               <div className="card-row">
-                {/* <strong>📖 Chapter:</strong> {item.chapter} */}
-                <strong className="assign-label" title="Chapter">📖 </strong> {item.chapter}
+                <strong className="assign-label">📖</strong> {item.chapterTitle}
               </div>
               <div className="card-row">
-                {/* <strong>🏫 Class/Section:</strong> {item.class} / {item.section} */}
-                <strong className="assign-label" title="Class/Section">🏫 </strong> {item.class} / {item.section}
+                <strong className="assign-label">🏫</strong>{" "}
+                {item.assignTo === "class"
+                  ? item.classId
+                  : item.section
+                  ? `${item.classId}/${item.section}`
+                  : ""}
               </div>
               <div className="card-row">
-                {/* <strong>👤 Student:</strong> {item.student} */}
-                <strong className="assign-label" title="Student">👤 </strong> {item.student}
+                <strong className="assign-label">👤</strong>{" "}
+                {item.assignTo === "class" ? "All students" : "Few Students"}
               </div>
               <div className="card-row">
-                <strong className="assign-label" title="Status">🟢 </strong>
-                <span className={`status-tag ${item.status.toLowerCase()}`}>
-                  {item.status}
-                </span>
-              </div>
-              <div className="card-row">
-                {/* <strong>📅 Assigned:</strong> {item.startDate} to {item.endDate} */}
-                <strong className="assign-label" title="Start/End Dates">📅 </strong> {item.startDate} to {item.endDate}
+                <strong className="assign-label">📅</strong> {item.startDate} to{" "}
+                {item.endDate}
               </div>
             </div>
           ))
@@ -206,11 +226,11 @@ const AssignedLessonsHistory = () => {
 
       <div className="d-flex user-pagination">
         <PaginationComponent
-          currentPage={1}
-          totalPages={getTotalPages(mockData.length, pageSize)}
-          onPageChange={(page) => {}}
+          currentPage={currentPage}
+          totalPages={getTotalPages(data.length, pageSize)}
+          onPageChange={setCurrentPage}
           pageSize={pageSize}
-          onPageSizeChange={(size) => {}}
+          onPageSizeChange={setPageSize}
           showPerPageSelector={false}
           showGotoPageSize={false}
         />
@@ -218,117 +238,5 @@ const AssignedLessonsHistory = () => {
     </div>
   );
 };
-
-// Temporary mock data
-const mockData = [
-  {
-    lesson: "Applying Psychological Theories",
-    chapter: "Chapter 27",
-    class: "B2",
-    section: "A",
-    student: "Ravi",
-    assignedBy: "Kiran",
-    status: "Completed",
-  },
-  {
-    lesson: "Introduction to Psychological Theories",
-    chapter: "Chapter 27",
-    class: "B2",
-    section: "A",
-    student: "Arun",
-    assignedBy: "Kiran",
-    status: "Pending",
-  },
-  {
-    lesson: "Applying Psychological Theories",
-    chapter: "Chapter 27",
-    class: "B2",
-    section: "A",
-    student: "Ravi",
-    assignedBy: "Kiran",
-    status: "Completed",
-  },
-  {
-    lesson: "Introduction to Psychological Theories",
-    chapter: "Chapter 27",
-    class: "B2",
-    section: "A",
-    student: "Arun",
-    assignedBy: "Kiran",
-    status: "Pending",
-  },
-  {
-    lesson: "Introduction to Psychological Theories",
-    chapter: "Chapter 27",
-    class: "B2",
-    section: "A",
-    student: "Rushan",
-    assignedBy: "Kiran",
-    status: "Pending",
-  },
-  {
-    lesson: "Introduction to Psychological Theories",
-    chapter: "Chapter 27",
-    class: "B2",
-    section: "A",
-    student: "Rushan",
-    assignedBy: "Kiran",
-    status: "Pending",
-  },
-  {
-    lesson: "Applying Psychological Theories",
-    chapter: "Chapter 27",
-    class: "B2",
-    section: "A",
-    student: "Ravi",
-    assignedBy: "Kiran",
-    status: "Completed",
-  },
-  {
-    lesson: "Introduction to Psychological Theories",
-    chapter: "Chapter 27",
-    class: "B2",
-    section: "A",
-    student: "Arun",
-    assignedBy: "Kiran",
-    status: "Pending",
-  },
-  {
-    lesson: "Applying Psychological Theories",
-    chapter: "Chapter 27",
-    class: "B2",
-    section: "A",
-    student: "Ravi",
-    assignedBy: "Kiran",
-    status: "Completed",
-  },
-  {
-    lesson: "Introduction to Psychological Theories",
-    chapter: "Chapter 27",
-    class: "B2",
-    section: "A",
-    student: "Arun",
-    assignedBy: "Kiran",
-    status: "Pending",
-  },
-  {
-    lesson: "Introduction to Psychological Theories",
-    chapter: "Chapter 27",
-    class: "B2",
-    section: "A",
-    student: "Rushan",
-    assignedBy: "Kiran",
-    status: "Pending",
-  },
-  {
-    lesson: "Introduction to Psychological Theories",
-    chapter: "Chapter 27",
-    class: "B2",
-    section: "A",
-    student: "Rushan",
-    assignedBy: "Kiran",
-    status: "Pending",
-  },
-];
 
 export default AssignedLessonsHistory;

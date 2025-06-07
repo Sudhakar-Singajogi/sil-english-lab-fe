@@ -119,9 +119,9 @@ const AssignLessonsChapters = () => {
               }}
             >
               <div>
-                <h6 className="recently-assigned-title">
+                <h5 className="recently-assigned-title">
                   Recently Assigned Lessons
-                </h6>
+                </h5>
               </div>
               <div style={{ textAlign: "right", marginRight: "0rem" }}>
                 <NavLink
@@ -155,35 +155,39 @@ const AssignLessonsChapters = () => {
                   {lessonsChapterStats &&
                     lessonsChapterStats?.resultData?.recentlyAssigned &&
                     lessonsChapterStats?.resultData?.recentlyAssigned.map(
-                      (lesson) => (
-                        <tr
-                          key={`recently-assigned-lesson-${lesson?.documentId}`}
-                        >
-                          <td>{lesson?.level}</td>
-                          <td>{lesson?.chapterTitle}</td>
-                          <td>{lesson?.lessonTitle}</td>
-                          <td>{lesson?.startDate}</td>
-                          <td>{lesson?.dueDate}</td>
-                          <td className="assigned-lesson-actions">
-                            {/* <span className="badge bg-info text-dark">
+                      (lesson, index) => (
+                        <>
+                          {index < 5 && (
+                            <tr
+                              key={`recently-assigned-lesson-${lesson?.documentId}`}
+                            >
+                              <td>{lesson?.level}</td>
+                              <td>{lesson?.chapterTitle}</td>
+                              <td>{lesson?.lessonTitle}</td>
+                              <td>{lesson?.startDate}</td>
+                              <td>{lesson?.dueDate}</td>
+                              <td className="assigned-lesson-actions">
+                                {/* <span className="badge bg-info text-dark">
                                 In Progress
                               </span> */}
-                            <span>
-                              <i
-                                className="bi bi-trash3 del-assinged-lesson"
-                                onClick={() =>
-                                  delAssignedLesson(lesson?.documentId)
-                                }
-                              ></i>
-                            </span>
-                            <span>
-                              <i
-                                className="bi bi-check-circle"
-                                title="Mark as complete"
-                              ></i>
-                            </span>
-                          </td>
-                        </tr>
+                                <span>
+                                  <i
+                                    className="bi bi-trash3 del-assinged-lesson"
+                                    onClick={() =>
+                                      delAssignedLesson(lesson?.documentId)
+                                    }
+                                  ></i>
+                                </span>
+                                <span>
+                                  <i
+                                    className="bi bi-check-circle"
+                                    title="Mark as complete"
+                                  ></i>
+                                </span>
+                              </td>
+                            </tr>
+                          )}
+                        </>
                       )
                     )}
                 </tbody>

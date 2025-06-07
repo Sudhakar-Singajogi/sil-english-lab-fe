@@ -169,6 +169,8 @@ export const LessonProvider = ({ children }) => {
     dispatch({ type: "LESSONS_BY_CHAPTER_STATS", payload: resp });
   };
 
+  const getCachedAssingedChapterLessonsStats = () => state.lessonsChapterStats;
+
   const deleteAssignedLesson  = async(assignLessonId) => {
 
      const delResp = await callDeleteAPI(`/assignlessons/delete/${assignLessonId}`);
@@ -191,7 +193,8 @@ export const LessonProvider = ({ children }) => {
       lessonsByChapter,
       resetChapterLessons,
       getAssingedChapterLessonsStats,
-      deleteAssignedLesson
+      deleteAssignedLesson,
+      getCachedAssingedChapterLessonsStats
     }),
     [state, lessonsByChapter]
   );
