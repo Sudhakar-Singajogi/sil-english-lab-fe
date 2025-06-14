@@ -11,11 +11,9 @@ const LessonRow = ({
   conflictedLesson
 }) => {
   const handleChange = (e) => {
-    onCheckChange(lesson?.documentId, e.target.checked);
+    onCheckChange(lesson?.id, e.target.checked);
   };
-
-  console.log('conflictedLesson', conflictedLesson)
-  console.log("documentId:", lesson)
+  
 
   return (
     <tr key={lesson?.documentId}>

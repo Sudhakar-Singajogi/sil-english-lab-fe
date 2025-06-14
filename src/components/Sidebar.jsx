@@ -17,15 +17,21 @@ const Sidebar = ({ isOpen }) => {
   const lacInfo = useSelector((state) => state.auth.lacInfo);
   const allMenuItems = useSelector((state) => state.auth.allMenuItems);
 
-  console.log("loged in role", role);
+  let lacModules = [];
+  if (lacInfo?.lacModules) {
+    lacInfo?.lacModules.map((lacModule) => {
+      lacModules.push(lacModule.moduleName);
+    });
+  }
 
   // Filter menu items for non-system-admin roles
   const visibleMenus =
     role === "system-admin"
       ? allMenuItems
-      : allMenuItems.filter((item) =>
-          lacInfo?.allowedModules?.includes(item.module)
-        );
+      : allMenuItems.filter((item) => {
+          return lacModules.includes(item.module);
+        });
+
   let pathprefix = "/admin";
   if (role === "super-admin") {
     pathprefix = "/school";

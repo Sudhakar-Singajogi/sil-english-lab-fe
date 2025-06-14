@@ -38,14 +38,14 @@ const AssignNewLessons = ({ lessonsChapterStats }) => {
 
   // const { allowedChapters } = useSelector((state) => state.auth.lacInfo);
   const rawAllowedChapters = useSelector(
-    (state) => state.auth.lacInfo.allowedChapters
+    (state) => state.auth.lacInfo.chapters
   );
   const allowedChapters = useMemo(
     () => rawAllowedChapters,
     [rawAllowedChapters]
   );
 
-  const { userId, fullName } = useSelector((state) => state.auth.user);
+  const { id:userId, fullName } = useSelector((state) => state.auth.user);
   const { schoolInfo } = useSelector((state) => state.auth);
   const [isLessonsSelected, setIsLessonsSelected] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -60,8 +60,15 @@ const AssignNewLessons = ({ lessonsChapterStats }) => {
     lessonsByChapter,
     resetChapterLessons,
   } = LessonChapterDetails();
+  console.log("chapterLessons are", chapterLessons);
 
-  const isLoading = useLessons(chapter, allowedChapters, lessonsByChapter);
+  const isLoading = useLessons(
+    level,
+    chapter,
+    allowedChapters,
+    lessonsByChapter,
+    levelChapters
+  );
   const isMobile = useIsMobile(); // defaults to 768px
 
   const assignedLessons = useAssignedMap(
@@ -77,19 +84,20 @@ const AssignNewLessons = ({ lessonsChapterStats }) => {
   );
 
   const handleAssign = async (payload) => {
+    
     if (selectedLessons.length > 0) {
       setIsLessonsSelected(false);
 
       const reqPayload = {
         schoolId: schoolInfo?.id,
         level: payload.level,
-        chapterId: payload.chapter,
+        chapterId: parseInt(payload.chapter),
         lessonIds: selectedLessons,
         assignTo: payload.assignedTo.toLowerCase(),
         classId: parseInt(payload.selectedClass),
         startDate: payload.startDate,
         dueDate: payload.dueDate,
-        assignedBy: `${userId} || ${fullName}`,
+        assignedBy: `${parseInt(userId)} || ${fullName}`,
       };
 
       if (payload?.selectedSection) {
@@ -100,11 +108,11 @@ const AssignNewLessons = ({ lessonsChapterStats }) => {
         reqPayload.studentIds = payload?.selectedStudents;
       }
 
-      if(isConflictedStudentsExcluded && excludedStudents.length > 0) {
+      if (isConflictedStudentsExcluded && excludedStudents.length > 0) {
         reqPayload.excludedStudentIds = excludedStudents;
       }
 
-      // console.log('reqPayload', reqPayload);
+      console.log('reqPayload', reqPayload);
       // return;
 
       const resp = await assignlessons(reqPayload);
@@ -131,7 +139,10 @@ const AssignNewLessons = ({ lessonsChapterStats }) => {
 
   const setIsChecked = (lessonId, isChecked) => {
     const prevVals = [...selectedLessons];
+    console.log("chapterLessons", chapterLessons);
+    console.log("chapter is ", chapter);
     const chapterLessonList = chapterLessons[chapter];
+    console.log("chapterLessonList", chapterLessonList);
 
     if (prevVals.length > 0 && !isChecked) {
       const index = prevVals.indexOf(lessonId);
@@ -139,10 +150,23 @@ const AssignNewLessons = ({ lessonsChapterStats }) => {
       setSelectedLessons([...prevVals]);
     } else {
       let assigned = [];
-      console.log("lessonId:", lessonId);
-      const matchedLesson = recentlyAssigned.find(
-        (l) => l.lessonId === lessonId
-      );
+
+      let matchedLesson = null;
+      if (recentlyAssigned.length > 0) {
+        matchedLesson = recentlyAssigned.find(
+          (l) =>
+            l.id === lessonId ||
+            parseInt(l.id) === parseInt(lessonId)
+        );
+      } else {
+        console.log("lessonId:", lessonId);
+        console.log("recentlyAssigned", recentlyAssigned);
+        matchedLesson = chapterLessonList.find(
+          (l) =>
+            l.id === lessonId ||
+            parseInt(l.id) === parseInt(lessonId)
+        );
+      }
 
       console.log("matchedLesson:", matchedLesson);
 
@@ -163,7 +187,7 @@ const AssignNewLessons = ({ lessonsChapterStats }) => {
         true
       ); // return students
 
-      console.log('assigned', assigned);
+      console.log("assigned", assigned);
 
       if (assigned.length > 0) {
         //show the popup with the assigned student for this lesson
@@ -284,12 +308,12 @@ const AssignNewLessons = ({ lessonsChapterStats }) => {
                 chapterLessons[chapter] &&
                 chapterLessons[chapter].map((lesson) => (
                   <LessonRow
-                    key={lesson?.documentId}
+                    key={lesson?.id}
                     lesson={lesson}
                     level={level}
                     chapterName={chapterName}
-                    isChecked={selectedLessons.includes(lesson?.documentId)}
-                    isAssigned={assignedLessons[lesson?.documentId]}
+                    isChecked={selectedLessons.includes(lesson?.id)}
+                    isAssigned={assignedLessons[lesson?.id]}
                     onCheckChange={setIsChecked}
                     conflictedLesson={conflictedLesson}
                   />

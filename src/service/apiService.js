@@ -44,7 +44,7 @@ export const fetchUsersAPI = async (params = {}) => {
 export const fetchChapterBylevel = async (level, fromCache = true) => {
   // const response = await axiosInstance.get(`/chapters/level/${level}`, {});
   // return response.data.data;
-  const url = `/chapters/level/${level}`;
+  const url = `/chapters?level=${level}`;
   const resp = await callGETAPI(url, fromCache);
   resp.chapters = resp.resultData;
   delete resp.resultData;
@@ -75,11 +75,18 @@ export const assignedChapLessStats = async () => {
         cache: false,
       }
     );
-    console.log("response is", response);
+
+    let resp = {
+      resultData: [],
+      resultTotal: 0,
+      totalRows: 0,
+      hasMore: false,
+    };
 
     if (response.status === 200) {
+      console.log("response is", response.data.data.resultData);
       const respData = response.data.data;
-      return {
+      resp = {
         resultData: {
           recentlyAssigned: respData.resultData,
           assignedStats: respData.assignedStats,
@@ -89,13 +96,15 @@ export const assignedChapLessStats = async () => {
         hasMore: response.data.data.hasMore,
       };
     } else {
-      return {
+      resp = {
         resultData: [],
         resultTotal: 0,
         totalRows: 0,
         hasMore: false,
       };
     }
+    console.log("resp is", resp);
+    return resp;
   } catch (exception) {
     return checkCatchException(exception);
   }
@@ -152,7 +161,6 @@ const checkCatchException = (exception) => {
   };
 };
 
-
 export const callDeleteAPI = async (url) => {
   try {
     const resp = await axiosInstance.delete(url);
@@ -178,7 +186,6 @@ export const callDeleteAPI = async (url) => {
     };
   }
 };
-
 
 const callPOSTAPI = async (url, payload) => {
   try {

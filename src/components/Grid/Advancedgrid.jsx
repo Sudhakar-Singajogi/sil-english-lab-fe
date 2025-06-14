@@ -34,8 +34,6 @@ const AdvancedGrid = ({
 
   const isAllSelected = data.length > 0 && localSelected.length === data.length;
 
-  console.log('grid dats is:', data);
-
   const toggleRow = (row) => {
     const exists = localSelected.find((r) => r.id === row.id);
     let updated = [];
@@ -73,7 +71,6 @@ const AdvancedGrid = ({
   //   };
 
   const showDropdown = (col, row) => (
-    console.log("col", col),
     <td key={col.key}>
       <div className="dropdown">
         <button
@@ -205,7 +202,8 @@ const AdvancedGrid = ({
                     key={item.id || idx}
                     onClick={() => onRowClick?.(item)}
                     className={
-                      enableRowHighlight && localSelected.length>0 &&
+                      enableRowHighlight &&
+                      localSelected.length > 0 &&
                       localSelected.some((r) => r.id === item.id)
                         ? "table-active"
                         : ""
@@ -215,7 +213,10 @@ const AdvancedGrid = ({
                       <td>
                         <input
                           type="checkbox"
-                          checked={localSelected.length>0 && localSelected.some((r) => r.id === item.id)}
+                          checked={
+                            localSelected.length > 0 &&
+                            localSelected.some((r) => r.id === item.id)
+                          }
                           onChange={(e) => {
                             e.stopPropagation();
                             toggleRow(item);

@@ -19,9 +19,7 @@ export const fetchUserByEmail = async (email) => {
   try {
     if (email) {
       const response = await axiosInstance.get(`/users/email/${email}`, {});
-      console.log("response is", response.data.data);
-      console.log("response is", response.status);
-
+      
       if (response.status !== 200) {
         return {
           schools: [],
@@ -40,8 +38,7 @@ export const fetchUserByEmail = async (email) => {
         };
       }
     }
-  } catch (exception) {
-    console.log("exception is", exception.response);
+  } catch (exp) { 
     return {
       users: [],
       resultTotal: 0,
@@ -54,7 +51,6 @@ export const fetchUserByEmail = async (email) => {
 export const updateUser = async (id, data) => {
   try {
     const response = await axiosInstance.patch(`/users/${id}`, data);
-    console.log("response is", response);
     return response;
   } catch (error) {
     console.log("error is", error);
@@ -63,8 +59,7 @@ export const updateUser = async (id, data) => {
 };
 export const addUser = async (data) => {
   try {
-    const response = await axiosInstance.post(`/users/create`, data);
-    console.log("response is", response);
+    const response = await axiosInstance.post(`/users/create`, data); 
     return response;
   } catch (error) {
     console.log("error is", error);
@@ -78,11 +73,12 @@ export const fetchUserByClassSection = async (
   whichSchool,
   fromCache = true
 ) => {
-  const url = `/users/class/${whichClass}/section/${whichSection}/school/${whichSchool}`;
+  // const url = `/users/class/${whichClass}/section/${whichSection}/school/${whichSchool}`;
+  const url=`/users?whichClass=${whichClass}&&section=${whichSection}&&school=${whichSchool}`
   try {
     const response = await axiosInstance.get(url, { cache: fromCache });
     console.log("response is", response.data.data);
-    console.log("response is", response.status);
+    // console.log("response is", response.status);
 
     if (response.status !== 200) {
       return {
@@ -92,14 +88,17 @@ export const fetchUserByClassSection = async (
         hasMore: false,
         assignedTeacher: {},
       };
-      /* */
+      
     } else {
-      const fetchedUser = response.data.data;
+      
+      const fetchedUser = response;
+      console.log('fetchedUser: ', fetchedUser)
+      console.log('Assigned teacher', response.data?.assignTeacher)
       return {
-        users: fetchedUser.resultData,
-        resultTotal: fetchedUser.resultData.length,
-        totalRows: fetchedUser.resultData.length,
-        assignedTeacher: fetchedUser.assignTeacher,
+        users: fetchedUser.data.data,
+        resultTotal: fetchedUser.data.resultTotal,
+        totalRows: fetchedUser.data.totalRows,
+        assignedTeacher: fetchedUser?.data?.assignTeacher,
         hasMore: false,
       };
     }
@@ -164,7 +163,7 @@ export const fetchUserByClass = async (
         users: fetchedUser.resultData,
         resultTotal: fetchedUser.resultData.length,
         totalRows: fetchedUser.resultData.length,
-        assignedTeacher: fetchedUser.assignTeacher,
+        assignedTeacher: fetchedUser.data.assignTeacher,
         hasMore: false,
       };
     }

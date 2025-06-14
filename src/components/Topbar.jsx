@@ -16,16 +16,11 @@ const Topbar = ({ onToggleSidebar }) => {
       : useSelector((state) => state.auth.schoolInfo);
 
   const handleLogout = () => {
-    console.log('logout')
     dispatch(logout());
-    // navigate("/login");
   };
 
-  
   useEffect(() => {
-    console.log("Will call to login if token already got cleard");
     if (!token) {
-      console.log("Token cleared, navigating to login...");
       navigate("/login");
     }
   }, [token, navigate]);

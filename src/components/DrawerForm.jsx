@@ -27,19 +27,19 @@ const DrawerForm = ({
   const allSchools = useSelector((state) => state.auth.allSchools);
 
   useEffect(() => {
-    console.log("addEdit", addEdit);
     if (role !== "system-admin" && formFor === "manage-users-form") {
       delete formFields[5];
       formFields[4].col = 12;
     } else if (
       role === "system-admin" &&
-      formFor === "manage-users-form" && (addEdit === "edit" || addEdit === "add")      
+      formFor === "manage-users-form" &&
+      (addEdit === "edit" || addEdit === "add")
     ) {
-      if(formFields[5]) {
+      if (formFields[5]) {
         formFields[5].options = allSchools;
         formFields[5].disabled = true;
       }
-    } 
+    }
   }, [addEdit]);
 
   useEffect(() => {
@@ -84,8 +84,6 @@ const DrawerForm = ({
     e.preventDefault();
     const newErrors = {};
     setLoading(true);
-    console.log("formData:", formData);
-    console.log("initialData", initialData);
 
     if (formFor === "manage-users-form") {
       // Custom validation: For "student", check class & section
@@ -104,9 +102,8 @@ const DrawerForm = ({
         }
       }
     }
-console.log('formData:', formData);
-    for (const field of formFields) {
 
+    for (const field of formFields) {
       const val = formData[field?.name];
       if (field?.required && !val) {
         newErrors[field.name] =
@@ -133,9 +130,6 @@ console.log('formData:', formData);
 
     if (Object.keys(newErrors).length === 0) {
       if (formFor === "manage-users-form") {
-        //check whether email already exists or not
-        console.log('formData:', formData);
-        console.log("no validation errors now");
         onSubmit(formData, addEdit);
       }
 

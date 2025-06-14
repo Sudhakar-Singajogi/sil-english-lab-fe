@@ -7,8 +7,7 @@ const SearchBar = () => {
 
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
-      console.log('Searching for:', query);
-      // You can hook into search logic here
+      //
     }
   };
 

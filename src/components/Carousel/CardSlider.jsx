@@ -25,9 +25,6 @@ const CardSlider = () => {
   // const lessonChunks = chunkArray(lessons, 2); // group into slides of 3
 
   const lessonChunks = useResponsiveChunks(lessons);
-
-  console.log("lessonChunks", lessonChunks);
-
   return (
     <div id="lessonCarousel" className="carousel slide" data-bs-ride="false">
       <div className="carousel-inner">

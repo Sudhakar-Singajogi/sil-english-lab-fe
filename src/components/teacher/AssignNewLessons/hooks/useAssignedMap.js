@@ -20,6 +20,8 @@ const useAssignedMap = (
 
   console.log("recentlyAssigned", recentlyAssigned);
 
+  
+
   useEffect(() => {
     if (!chapter || !chapterLessons?.[chapter]) {
       setAssignedLessons({});

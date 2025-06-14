@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useLessons = (chapter, allowedChapters, lessonsByChapter) => {
+const useLessons = (level, chapter, allowedChapters, lessonsByChapter, levelChapters) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -8,7 +8,7 @@ const useLessons = (chapter, allowedChapters, lessonsByChapter) => {
       if (!chapter) return;
 
       setIsLoading(true);
-      await lessonsByChapter(allowedChapters, chapter);
+      await lessonsByChapter(level, allowedChapters, chapter, levelChapters);
       setIsLoading(false);
     };
 

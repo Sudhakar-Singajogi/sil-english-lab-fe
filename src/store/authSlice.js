@@ -11,7 +11,6 @@ export const loginUser = createAsyncThunk(
       });
       console.log("response is", response);
       const {
-        token,
         user,
         schoolInfo,
         licenseTierInfo,
@@ -21,7 +20,7 @@ export const loginUser = createAsyncThunk(
       } = response.data;
 
       return {
-        token,
+        token:response.data.accessToken,
         user,
         role: user.role,
         schoolInfo,
@@ -29,6 +28,7 @@ export const loginUser = createAsyncThunk(
         lacInfo,
         allMenuItems,
         allTeachers,
+        refreshToken:response.data.refreshToken
       };
     } catch (error) {
       const message =
@@ -51,6 +51,7 @@ const initialState = {
   error: null,
   allSchools: null,
   allTeachers: [],
+  refreshToken:null
 };
 
 const authSlice = createSlice({
@@ -69,6 +70,7 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.allSchools = null;
       state.allTeachers=[]; 
+      state.refreshToken = null
     },
     setAllSchools: (state, action) => {
       state.allSchools = action.payload;
@@ -90,9 +92,11 @@ const authSlice = createSlice({
           lacInfo,
           allMenuItems,
           allTeachers,
+          refreshToken
         } = action.payload;
         state.loading = false;
         state.token = token;
+        state.refreshToken = refreshToken;
         state.user = user;
         state.role = role;
         state.schoolInfo = schoolInfo;

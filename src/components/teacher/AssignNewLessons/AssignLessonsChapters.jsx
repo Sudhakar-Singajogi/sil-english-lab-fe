@@ -152,44 +152,44 @@ const AssignLessonsChapters = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {lessonsChapterStats &&
-                    lessonsChapterStats?.resultData?.recentlyAssigned &&
-                    lessonsChapterStats?.resultData?.recentlyAssigned.map(
-                      (lesson, index) => (
-                        <>
-                          {index < 5 && (
-                            <tr
-                              key={`recently-assigned-lesson-${lesson?.documentId}`}
-                            >
-                              <td>{lesson?.level}</td>
-                              <td>{lesson?.chapterTitle}</td>
-                              <td>{lesson?.lessonTitle}</td>
-                              <td>{lesson?.startDate}</td>
-                              <td>{lesson?.dueDate}</td>
-                              <td className="assigned-lesson-actions">
-                                {/* <span className="badge bg-info text-dark">
-                                In Progress
-                              </span> */}
-                                <span>
-                                  <i
-                                    className="bi bi-trash3 del-assinged-lesson"
-                                    onClick={() =>
-                                      delAssignedLesson(lesson?.documentId)
-                                    }
-                                  ></i>
-                                </span>
-                                <span>
-                                  <i
-                                    className="bi bi-check-circle"
-                                    title="Mark as complete"
-                                  ></i>
-                                </span>
-                              </td>
-                            </tr>
-                          )}
-                        </>
-                      )
-                    )}
+                  {lessonsChapterStats?.resultData?.recentlyAssigned?.length >
+                  0 ? (
+                    lessonsChapterStats.resultData.recentlyAssigned
+                      .slice(0, 5)
+                      .map((lesson) => (
+                        <tr
+                          key={`recently-assigned-lesson-${lesson?.documentId}`}
+                        >
+                          <td>{lesson?.level}</td>
+                          <td>{lesson?.chapterTitle}</td>
+                          <td>{lesson?.lessonTitle}</td>
+                          <td>{lesson?.startDate}</td>
+                          <td>{lesson?.dueDate}</td>
+                          <td className="assigned-lesson-actions">
+                            <span>
+                              <i
+                                className="bi bi-trash3 del-assinged-lesson"
+                                onClick={() =>
+                                  delAssignedLesson(lesson?.documentId)
+                                }
+                              ></i>
+                            </span>
+                            <span>
+                              <i
+                                className="bi bi-check-circle"
+                                title="Mark as complete"
+                              ></i>
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                  ) : (
+                    <tr>
+                      <td colSpan="6" className="text-center text-muted">
+                        No lessons assigned.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>

@@ -93,8 +93,11 @@ function AssignNewLessonsFilters({
 
     if (name === "chapter") {
       const chapterName = levelChapters[level].find(
-        (chapter) => chapter.documentId === value
-      )?.title;
+        (chapLess) =>
+          parseInt(chapLess?.chapter.id) === parseInt(value) ||
+          chapLess?.chapter.id === value
+      )?.chapter?.title;
+
       setChapterName(chapterName);
     }
 
@@ -178,9 +181,12 @@ function AssignNewLessonsFilters({
           >
             <option value=""> </option>
             {Array.isArray(levelChapters[level]) &&
-              levelChapters[level].map((chapter) => (
-                <option key={chapter?.documentId} value={chapter?.documentId}>
-                  {chapter?.title}
+              levelChapters[level].map((chapLess) => (
+                <option
+                  key={chapLess?.chapter?.id}
+                  value={chapLess?.chapter?.id}
+                >
+                  {chapLess?.chapter?.title}
                 </option>
               ))}
           </select>
@@ -274,7 +280,7 @@ function AssignNewLessonsFilters({
                   handelChange(null, { name: "selectedSection", value: value });
                 }}
                 onStudentsSelect={(studentIds) => {
-                  console.log('studentIds are:', studentIds)
+                  console.log("studentIds are:", studentIds);
                   setSelectedStudents(studentIds);
                 }}
               />

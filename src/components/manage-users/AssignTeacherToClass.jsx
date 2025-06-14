@@ -73,7 +73,6 @@ const AssignTeacherToClass = () => {
   }, [loadOptions]);
 
   const handleEdit = (row) => {
-    console.log("row is", row);
     setEditData(row);
     setShowDrawer(true);
   };
@@ -86,7 +85,7 @@ const AssignTeacherToClass = () => {
     schoolTeachers.forEach((teacher) => {
       list.push({
         label: teacher.fullName,
-        value: teacher.documentId,
+        value: teacher.id,
       });
     });
 
@@ -111,12 +110,11 @@ const AssignTeacherToClass = () => {
       if (res.users.length > 0) {
         setStudents(res.users);
         setAssignedTeacher(res.assignedTeacher);
-        setSelectedTeacher(res.assignedTeacher.teacherId);
-        console.log("res.assignedTeacher is", res.assignedTeacher);
+        setSelectedTeacher(res.assignedTeacher.id);
 
-        if (res.assignedTeacher?.teacherId) {
+        if (res.assignedTeacher?.id) {
           const teacher_name = teacherList.find(
-            (teacher) => teacher.value === res.assignedTeacher.teacherId
+            (teacher) => teacher.value === res.assignedTeacher.id
           ).label;
           setTeacherName(teacher_name.toUpperCase());
         } else {
@@ -147,7 +145,6 @@ const AssignTeacherToClass = () => {
       if (classNum && section && role === "system-admin") {
         setAlertMsg(() => "");
         if (schoolId === "") {
-          console.log("till here");
           setShowAlert(true);
           setAlertMsg("Please select school");
           setAlertVariant("danger");
@@ -162,7 +159,7 @@ const AssignTeacherToClass = () => {
   }, [classNum, section, schoolId]);
 
   useEffect(() => {
-    console.log("ShowAlert:", showAlert);
+    // console.log("ShowAlert:", showAlert);
   }, [showAlert]);
 
   const handleClassChange = (value) => {
@@ -257,7 +254,6 @@ const AssignTeacherToClass = () => {
   };
 
   const submitUser = async (data, addEdit) => {
-    console.log("data is", data);
     const { email, fullName, phone, section, status } = data;
     const selectedRole = data.role;
     const whichClass = data.class;
@@ -388,17 +384,16 @@ const AssignTeacherToClass = () => {
               </div>
             </div>
             <div className="student-count">
-              
               {selectedTeacher && (
                 <>
                   {" "}
-                  <p>Total Classes: {students.length}{" "} </p> 
+                  <p>Total Classes: {students.length} </p>
                 </>
               )}
               {selectedTeacher && (
                 <>
                   {" "}
-                  <p>Total Students: {students.length}{" "} </p> 
+                  <p>Total Students: {students.length} </p>
                 </>
               )}
             </div>
@@ -407,7 +402,9 @@ const AssignTeacherToClass = () => {
         {role !== "teacher" && (
           <div>
             <div className="std-cnt">
-              <div className="assigned-label">Assigned Teacher:{teacherName} </div>
+              <div className="assigned-label">
+                Assigned Teacher:{teacherName}{" "}
+              </div>
               {/* <div className="teacher-name">{teacherName}</div> */}
             </div>
             <button className="btn change-btn">

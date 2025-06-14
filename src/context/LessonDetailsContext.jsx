@@ -10,7 +10,7 @@ import {
   fetchAChapter,
   fetchLessonsByChapter,
   assignedChapLessStats,
-  callDeleteAPI
+  callDeleteAPI,
 } from "../service/apiService";
 
 const LessonDetailsContext = createContext();
@@ -113,7 +113,59 @@ export const LessonProvider = ({ children }) => {
   };
 
   const lessonsByChapter = useCallback(
-    async (allowedChapters, chapterId) => {
+    async (level, allowedChapters, chapterId, levelChapters) => {
+      console.log("allowedChapters: ", allowedChapters);
+
+      const levelchapterLessons = levelChapters?.[level] || [];
+
+      const filteredData = levelchapterLessons.find(
+        (levelChapterLesson) =>
+          parseInt(levelChapterLesson.chapter.id) === parseInt(chapterId) ||
+          levelChapterLesson.chapter.id === chapterId
+      );
+
+      const filteredLessons = filteredData?.lessons || [];
+      console.log("filteredLessons are ", filteredLessons);
+      if (filteredLessons.length > 0) {
+        const lessons = filteredLessons.map((lesson) => lesson.lesson);
+        const ids = lessons.map((lesson) => lesson.id);
+
+        dispatch({
+          type: "SET_CHAPTER_LESSON_IDS",
+          payload: { chapterId, lessonIds: ids },
+        });
+
+        dispatch({
+          type: "SET_CHAPTER_LESSONS",
+          payload: { chapterId, lessons: lessons },
+        });
+        console.log("Filtered lessons response:", lessons);
+      }
+
+
+      // const ids = filteredLessons.map((lesson) => lesson.documentId);
+
+      /*
+          // Step 2: Filter lessons from API to include only allowed ones
+          const filteredLessons = resp.resultData.filter((lesson) =>
+            allowedLessonIds.includes(lesson.documentId)
+          );
+  
+          if (filteredLessons.length > 0) {
+            const ids = filteredLessons.map((lesson) => lesson.documentId);
+  
+            dispatch({
+              type: "SET_CHAPTER_LESSON_IDS",
+              payload: { chapterId, lessonIds: ids },
+            });
+  
+            dispatch({
+              type: "SET_CHAPTER_LESSONS",
+              payload: { chapterId, lessons: filteredLessons },
+            });
+          }
+  
+          console.log("Filtered lessons response:", filteredLessons);
       const resp = await fetchLessonsByChapter(chapterId);
 
       if (resp.resultData.length > 0) {
@@ -143,6 +195,7 @@ export const LessonProvider = ({ children }) => {
 
         console.log("Filtered lessons response:", filteredLessons);
       }
+      */
     },
     [dispatch]
   );
@@ -171,18 +224,18 @@ export const LessonProvider = ({ children }) => {
 
   const getCachedAssingedChapterLessonsStats = () => state.lessonsChapterStats;
 
-  const deleteAssignedLesson  = async(assignLessonId) => {
+  const deleteAssignedLesson = async (assignLessonId) => {
+    const delResp = await callDeleteAPI(
+      `/assignlessons/delete/${assignLessonId}`
+    );
+    console.log("delResp is", delResp);
 
-     const delResp = await callDeleteAPI(`/assignlessons/delete/${assignLessonId}`);
-     console.log("delResp is", delResp);
-
-     if(delResp.success){
+    if (delResp.success) {
       getAssingedChapterLessonsStats();
       return true;
-     }
-     return false;
-
-  }
+    }
+    return false;
+  };
 
   const value = useMemo(
     () => ({
@@ -194,7 +247,7 @@ export const LessonProvider = ({ children }) => {
       resetChapterLessons,
       getAssingedChapterLessonsStats,
       deleteAssignedLesson,
-      getCachedAssingedChapterLessonsStats
+      getCachedAssingedChapterLessonsStats,
     }),
     [state, lessonsByChapter]
   );
